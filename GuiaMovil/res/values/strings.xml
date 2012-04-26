@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appName">Guia Movil Curicó</string>
+    <string-array name="categoriesESP">
+        <item >Sitios Turísticos</item>
+        <item >Sitios de Interés</item>
+        <item >Entretenimiento</item>
+        <item >Servicios</item>
+    </string-array>
+    
+    <string-array name="touristAttractionsESP">
+        <item >Playas</item>
+        <item >Lagos</item>
+        <item >Ríos</item>
+        <item >Montañas y Volcanes</item>
+        <item >Ciudades</item>
+        <item >Parques y Reservas</item>
+    </string-array>
+    
+    <string-array name="siteOfInterestESP">
+        <item >Monumentos</item>
+        <item >Esparcimiento</item>
+        <item >Museos y Bibliotecas</item>
+        <item >Patrimonio</item>
+    </string-array>
+    
+    <string-array name="recreationESP">
+        <item >Bienestar y Relajación</item>
+        <item >Restaurantes</item>
+        <item >Bares y Pubs</item>
+        <item >Deportes y Fitness</item>
+    </string-array>
+    
+    <string-array name="servicesESP">
+        <item >Centros de Salud</item>
+        <item >Carabineros</item>
+        <item >Alojamiento</item>
+        <item >Transporte</item>
+        <item >Provisiones</item>
+    </string-array>
+    
+    <string-array name="categoriesING">
+        <item >Tourist Attractions</item>
+        <item >Sites of Interest</item>
+        <item >Recreation</item>
+        <item >Services</item>
+    </string-array>
+    
+    <string-array name="touristAttractionsING">
+        <item >Beach</item>
+        <item >Lakes</item>
+        <item >Rivers</item>
+        <item >Moutains and Volcains</item>
+        <item >Cities</item>
+        <item >Parks and Reserves</item>
+    </string-array>
+    
+    <string-array name="siteOfInterestING">
+        <item >Monuments</item>
+        <item >Amusement</item>
+        <item >Museums and Libraries</item>
+        <item >Cultural Heritage</item>
+    </string-array>
+    
+    <string-array name="recreationING">
+        <item >Well-Being and Relax</item>
+        <item >Dining</item>
+        <item >Bars and Pubs</item>
+        <item >Sports and Fitness</item>
+    </string-array>
+    
+    <string-array name="servicesING">
+        <item >Health and Care Centers</item>
+        <item >Police Stations</item>
+        <item >Lodging</item>
+        <item >Transport</item>
+        <item >Supply Centers</item>
+    </string-array>
+
+</resources>
