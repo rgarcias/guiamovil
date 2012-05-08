@@ -2,7 +2,6 @@ package guia.movil.app;
 
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,7 +34,8 @@ public class MainActivity extends TabActivity {
         tabs.addTab(spec);
          
         spec=tabs.newTabSpec("tabMapa");
-        spec.setContent(R.id.tab2);
+        Intent intent2 = new Intent().setClass(this, MapsActivity.class);
+        spec.setContent(intent2);
 
         spec.setIndicator(iv2);
         tabs.addTab(spec);
