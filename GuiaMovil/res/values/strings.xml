@@ -76,5 +76,10 @@
         <item >Transport</item>
         <item >Supply Centers</item>
     </string-array>
+    <string name="mainESP">Principal</string>
+    <string name="mainING">Main Menu</string>
+    <string name="back">Back</string>
+    <string name="infoESP">Las Siete Tazas están constituidas por las siete caídas de agua y respectivas &quot;tazas&quot; que el río Claro de Molina (VII Región del Maule, Chile) ha formado a través de miles de años en la dura roca basáltica.  A 4 Km. de las Siete Tazas, contiguo al Parque Nacional y formando parte del área de protección forestal, se encuentra el &quot;Valle de las Catas&quot;, hermoso paraje de prados verdes, ubicado al interior del fundo &quot;San José de Frutillar&quot;, donde podrá disfrutar de la naturaleza en 800 hectáreas de bellos paisajes, senderos, bosque nativo, río, cascadas y montaña. </string>
+    <string name="titleInfoESP">Radal Siete Tazas</string>
 
 </resources>
