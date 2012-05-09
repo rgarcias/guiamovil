@@ -17,6 +17,8 @@ public class MainActivity extends TabActivity {
         
         //Resources res = getResources();
         
+        Bundle bundle = getIntent().getExtras();
+        boolean english = bundle.getBoolean("english");
         TabHost tabs=(TabHost)findViewById(android.R.id.tabhost);
         tabs.setup();
          
@@ -26,7 +28,8 @@ public class MainActivity extends TabActivity {
         ImageView iv2 = new ImageView(this);
         iv2.setImageResource(R.drawable.ic_tab_location);
         Intent intent = new Intent().setClass(this, CategoryActivity.class);
-
+        intent.putExtra("english", english);
+        
         TabHost.TabSpec spec=tabs.newTabSpec("tabInfo");
         spec.setContent(intent);
 
