@@ -4,5 +4,12 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="6.60"
+        android:src="@drawable/ic_presentation_intro" />
 
 </LinearLayout>

@@ -26,11 +26,13 @@
                 android1:id="@android:id/tabcontent"
                 android1:layout_width="match_parent"
                 android1:layout_height="match_parent" >
-
+
                 <LinearLayout
                     android1:id="@+id/tab1"
                     android1:layout_width="match_parent"
-                    android1:layout_height="match_parent" >
+                    android1:layout_height="match_parent"
+                    android1:background="@color/background" >
+
                 </LinearLayout>
 
                 <LinearLayout

@@ -21,7 +21,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
 	static final int DIALOG_BACK_ID = 0;
 	
     /* Variables*/
-    private boolean english = true;
+    private boolean english = false;
     private int depth;
     private ArrayList<String> itemes;
     
@@ -34,6 +34,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     private String main;
     private ListView lv;
     private TextView tv; 
+    private TextView stv; 
     private ImageButton ib;
     private ArrayAdapter<String> listAdapter;
     private String[] dialogItems;
@@ -43,7 +44,9 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
        super.onCreate(savedInstanceState); 
        requestWindowFeature(Window.FEATURE_NO_TITLE);
        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-       setContentView(R.layout.activity);
+       setContentView(R.layout.category);
+       Bundle bundle = getIntent().getExtras();
+       this.english = bundle.getBoolean("english");
        selectLanguage();
        
        itemes = new ArrayList<String>();
@@ -54,6 +57,10 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
        ib = (ImageButton) this.findViewById(R.id.imageButton1);
        ib.setOnClickListener(this);
        ib.setVisibility(View.INVISIBLE);
+       
+       stv = (TextView) this.findViewById(R.id.path);
+       stv.setVisibility(View.INVISIBLE);
+       
        this.depth = 0;
        lv = this.getListView();
        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
@@ -72,6 +79,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
         		itemes.add((String) lv.getAdapter().getItem(position));
         	}
         	ib.setVisibility(View.VISIBLE);
+        	stv.setVisibility(View.VISIBLE);
         	tv.setText(itemes.get(itemes.size()-1));
             String[] aux = selectArray(itemes.get(itemes.size()-1));
             listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
@@ -87,6 +95,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
 	    	if(depth == 0){
 	    		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
 	    		ib.setVisibility(View.INVISIBLE);
+	    		stv.setVisibility(View.INVISIBLE);
 	    	}
 	    	else{
 	    		if(depth>0){
@@ -176,16 +185,19 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
 			depth = 0;
 			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
     		ib.setVisibility(View.INVISIBLE);
+    		stv.setVisibility(View.INVISIBLE);
 		}
 		else if(dialogItems[which].compareTo(itemes.get(1)) == 0){
 			depth = 1;
 			itemes.remove(2);
 			ib.setVisibility(View.VISIBLE);
+			stv.setVisibility(View.VISIBLE);
 			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selectArray(dialogItems[which]));
 		}
 		else{
 			depth = 2;
 			ib.setVisibility(View.VISIBLE);
+			stv.setVisibility(View.VISIBLE);
 			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, retrievePlaces(dialogItems[which]));
 		}
 		lv.setAdapter(listAdapter);
