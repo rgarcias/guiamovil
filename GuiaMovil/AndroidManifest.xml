@@ -24,5 +24,6 @@
         <activity android:name="MapsActivity"></activity>
         <activity android:name="MainActivity"></activity>
         <activity android:name="PresentationActivity"></activity>
+        <activity android:name="FacebookWallPostActivity"></activity>
     </application>
 </manifest> 
