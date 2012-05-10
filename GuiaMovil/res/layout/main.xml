@@ -14,11 +14,12 @@
             android1:layout_width="match_parent"
             android1:layout_height="match_parent"
             android1:orientation="vertical" >
-
+
             <TabWidget
                 android1:id="@android:id/tabs"
                 android1:layout_width="match_parent"
-                android1:layout_height="35dp" >
+                android1:layout_height="35dp"
+                android1:tabStripEnabled="true" >
 
             </TabWidget>
 
