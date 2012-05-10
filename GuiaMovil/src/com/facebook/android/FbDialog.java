@@ -16,6 +16,7 @@
 
 package com.facebook.android;
 
+import guia.movil.app.R;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
