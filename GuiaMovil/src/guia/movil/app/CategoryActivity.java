@@ -8,6 +8,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -79,6 +80,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
         		itemes.add((String) lv.getAdapter().getItem(position));
         	}
         	ib.setVisibility(View.VISIBLE);
+        	stv.setText(this.arrayListtoString());
         	stv.setVisibility(View.VISIBLE);
         	tv.setText(itemes.get(itemes.size()-1));
             String[] aux = selectArray(itemes.get(itemes.size()-1));
@@ -89,9 +91,9 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     
     @Override
     public void onBackPressed(){
+    	itemes.remove(itemes.size()-1);
     	if(depth > 0){
     		this.depth -= 1;
-    		itemes.remove(itemes.size()-1);
 	    	if(depth == 0){
 	    		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
 	    		ib.setVisibility(View.INVISIBLE);
@@ -100,6 +102,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
 	    	else{
 	    		if(depth>0){
 	    			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selectArray(itemes.get(itemes.size()-1)));
+	    			stv.setText(this.arrayListtoString());
 	    		}
 	    	}
     		tv.setText(itemes.get(itemes.size()-1));
@@ -191,17 +194,27 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
 			depth = 1;
 			itemes.remove(2);
 			ib.setVisibility(View.VISIBLE);
+			stv.setText(this.arrayListtoString());
 			stv.setVisibility(View.VISIBLE);
 			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selectArray(dialogItems[which]));
 		}
 		else{
 			depth = 2;
 			ib.setVisibility(View.VISIBLE);
+			stv.setText(this.arrayListtoString());
 			stv.setVisibility(View.VISIBLE);
 			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, retrievePlaces(dialogItems[which]));
 		}
 		lv.setAdapter(listAdapter);
 		tv.setText(itemes.get(itemes.size()-1));
 		this.removeDialog(DIALOG_BACK_ID);
+	}
+	
+	public String arrayListtoString(){
+		String aux = "";
+		for(int i = 0;i<itemes.size()-1;i++){
+			aux = aux + itemes.get(i) + " - ";
+		}
+		return aux;
 	}
 }

@@ -23,10 +23,10 @@ public class MainActivity extends TabActivity {
         tabs.setup();
          
         ImageView iv = new ImageView(this);
-        iv.setImageResource(R.drawable.ic_tab_categories);
+        iv.setImageResource(R.drawable.ic_tab_list);
         
         ImageView iv2 = new ImageView(this);
-        iv2.setImageResource(R.drawable.ic_tab_location);
+        iv2.setImageResource(R.drawable.ic_tab_map);
         Intent intent = new Intent().setClass(this, CategoryActivity.class);
         intent.putExtra("english", english);
         
