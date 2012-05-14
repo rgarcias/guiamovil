@@ -4,14 +4,41 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical" >
-    
-    <com.google.android.maps.MapView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/mapview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" >
+        
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextMaps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:text="Buscar"
+            android:textColor="@color/searchColor" >
+
+            <requestFocus />
+        </AutoCompleteTextView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_margin="15dp"
-        android:apiKey="0gZ9nODwKbRmRVgrPh6bcwW9Ocjtg1KaXMQoj5A"
-        android:clickable="true" />
+        android:orientation="vertical" >
+
+        <com.google.android.maps.MapView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/mapview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:apiKey="0jOOKU5iH4eJ4zs6NHZp-YgsoUhvMoJG5Ne8RvA"
+            android:clickable="true" >
+        </com.google.android.maps.MapView>
+
+    </LinearLayout>
 
 </LinearLayout>
