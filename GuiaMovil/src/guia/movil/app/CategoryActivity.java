@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -66,6 +67,8 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
        lv = this.getListView();
        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
        lv.setAdapter(listAdapter);
+       lv.requestFocus();
+       lv.requestFocusFromTouch();
    }
 	
     @Override
