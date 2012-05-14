@@ -14,11 +14,12 @@
             android1:layout_width="match_parent"
             android1:layout_height="match_parent"
             android1:orientation="vertical" >
-
+
             <TabWidget
                 android1:id="@android:id/tabs"
+                style="@style/widgetlayout"
                 android1:layout_width="match_parent"
-                android1:layout_height="35dp"
+                android1:layout_height="wrap_content"
                 android1:tabStripEnabled="true" >
 
             </TabWidget>
@@ -27,25 +28,22 @@
                 android1:id="@android:id/tabcontent"
                 android1:layout_width="match_parent"
                 android1:layout_height="match_parent" >
-
+
                 <LinearLayout
-                    android1:id="@+id/tab1"
+                    android1:id="@+id/tab_1"
+                    style="@style/tablayout"
                     android1:layout_width="match_parent"
                     android1:layout_height="match_parent"
                     android1:background="@color/background" >
 
                 </LinearLayout>
-
+
                 <LinearLayout
-                    android1:id="@+id/tab2"
+                    android1:id="@+id/tab_2"
+                    style="@style/tablayout"
                     android1:layout_width="match_parent"
                     android1:layout_height="match_parent" >
-                </LinearLayout>
 
-                <LinearLayout
-                    android1:id="@+id/tab3"
-                    android1:layout_width="match_parent"
-                    android1:layout_height="match_parent" >
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
