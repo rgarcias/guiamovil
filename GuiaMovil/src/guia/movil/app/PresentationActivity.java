@@ -29,7 +29,7 @@ public class PresentationActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View view) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(PresentationActivity.this, MainActivity.class);
+		Intent intent = new Intent(PresentationActivity.this, CategoryActivity.class);
 		if(view.getId() == R.id.spanishButton){
 			intent.putExtra("english", false);
 		}
