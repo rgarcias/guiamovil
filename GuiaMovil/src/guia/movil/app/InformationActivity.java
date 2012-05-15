@@ -2,9 +2,6 @@ package guia.movil.app;
 
 import java.util.ArrayList;
 
-
-
-
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
@@ -35,9 +32,11 @@ public class InformationActivity extends FBConnectionActivity {
 	private ImageButton btnCheck;
 	private ImageButton btnStar;
 	private ImageButton btnComment;
+	
 	//foursquare
 	public static final String CLIENT_ID = "QDLB4XF1BRCAP3X0KBOX04MQ43F1SJ0GPYYNX1H2A2EV11FX";
 	public static final String CLIENT_SECRET = "AMII1DTTF4WCKMTTJ4JUN0XFBARKV1QY4IWTVG4QPMQFMLYW";
+	
 	//twitter
 	private static final String CONSUMER_KEY = "l1s2kUwvs2Y3qrgLelGUsw";	
 	private static final String CONSUMER_SECRET = "A8WBA5myV7ktHTRyXipOPHCh1moo9uhqgDUofkPO0";	
@@ -52,7 +51,6 @@ public class InformationActivity extends FBConnectionActivity {
 	private OAuthProvider httpOauthprovider;
 	private AccessToken accessToken;
 	
-	
 	private SharedPreferences accesPref;
 	private Context mContext;
 	
@@ -61,8 +59,6 @@ public class InformationActivity extends FBConnectionActivity {
 	private com.fsq.android.NearbyAdapter mAdapter;
 	private ArrayList<com.fsq.android.FsqVenue> mNearbyList;
 	private ProgressDialog mProgress;
-	
-	
 	
     @Override
     public void onCreate(Bundle icicle) {
@@ -87,18 +83,12 @@ public class InformationActivity extends FBConnectionActivity {
         
         btnShare.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	
-            		
             		setConnection();
             		getID();
             		String text= "Radal fhghfjfhg tazas";
             		postOnWall(text);
-            	
-            	
-            	
             }
         });
-        
         
         btnTwitt.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -109,8 +99,6 @@ public class InformationActivity extends FBConnectionActivity {
 				else
 				{
 					autoriza();
-					
-				
 				}
 			}
 		});
@@ -124,7 +112,6 @@ public class InformationActivity extends FBConnectionActivity {
         }); 
     }
     
-   
    private void inicializar()
    {
          
@@ -135,9 +122,6 @@ public class InformationActivity extends FBConnectionActivity {
          if (!accesToken.equals(""))
         	 accessToken = new AccessToken(accesToken, SecretToken);
     }
-    
-    
-    
     
     private void autoriza() {
 		try {
@@ -154,7 +138,6 @@ public class InformationActivity extends FBConnectionActivity {
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		Toast.makeText(this, "onNewIntent", Toast.LENGTH_LONG).show();
 		super.onNewIntent(intent);
 
 		Uri uri = intent.getData();
@@ -167,13 +150,8 @@ public class InformationActivity extends FBConnectionActivity {
 				accesPref.edit().putString(ACCES,httpOauthConsumer.getToken()).commit();
 				accesPref.edit().putString(SECRET, httpOauthConsumer.getTokenSecret()).commit();
 				System.out.println(httpOauthprovider);
-				Log.v("tokentwitt",httpOauthConsumer.getToken());
-			    
-				
-				
 			} catch (Exception e) {
-				Log.v("tokentwitt",e.getMessage());
-				
+
 			}
 		}
 	}
@@ -186,16 +164,8 @@ public class InformationActivity extends FBConnectionActivity {
 	
 			// send the tweet
 			twitter.updateStatus("Probando twitter desde aplicacion android para la muni");
-	
-			// feedback for the user...
-			
 		} catch(Exception e) {
 			
 		}
-	}
-	
-	
-	
-
-    
+	} 
 }

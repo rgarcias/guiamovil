@@ -74,7 +74,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if(depth >= 2){
-        	Intent intent = new Intent(CategoryActivity.this, InformationActivity.class);
+        	Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
         	this.startActivity(intent);
         }
         else{
