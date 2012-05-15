@@ -4,27 +4,20 @@ import java.util.ArrayList;
 
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.Toast;
 
 public class InformationActivity extends FBConnectionActivity {
 	private ImageButton btnShare;
@@ -93,12 +86,12 @@ public class InformationActivity extends FBConnectionActivity {
         btnTwitt.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				inicializar();
+				
 				if(accessToken!=null)
 					enviaTweet();
 				else
 				{
-					autoriza();
+					
 				}
 			}
 		});
@@ -112,49 +105,7 @@ public class InformationActivity extends FBConnectionActivity {
         }); 
     }
     
-   private void inicializar()
-   {
-         
-         accesPref = PreferenceManager.getDefaultSharedPreferences(mContext);
-         String accesToken= accesPref.getString(ACCES, "");
-         String SecretToken= accesPref.getString(SECRET, "");
-         Toast.makeText(this, accesToken+"dsdss", Toast.LENGTH_LONG).show();
-         if (!accesToken.equals(""))
-        	 accessToken = new AccessToken(accesToken, SecretToken);
-    }
-    
-    private void autoriza() {
-		try {
-			httpOauthConsumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-			httpOauthprovider = new CommonsHttpOAuthProvider(REQUEST_URL, ACCESS_URL, AUTHORIZE_URL);
-			String authUrl = httpOauthprovider.retrieveRequestToken(httpOauthConsumer, CALLBACK_URL);
-	
-			this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
-		} catch (Exception e) {
-			
-			Log.v("autoriza",e.getMessage());
-		}
-	}
-	
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-
-		Uri uri = intent.getData();
-		if (uri != null && uri.toString().startsWith(CALLBACK_URL)) {
-			String verifier = uri.getQueryParameter(oauth.signpost.OAuth.OAUTH_VERIFIER);
-			try {
-				httpOauthprovider.retrieveAccessToken(httpOauthConsumer, verifier);
-				accessToken = new AccessToken(httpOauthConsumer.getToken(), httpOauthConsumer.getTokenSecret());
-				accesPref = PreferenceManager.getDefaultSharedPreferences(mContext);
-				accesPref.edit().putString(ACCES,httpOauthConsumer.getToken()).commit();
-				accesPref.edit().putString(SECRET, httpOauthConsumer.getTokenSecret()).commit();
-				System.out.println(httpOauthprovider);
-			} catch (Exception e) {
-
-			}
-		}
-	}
+   
 	
 	private void enviaTweet() {
 		try {
