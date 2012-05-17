@@ -11,9 +11,11 @@
 	
     <application android:label="@string/appName" >
     <uses-library android:name="com.google.android.maps"></uses-library>
-        <activity android:name="SplashActivity">
+        <activity android:name="SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" 
+                    android:screenOrientation="portrait"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
