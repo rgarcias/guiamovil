@@ -157,7 +157,7 @@ public abstract class FBConnectionActivity extends Activity {
             mFacebook.authorizeCallback(requestCode, resultCode, data);
     }
     
-    public void postOnWall(String msg) {
+    public String postOnWall(String msg) {
         Log.d("Tests", "Testing graph API wall post");
          try {
                 String response = mFacebook.request("me");
@@ -170,9 +170,11 @@ public abstract class FBConnectionActivity extends Activity {
                 if (response == null || response.equals("") || 
                         response.equals("false")) {
                    Log.v("Error", "Blank response");
+                   
                }
+                return response;
          } catch(Exception e) {
-             e.printStackTrace();
+             return e.getMessage();
          }
     }
     
