@@ -6,10 +6,10 @@
     android:gravity="center_horizontal|right"
     android:orientation="vertical"
     android:padding="2dip" >
-     
+     
      <RatingBar
          android:id="@+id/dialog_ratingbar"
-         android:layout_width="wrap_content"
+         android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_gravity="center"
          android:layout_marginBottom="10dp"
