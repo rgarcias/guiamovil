@@ -33,7 +33,8 @@
             android:layout_width="match_parent"
             android:layout_height="190dp"
             android:layout_weight="0.88"
-            android:choiceMode="singleChoice" >
+            android:choiceMode="singleChoice"
+            android:cacheColorHint="@color/background" >
 
             <!-- Preview: listitem=@layout/commentlistitem -->
 
@@ -49,7 +50,10 @@
             android:id="@+id/commentarySubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Button"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp" />
 
     </LinearLayout>
 
