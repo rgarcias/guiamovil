@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    
     android:background="@color/background"
-    android:gravity="center|center_vertical|top"
+    android:gravity="center|center_vertical|right|top"
     android:orientation="vertical" >
 
     <TextView
@@ -12,21 +11,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/comentESP"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
         <TextView
             android:id="@+id/nickTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/apodoESP"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            
             android:layout_marginLeft="15dp"
-             />
+            android:text="@string/apodoESP"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
             android:id="@+id/nickText"
@@ -34,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
             android:ems="10" >
 
             <requestFocus />
@@ -53,23 +57,25 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_marginLeft="15dp"
              />
-
+
         <EditText
             android:id="@+id/commentText"
             android:layout_width="match_parent"
-            android:layout_height="340dp"
+            android:layout_height="233dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
             android:ems="10"
             android:inputType="textMultiLine"
-            android:singleLine="false"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp" />
+            android:singleLine="false" />
 
     </LinearLayout>
-
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
+
         <Button
             android:id="@+id/sendComment"
             android:layout_width="wrap_content"
@@ -77,9 +83,10 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_weight="0.15"
+            android:layout_marginTop="15dp"
+            android:layout_weight="0.28"
             android:text="@string/SendESP" />
-
+
         <Button
             android:id="@+id/cancelComment"
             android:layout_width="wrap_content"
@@ -87,7 +94,8 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_weight="0.15"
+            android:layout_marginTop="15dp"
+            android:layout_weight="0.22"
             android:text="@string/cancelESP" />
 
     </LinearLayout>

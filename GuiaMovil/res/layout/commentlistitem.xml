@@ -11,10 +11,10 @@
 <TextView android:id="@+id/LblTitulo"
     android:layout_width="fill_parent"
     android:layout_gravity="right"
-    android:textColor="@android:color/white"
+    
     android:layout_height="wrap_content"
     android:textStyle="bold"
-    android:textSize="28dp"
+    android:textSize="10dp"
     android:layout_marginLeft="10dp" />
  
 <TextView android:id="@+id/LblSubTitulo"
@@ -23,7 +23,7 @@
     android:textColor="@android:color/white"
     android:layout_height="wrap_content"
     android:textStyle="normal"
-    android:textSize="18dp"
+    android:textSize="20dp"
 	android:layout_marginLeft="10dp"/>
  
 </LinearLayout>
