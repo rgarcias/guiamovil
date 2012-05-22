@@ -14,16 +14,17 @@
         android:textAppearance="?android:attr/textAppearanceLarge" 
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-       android:layout_marginTop="5dp"/>
-
+       android:layout_marginTop="15dp"/>
+
     <TextView
         android:id="@+id/commentSpace"
         android:layout_width="match_parent"
-        android:layout_height="418dp"
-        android:text="@string/comentario"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginRight="15dp"
+        android:layout_height="406dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/comentario"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>
