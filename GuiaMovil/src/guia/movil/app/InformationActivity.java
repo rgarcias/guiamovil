@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class InformationActivity extends FBConnectionActivity implements OnClickListener {
@@ -69,6 +70,10 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         
         RatingBar rb = (RatingBar) this.findViewById(R.id.ratingBar1);
         
+        TextView text = (TextView) this.findViewById(R.id.textView2);
+        String methodname = "getDescription";
+        String soap = "http://turismo/" + methodname;
+        text.setText(Services.getDescription(methodname, soap, "place", "Radal Siete Tazas"));
         rb.setRating(4.2f);
         mContext=this;
         btnShare= (ImageButton) findViewById(R.id.shareButton); 
