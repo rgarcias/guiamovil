@@ -22,16 +22,16 @@
         android:layout_height="wrap_content"
         style="?android:attr/ratingBarStyleIndicator"
         android:layout_marginLeft="15dp" />
-
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:textColor="@android:color/white"
         android:paddingTop="15dp"
-        android:text="@string/infoESP" />
+        android:text="@string/infoESP"
+        android:textColor="@android:color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
