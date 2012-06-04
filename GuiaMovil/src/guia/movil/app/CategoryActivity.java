@@ -1,6 +1,13 @@
 package guia.movil.app;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -162,6 +169,8 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     private String[] retrievePlaces(String item){
     	String[] aux = new String[]{"Radal Siete Tazas", "Iloca"};
     	
+    	
+    	aux = procesarConsulta(Services.getPlaces("getPlaces", "http://turismo/getPlaces", "subcategory", item));
     	return aux;
     }
 
@@ -221,5 +230,20 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
 			aux = aux + itemes.get(i) + " - ";
 		}
 		return aux;
+	}
+	
+	private String[] procesarConsulta(String consulta) {
+		
+		Gson gson = new Gson();
+		ArrayList<String> arreglo = new ArrayList<String>();
+        Type collectionType = new TypeToken<ArrayList<String>>(){}.getType();
+        arreglo = gson.fromJson(consulta, collectionType);
+        
+        String[] stringarray;
+        
+        stringarray=new String[arreglo.size()];
+        arreglo.toArray(stringarray);
+		
+        return stringarray;
 	}
 }
