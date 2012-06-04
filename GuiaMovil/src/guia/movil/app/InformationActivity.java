@@ -60,7 +60,10 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private com.fsq.android.NearbyAdapter mAdapter;
 	private ArrayList<com.fsq.android.FsqVenue> mNearbyList;
 	private ProgressDialog mProgress;
-	
+	private RatingBar ratingBar;
+	private String placeID;
+	private String rat;
+	private RatingBar rb;
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -68,7 +71,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.setContentView(R.layout.information);
         
-        RatingBar rb = (RatingBar) this.findViewById(R.id.ratingBar1);
+        rb = (RatingBar) this.findViewById(R.id.ratingBar1);
         
         TextView title = (TextView) this.findViewById(R.id.textView1);
         title.setText(CategoryActivity.PLACE);
@@ -78,7 +81,16 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         String soap = "http://turismo/" + methodname;
         text.setText(Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(CategoryActivity.english)));
         
-        rb.setRating(4.2f);
+        String methodnameID = "getPlaceID";
+        String soapID = "http://turismo/" + methodnameID;
+    	placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE);
+        
+        
+    	refreshRat();
+    	
+    	
+    	
+        rb.setRating(Float.valueOf(rat));
         mContext=this;
         btnShare= (ImageButton) findViewById(R.id.shareButton); 
         btnTwitt= (ImageButton) findViewById(R.id.tweetButton);
@@ -101,6 +113,15 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         btnStar.setOnClickListener(this);
         
         btnCheck.setOnClickListener(this); 
+    }
+    
+    private void refreshRat()
+    {
+    	String methodnameAv = "getPlaceRatingAverage";
+        String soapAv = "http://turismo/" + methodnameAv;
+    	rat = Services.getPlaceID(methodnameAv, soapAv, "placeId", placeID);
+    	
+        rb.setRating(Float.valueOf(rat));
     }
     
    
@@ -133,7 +154,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			final Dialog rankDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
 	        rankDialog.setContentView(R.layout.stardialog);
 	        rankDialog.setCancelable(true);
-	        RatingBar ratingBar = (RatingBar)rankDialog.findViewById(R.id.dialog_ratingbar);
+	        ratingBar = (RatingBar)rankDialog.findViewById(R.id.dialog_ratingbar);
 	       
 	       
 	 
@@ -141,6 +162,13 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        aceptar.setOnClickListener(new View.OnClickListener() {
 	            @Override
 	            public void onClick(View v) {
+	            	
+	            	
+	            	
+	            	String methodname = "sendRating";
+	                String soap = "http://turismo/" + methodname;
+	            	Services.addRating(methodname, soap, String.valueOf(ratingBar.getRating()),placeID );
+	            	refreshRat();
 	                rankDialog.dismiss();
 	            }
 	        });
