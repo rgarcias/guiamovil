@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 public class CategoryActivity extends ListActivity implements OnClickListener, android.content.DialogInterface.OnClickListener {
 	static final int DIALOG_BACK_ID = 0;
+	static String PLACE = "";
 	
     /* Variables*/
     private boolean english = false;
@@ -75,6 +76,8 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if(depth >= 2){
         	Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
+        	String place = (String) lv.getAdapter().getItem(position);
+        	this.PLACE = place;
         	this.startActivity(intent);
         }
         else{
@@ -158,7 +161,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     }
     
     private String[] retrievePlaces(String item){
-    	String[] aux = new String[]{"Hola", "esto", "es", "una", "prueba"};
+    	String[] aux = new String[]{"Radal Siete Tazas", "Iloca"};
     	
     	return aux;
     }
