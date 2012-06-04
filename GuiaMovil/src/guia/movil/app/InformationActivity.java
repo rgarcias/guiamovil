@@ -1,6 +1,18 @@
 package guia.movil.app;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
@@ -12,6 +24,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -77,6 +91,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         title.setText(CategoryActivity.PLACE);
         TextView text = (TextView) this.findViewById(R.id.textView2);
         
+        /* get descriptions */
         String methodname = "getDescription";
         String soap = "http://turismo/" + methodname;
         text.setText(Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(CategoryActivity.english)));
@@ -85,12 +100,19 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         String soapID = "http://turismo/" + methodnameID;
     	placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE);
         
-        
+        /*rating*/
     	refreshRat();
-    	
-    	
-    	
-        rb.setRating(Float.valueOf(rat));
+        rb.setRating(Float.valueOf(rat)); 
+        
+        /* photos */
+        ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
+        TextView photo = (TextView) this.findViewById(R.id.textView3);
+        String photosString = "";
+        for(int i = 0;i<photos.size();i++){
+        	photosString = photosString + "," + photos.get(i);
+        }
+        photo.setText(photosString);
+        
         mContext=this;
         btnShare= (ImageButton) findViewById(R.id.shareButton); 
         btnTwitt= (ImageButton) findViewById(R.id.tweetButton);
@@ -226,5 +248,32 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			Log.d("NETWORK", "No network available");
 		}
 		return false;
+	}
+	
+	public static Bitmap getImageBitmap(String url) { 
+        Bitmap bm = null; 
+        try { 
+            URL aURL = new URL(url); 
+            URLConnection conn = aURL.openConnection(); 
+            conn.connect(); 
+            InputStream is = conn.getInputStream(); 
+            BufferedInputStream bis = new BufferedInputStream(is); 
+            bm = BitmapFactory.decodeStream(bis); 
+            bis.close(); 
+            is.close(); 
+       } catch (IOException e) { 
+           Log.e("1", "Error getting bitmap", e); 
+       } 
+       return bm; 
+    } 
+	
+	private ArrayList<String> procesarConsulta(String consulta) {
+		
+		Gson gson = new Gson();
+		ArrayList<String> arreglo = new ArrayList<String>();
+        Type collectionType = new TypeToken<ArrayList<String> >(){}.getType();
+        arreglo = gson.fromJson(consulta, collectionType);
+        
+        return arreglo;
 	}
 }

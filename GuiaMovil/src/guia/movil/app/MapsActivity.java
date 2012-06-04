@@ -10,6 +10,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
@@ -39,6 +40,9 @@ public class MapsActivity extends MapActivity{
         String longitude = Services.getLongitude(methodname2, soap2, "place", CategoryActivity.PLACE);
         
         GeoPoint point = new GeoPoint(Integer.parseInt(latitude),Integer.parseInt(longitude));
+        MapController control = mapView.getController();
+        control.setCenter(point);
+        control.setZoom(13);
         OverlayItem overlayitem = new OverlayItem(point, "Hola mundo!", "I'm in "+ CategoryActivity.PLACE);
         
         itemizedoverlay.addOverlay(overlayitem);
