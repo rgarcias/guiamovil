@@ -1,6 +1,16 @@
 package guia.movil.app;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Activity;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,10 +26,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-public class CommentsActivity extends Activity implements OnClickListener, OnItemClickListener {
-	
+public class CommentsActivity extends Activity implements OnClickListener {
+	protected static String nick;
+	protected static String comment;
 	private TextView title;
 	private ListView commentaries;
 	private View tempView;
@@ -31,6 +43,7 @@ public class CommentsActivity extends Activity implements OnClickListener, OnIte
 			new CommentResume("Pedro", "Mal lugar"),new CommentResume("Peter", "Nice place"),
 			new CommentResume("James", "Is not bad")};
 	private Button comentar;
+	private String placeID;
 	
     @Override
     public void onCreate(Bundle icicle) {
@@ -47,19 +60,66 @@ public class CommentsActivity extends Activity implements OnClickListener, OnIte
        
         
         commentaries = (ListView) findViewById(R.id.commentaryList);
+        String methodname = "getComment";
+        String soap = "http://turismo/" + methodname;
+        String methodnameID = "getPlaceID";
+        String soapID = "http://turismo/" + methodnameID;
+        
+        placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE); 
+        
+        String consulta =Services.getComments(methodname, soap, "placeID", placeID);
+        procesarConsulta(consulta);
  
         AdaptadorTitulares adaptador = 
             	new AdaptadorTitulares(this);
 
         commentaries.setAdapter(adaptador);
-        
-       
+        commentaries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				nick=datos[arg2].getNick();
+				comment=datos[arg2].getComment();
+				Intent intent = new Intent(CommentsActivity.this,CommentViewActivity.class);
+				
+				
+				CommentsActivity.this.startActivity(intent);
+				
+			}
+		});
         
         
         comentar.setOnClickListener(this);
         
         // ToDo add your GUI initialization code here        
     }
+
+	private void procesarConsulta(String consulta) {
+		
+		Gson gson = new Gson();
+		HashMap<String,String> arreglo = new HashMap<String, String>();
+        Type collectionType = new TypeToken<HashMap<String,String> >(){}.getType();
+        arreglo = gson.fromJson(consulta, collectionType);
+        
+        ArrayList<CommentResume> temp= new  ArrayList<CommentResume>();
+        
+        Iterator iter = arreglo.entrySet().iterator();
+        
+        Map.Entry e;
+
+        
+        while (iter.hasNext()) {
+        	e = (Map.Entry)iter.next();
+        	temp.add(new CommentResume(e.getKey().toString(), e.getValue().toString()));
+        	
+        }
+        
+        datos=new CommentResume[temp.size()];
+        temp.toArray(datos);
+		
+	}
 
 	@Override
 	public void onClick(View arg0) {
@@ -78,7 +138,7 @@ public class CommentsActivity extends Activity implements OnClickListener, OnIte
 	
 	
 	
-	class AdaptadorTitulares extends ArrayAdapter<CommentResume> implements OnClickListener, OnItemClickListener{
+	class AdaptadorTitulares extends ArrayAdapter<CommentResume>{
 		 
 	    Activity context;
 		
@@ -99,10 +159,13 @@ public class CommentsActivity extends Activity implements OnClickListener, OnIte
 	        	lblTitulo.setText(datos[position].getNick());
 	 
 	        	TextView lblSubtitulo = (TextView)item.findViewById(R.id.LblSubTitulo);
-	        	lblSubtitulo.setText(datos[position].getComment());
+	        	if(datos[position].getComment().length()>20)
+	        		lblSubtitulo.setText(datos[position].getComment().substring(0,20)+"...");
+	        	else
+	        		lblSubtitulo.setText(datos[position].getComment());
 	        	item.setTag(position);
-	        	item.setOnClickListener(this);
-	        	commentaries.setOnItemClickListener(this);
+	        	
+	        	
 	        	
 	        	
 
@@ -111,57 +174,17 @@ public class CommentsActivity extends Activity implements OnClickListener, OnIte
 	        	return(item);
 	    }
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				Intent intent = new Intent(CommentsActivity.this,CommentViewActivity.class);
-				
-				CommentsActivity.this.startActivity(intent);
-				
-				
-				 
-				
-			}
+			
 
 
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View v, int arg2,
-					long arg3) {
-				
-				v.setFocusable(true);
-				v.setSelected(true);
-				v.setBackgroundColor(Color.YELLOW);
-				if(tempView != null){
-			        //If row is already clicked then reset its color to default row color
-			        tempView.setBackgroundColor(Color.TRANSPARENT);
-
-			    }
-			    tempView = v;
-				
-				
-			}
+		
 			
 			
 	}
 
 
 
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3) {
-		// TODO Auto-generated method stub
-		v.setFocusable(true);
-		v.setSelected(true);
-		v.setBackgroundColor(Color.YELLOW);
-		if(tempView != null){
-	        //If row is already clicked then reset its color to default row color
-	        tempView.setBackgroundColor(Color.TRANSPARENT);
 
-	    }
-	    tempView = v;
-		
-		
-	}
 	}
 	
 	
