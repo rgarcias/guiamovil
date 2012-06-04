@@ -20,11 +20,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class CategoryActivity extends ListActivity implements OnClickListener, android.content.DialogInterface.OnClickListener {
-	static final int DIALOG_BACK_ID = 0;
-	static String PLACE = "";
-	
+	protected static final int DIALOG_BACK_ID = 0;
+	protected static String PLACE = "";
+	protected static boolean english = false;
     /* Variables*/
-    private boolean english = false;
     private int depth;
     private ArrayList<String> itemes;
     
@@ -49,7 +48,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
        setContentView(R.layout.category);
        Bundle bundle = getIntent().getExtras();
-       this.english = bundle.getBoolean("english");
+       CategoryActivity.english = bundle.getBoolean("english");
        selectLanguage();
        
        itemes = new ArrayList<String>();
@@ -120,7 +119,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     }
 	
     private void selectLanguage(){
-    	if(!english){
+    	if(!CategoryActivity.english){
     		main = getResources().getString(R.string.mainESP);
             categories = getResources().getStringArray(R.array.categoriesESP);
             attractions = getResources().getStringArray(R.array.touristAttractionsESP);
