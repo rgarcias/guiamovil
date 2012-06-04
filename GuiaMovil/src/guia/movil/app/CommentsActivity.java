@@ -32,6 +32,7 @@ import android.widget.ViewSwitcher;
 public class CommentsActivity extends Activity implements OnClickListener {
 	protected static String nick;
 	protected static String comment;
+	
 	private TextView title;
 	private ListView commentaries;
 	private View tempView;
@@ -43,7 +44,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
 			new CommentResume("Pedro", "Mal lugar"),new CommentResume("Peter", "Nice place"),
 			new CommentResume("James", "Is not bad")};
 	private Button comentar;
-	private String placeID;
+	protected static String placeID;
 	
     @Override
     public void onCreate(Bundle icicle) {

@@ -13,7 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class Services {
 	private static final String NAMESPACE  = "http://turismo/";
-    public static String URL="http://192.168.1.8:8084/TurismoCuricoWebService/TurismoCurico?wsdl";
+    public static String URL="http://172.17.32.184:8084/TurismoCuricoWebService/TurismoCurico?wsdl";
 
     public static String getDescription(String methodname,String soap,String nombre,String parametrovalor, String nombre2, Boolean english){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
@@ -136,6 +136,108 @@ public class Services {
 	    }
 	} 
     public static String getComments(String methodname,String soap,String nombre,String parametrovalor){
+	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
+	    PropertyInfo parametro = new PropertyInfo();
+	    parametro.setName(nombre);
+	    parametro.setValue(parametrovalor);
+	    parametro.setType(String.class);
+	    Solicitud.addProperty(parametro);
+	    SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
+	    Envoltorio.setOutputSoapObject (Solicitud);
+	    HttpTransportSE TransporteHttp = new HttpTransportSE(URL);
+	    try {
+	    	TransporteHttp.call (soap, Envoltorio);
+	    }
+	    catch (IOException ex) {
+	        return null;
+	    }
+	    catch (XmlPullParserException ex) {
+	        return null;
+	    }
+	    try {
+	        String CadenaDevuelta =  Envoltorio.getResponse().toString();
+	        return CadenaDevuelta;  
+	    } 
+	    catch (SoapFault ex) {
+	        return null;
+	    }
+	} 
+
+
+
+	public static void addComments(String methodname,String soap,String parametrovalorComment
+			,String parametrovalorNick,String parametrovalorplcaeid){
+		SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
+		PropertyInfo parametroComment = new PropertyInfo();
+		parametroComment.setName("comment");
+		parametroComment.setValue(parametrovalorComment);
+		parametroComment.setType(String.class);
+		
+		PropertyInfo parametroNick = new PropertyInfo();
+		parametroNick.setName("nick");
+		parametroNick.setValue(parametrovalorNick);
+		parametroNick.setType(String.class);
+		
+		PropertyInfo parametroplcaeid = new PropertyInfo();
+		parametroplcaeid.setName("plcaeId");
+		parametroplcaeid.setValue(parametrovalorplcaeid);
+		parametroplcaeid.setType(String.class);
+		
+		
+		
+		Solicitud.addProperty(parametroComment);
+		Solicitud.addProperty(parametroNick);
+		Solicitud.addProperty(parametroplcaeid);
+		SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
+		Envoltorio.setOutputSoapObject (Solicitud);
+		HttpTransportSE TransporteHttp = new HttpTransportSE(URL);
+		
+		try {
+		    	TransporteHttp.call (soap, Envoltorio);
+		    }
+		catch (IOException ex) {
+		       
+		    }
+		catch (XmlPullParserException ex) {
+		       
+		    }
+	}
+	
+	public static void addRating(String methodname,String soap,String parametrovalorNumber
+			,String parametrovalorplcaeid){
+		SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
+		PropertyInfo parametroNumber = new PropertyInfo();
+		parametroNumber.setName("number");
+		parametroNumber.setValue(parametrovalorNumber);
+		parametroNumber.setType(String.class);
+
+		PropertyInfo parametroplcaeid = new PropertyInfo();
+		parametroplcaeid.setName("placeId");
+		parametroplcaeid.setValue(parametrovalorplcaeid);
+		parametroplcaeid.setType(String.class);
+		
+		
+		
+		Solicitud.addProperty(parametroNumber);
+		Solicitud.addProperty(parametroplcaeid);
+		SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
+		Envoltorio.setOutputSoapObject (Solicitud);
+		HttpTransportSE TransporteHttp = new HttpTransportSE(URL);
+		
+		try {
+		    	TransporteHttp.call (soap, Envoltorio);
+		    }
+		catch (IOException ex) {
+		       
+		    }
+		catch (XmlPullParserException ex) {
+		       
+		    }
+	}
+	
+	
+	
+	public static String getRatingAverage(String methodname,String soap,String nombre,String parametrovalor){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 	    PropertyInfo parametro = new PropertyInfo();
 	    parametro.setName(nombre);
