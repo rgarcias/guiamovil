@@ -28,7 +28,6 @@ public class MainActivity extends TabActivity {
         ImageView iv2 = new ImageView(this);
         iv2.setImageResource(R.drawable.ic_tab_map);
         Intent intent = new Intent().setClass(this, InformationActivity.class);
-        
         TabHost.TabSpec spec=tabs.newTabSpec("tabInfo");
         spec.setContent(intent);
         //spec.setIndicator(iv);

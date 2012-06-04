@@ -79,7 +79,7 @@
     <string name="mainESP">Principal</string>
     <string name="mainING">Main Menu</string>
     <string name="infoESP"></string>
-    <string name="titleInfoESP">Radal Siete Tazas</string>
+    <string name="titleInfoESP"></string>
     <color name="background">#4e8950</color>
     <color name="searchColor">#888888</color>
     <string name="searchESP">Buscar</string>
