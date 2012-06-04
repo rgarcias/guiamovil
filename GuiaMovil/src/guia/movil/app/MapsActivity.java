@@ -30,8 +30,16 @@ public class MapsActivity extends MapActivity{
         Drawable drawable = this.getResources().getDrawable(R.drawable.blue_dot);
         PointersActivity itemizedoverlay = new PointersActivity(drawable, this);
         
-        GeoPoint point = new GeoPoint(-34983330,-71233330);
-        OverlayItem overlayitem = new OverlayItem(point, "Hola mundo!", "I'm in Curicó City!");
+        String methodname = "getLatitude";
+        String soap = "http://turismo/" + methodname;
+        String latitude = Services.getLatitude(methodname, soap, "place", CategoryActivity.PLACE);
+        
+        String methodname2 = "getLongitude";
+        String soap2 = "http://turismo/" + methodname;
+        String longitude = Services.getLongitude(methodname2, soap2, "place", CategoryActivity.PLACE);
+        
+        GeoPoint point = new GeoPoint(Integer.parseInt(latitude),Integer.parseInt(longitude));
+        OverlayItem overlayitem = new OverlayItem(point, "Hola mundo!", "I'm in "+ CategoryActivity.PLACE);
         
         itemizedoverlay.addOverlay(overlayitem);
         mapOverlays.add(itemizedoverlay);

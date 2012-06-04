@@ -15,13 +15,21 @@ public class Services {
 	private static final String NAMESPACE  = "http://turismo/";
     public static String URL="http://192.168.1.7:8084/TurismoCuricoWebService/TurismoCurico?wsdl";
 
-    public static String getDescription(String methodname,String soap,String nombre,String parametrovalor){
+    public static String getDescription(String methodname,String soap,String nombre,String parametrovalor, String nombre2, Boolean english){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 	    PropertyInfo parametro = new PropertyInfo();
 	    parametro.setName(nombre);
 	    parametro.setValue(parametrovalor);
 	    parametro.setType(String.class);
+	    
+	    PropertyInfo parametro2 = new PropertyInfo();
+	    parametro2.setName(nombre2);
+	    parametro2.setValue(english.booleanValue());
+	    parametro2.setType(Boolean.class);
+	    
 	    Solicitud.addProperty(parametro);
+	    Solicitud.addProperty(parametro2);
+	    
 	    SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
 	    Envoltorio.setOutputSoapObject (Solicitud);
 	    HttpTransportSE TransporteHttp = new HttpTransportSE(URL);

@@ -73,10 +73,11 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         TextView title = (TextView) this.findViewById(R.id.textView1);
         title.setText(CategoryActivity.PLACE);
         TextView text = (TextView) this.findViewById(R.id.textView2);
+        
         String methodname = "getDescription";
         String soap = "http://turismo/" + methodname;
-        Log.v("Place", CategoryActivity.PLACE);
-        text.setText(Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE));
+        text.setText(Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(CategoryActivity.english)));
+        
         rb.setRating(4.2f);
         mContext=this;
         btnShare= (ImageButton) findViewById(R.id.shareButton); 
