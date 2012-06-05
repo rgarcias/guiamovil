@@ -39,47 +39,54 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="15dp" >
-
+
         <ImageButton
             android:id="@+id/commentsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_information_comments" />
-
+            android:src="@drawable/comments" />
+
         <ImageButton
             android:id="@+id/starButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_information_rating" />
-
+            android:src="@drawable/star" />
+
         <ImageButton
             android:id="@+id/shareButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_information_facebook" />
-
+            android:src="@drawable/facebook" />
+
         <ImageButton
             android:id="@+id/tweetButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_information_twitter" />
-
+            android:src="@drawable/twitter" />
+
         <ImageButton
             android:id="@+id/checkinButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_information_checkin" />
+            android:src="@drawable/foursquare" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:src="@drawable/ic_tab_list" />
 
     <TextView
         android:id="@+id/textView3"

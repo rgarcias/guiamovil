@@ -167,10 +167,8 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     }
     
     private String[] retrievePlaces(String item){
-    	String[] aux = new String[]{"Radal Siete Tazas", "Iloca"};
+    	String[] aux = procesarConsulta(Services.getPlaces("getPlaces", "http://turismo/getPlaces", "subcategory", item));
     	
-    	
-    	aux = procesarConsulta(Services.getPlaces("getPlaces", "http://turismo/getPlaces", "subcategory", item));
     	return aux;
     }
 
