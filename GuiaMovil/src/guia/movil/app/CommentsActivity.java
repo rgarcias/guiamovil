@@ -126,11 +126,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		
-		if(tempView != null){
-	        //If row is already clicked then reset its color to default row color
-	        tempView.setBackgroundColor(Color.TRANSPARENT);
-
-	    }
+		
 		Intent intent = new Intent(CommentsActivity.this,CommentWriteActivity.class);
 		finish();
 		this.startActivity(intent);
