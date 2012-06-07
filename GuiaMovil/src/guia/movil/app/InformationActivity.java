@@ -79,6 +79,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private String placeID;
 	private String rat;
 	private RatingBar rb;
+	private TextView text;
+	private TextView title;
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -88,9 +90,9 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         
         rb = (RatingBar) this.findViewById(R.id.ratingBar1);
         
-        TextView title = (TextView) this.findViewById(R.id.textView1);
+        title = (TextView) this.findViewById(R.id.textView1);
         title.setText(CategoryActivity.PLACE);
-        TextView text = (TextView) this.findViewById(R.id.textView2);
+        text = (TextView) this.findViewById(R.id.textView2);
         
         /* get descriptions */
         String methodname = "getDescription";
@@ -217,20 +219,27 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 		else if(v.getId()==R.id.shareButton && isOnline())
 		{
+			Toast.makeText(this, "Publicando mensaje", Toast.LENGTH_LONG).show();
 			setConnection();
     		getID();
-    		String text= "Radal fhghfjfhg tazas";
-    		postOnWall(text);
+    		String text= this.text.getText().toString();
+    		String title = this.title.getText().toString();
+    		String response= postOnWall(title,text);
+    		if(response.equals("{\"error\":{\"message\":\"(#506) Duplicate status message\",\"type\":\"OAuthException\",\"code\":506}}"))
+    			Toast.makeText(this, "Mensaje ya publicado", Toast.LENGTH_LONG).show();
+    		else
+    			Toast.makeText(this, "Mensaje  publicado", Toast.LENGTH_LONG).show();
 		}
 		else if(!isOnline())
 		{
-			Toast.makeText(this, "No conectado a internet", Toast.LENGTH_SHORT).show();
+			
 		}
 		
 	}
 	public boolean isOnline() {
 		Context context = getApplicationContext();
 		ConnectivityManager connectMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		Toast.makeText(this, "Verificando conexion", Toast.LENGTH_SHORT).show();
 		if (connectMgr != null) {
 			NetworkInfo[] netInfo = connectMgr.getAllNetworkInfo();
 			if (netInfo != null) {
@@ -243,6 +252,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		} 
 		else {
 			Log.d("NETWORK", "No network available");
+			Toast.makeText(this, "No conectado a internet", Toast.LENGTH_SHORT).show();
 		}
 		return false;
 	}

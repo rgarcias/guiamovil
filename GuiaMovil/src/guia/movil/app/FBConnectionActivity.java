@@ -157,13 +157,15 @@ public abstract class FBConnectionActivity extends Activity {
             mFacebook.authorizeCallback(requestCode, resultCode, data);
     }
     
-    public String postOnWall(String msg) {
+    public String postOnWall(String title,String msg) {
         Log.d("Tests", "Testing graph API wall post");
          try {
                 String response = mFacebook.request("me");
                 Bundle parameters = new Bundle();
-                parameters.putString("message", msg);
-                parameters.putString("description", "test test test");
+                //parameters.putString("name", "Iloca");
+                //parameters.putString("link", "http://www.curico.cl");
+                parameters.putString("message", title+"\n"+msg);
+                parameters.putString("description", "");
                 response = mFacebook.request("me/feed", parameters, 
                         "POST");
                 Log.d("Tests", "got response: " + response);
