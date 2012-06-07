@@ -26,7 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class CategoryActivity extends ListActivity implements OnClickListener, android.content.DialogInterface.OnClickListener {
+public class CategoryActivity extends ListActivity implements OnClickListener {
 	protected static final int DIALOG_BACK_ID = 0;
 	protected static String PLACE = "";
 	protected static boolean english = false;
@@ -45,6 +45,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     private TextView tv; 
     private TextView stv; 
     private ImageButton ib;
+    private ImageButton ib2;
     private ArrayAdapter<String> listAdapter;
     private String[] dialogItems;
 
@@ -66,6 +67,10 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
        ib = (ImageButton) this.findViewById(R.id.imageButton1);
        ib.setOnClickListener(this);
        ib.setVisibility(View.INVISIBLE);
+       
+       ib2 = (ImageButton) this.findViewById(R.id.imageButton2);
+       ib2.setOnClickListener(this);
+       ib2.setVisibility(View.INVISIBLE);
        
        stv = (TextView) this.findViewById(R.id.path);
        stv.setVisibility(View.INVISIBLE);
@@ -92,6 +97,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
         		itemes.add((String) lv.getAdapter().getItem(position));
         	}
         	ib.setVisibility(View.VISIBLE);
+        	ib2.setVisibility(View.VISIBLE);
         	stv.setText(this.arrayListtoString());
         	stv.setVisibility(View.VISIBLE);
         	tv.setText(itemes.get(itemes.size()-1));
@@ -109,6 +115,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
 	    	if(depth == 0){
 	    		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
 	    		ib.setVisibility(View.INVISIBLE);
+	    		ib2.setVisibility(View.INVISIBLE);
 	    		stv.setVisibility(View.INVISIBLE);
 	    	}
 	    	else{
@@ -172,54 +179,8 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
     	return aux;
     }
 
-	@Override
-	public void onClick(View arg0) {
-		if(itemes.size() > 2){
-			this.onCreateDialog(DIALOG_BACK_ID);
-			this.showDialog(DIALOG_BACK_ID);
-		}
-		else{
-			this.onBackPressed();
-		}
-	}
-	
-	public Dialog onCreateDialog(int integer){
-		dialogItems = itemes.toArray(new String[itemes.size()]);
-	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	    
-	    builder.setItems(dialogItems, this);
-	      
-	    return builder.create();
-	}
-
-	@Override
-	public void onClick(DialogInterface dialog, int which) {
-		if(dialogItems[which].compareTo(itemes.get(0)) == 0){
-			itemes.remove(2);
-			itemes.remove(1);
-			depth = 0;
-			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
-    		ib.setVisibility(View.INVISIBLE);
-    		stv.setVisibility(View.INVISIBLE);
-		}
-		else if(dialogItems[which].compareTo(itemes.get(1)) == 0){
-			depth = 1;
-			itemes.remove(2);
-			ib.setVisibility(View.VISIBLE);
-			stv.setText(this.arrayListtoString());
-			stv.setVisibility(View.VISIBLE);
-			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selectArray(dialogItems[which]));
-		}
-		else{
-			depth = 2;
-			ib.setVisibility(View.VISIBLE);
-			stv.setText(this.arrayListtoString());
-			stv.setVisibility(View.VISIBLE);
-			listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, retrievePlaces(dialogItems[which]));
-		}
-		lv.setAdapter(listAdapter);
-		tv.setText(itemes.get(itemes.size()-1));
-		this.removeDialog(DIALOG_BACK_ID);
+	public void onClick(int which) {
+		
 	}
 	
 	public String arrayListtoString(){
@@ -243,5 +204,34 @@ public class CategoryActivity extends ListActivity implements OnClickListener, a
         arreglo.toArray(stringarray);
 		
         return stringarray;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if(v.getId() == R.id.imageButton1){
+			this.onBackPressed();
+		}
+		
+		if(v.getId() == R.id.imageButton2){
+			this.home();
+		}
+	}
+	
+	public void home(){
+		listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
+	    lv.setAdapter(listAdapter);
+	    ib2.setVisibility(View.INVISIBLE);
+	    ib.setVisibility(View.INVISIBLE);
+	    if(depth == 2){
+	    	itemes.remove(2);
+	    	itemes.remove(1);
+	    }
+	    if(depth == 1){
+	    	itemes.remove(1);
+	    }
+	    tv.setText(itemes.get(0));
+	    stv.setVisibility(View.INVISIBLE);
+	    depth = 0;
 	}
 }

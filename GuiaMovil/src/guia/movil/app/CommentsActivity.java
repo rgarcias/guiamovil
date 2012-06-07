@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
 			new CommentResume("James", "Is not bad"),new CommentResume("Juan", "Buen lugar"),
 			new CommentResume("Pedro", "Mal lugar"),new CommentResume("Peter", "Nice place"),
 			new CommentResume("James", "Is not bad")};
-	private Button comentar;
+	private ImageButton comentar;
 	protected static String placeID;
 	
     @Override
@@ -54,8 +55,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
         
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-        comentar= (Button)findViewById(R.id.commentarySubmit);
-        comentar.setText("Comentar");
+        comentar= (ImageButton)findViewById(R.id.comment);
         title = (TextView)findViewById(R.id.comentaryTitle);
         title.setText("Comentarios");       
        

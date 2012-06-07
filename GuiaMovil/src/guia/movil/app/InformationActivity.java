@@ -107,12 +107,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         
         /* photos */
         ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
-        /*TextView photo = (TextView) this.findViewById(R.id.textView3);
-        String photosString = "";
-        for(int i = 0;i<photos.size();i++){
-        	photosString = photosString + "," + photos.get(i);
-        }
-        photo.setText(photosString);*/
         ImageView image = (ImageView) this.findViewById(R.id.imageView1);
         image.setImageBitmap(this.getImageBitmap(photos.get(0)));
         

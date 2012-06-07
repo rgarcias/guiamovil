@@ -11,17 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp" >
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:text="Buscar"
-            android:textColor="@color/searchColor" >
-        </AutoCompleteTextView>
     </LinearLayout>
 
     <LinearLayout
@@ -29,15 +18,17 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:orientation="vertical" >
-
+
         <TextView
             android:id="@+id/path"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
             android:text="Small Text"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/previousCategories" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -56,6 +47,14 @@
                 android:layout_marginLeft="15dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_categories_back" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/home" />
 
             <TextView
                 android:id="@+id/textView1"
