@@ -122,7 +122,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         mFsqApp 		= new com.fsq.android.FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
         
         mAdapter 		= new com.fsq.android.NearbyAdapter(this);
-        mNearbyList		= new ArrayList<com.fsq.android.FsqVenue>();
+        mNearbyList	= new ArrayList<com.fsq.android.FsqVenue>();
         mProgress		= new ProgressDialog(this);
         
         btnShare.setOnClickListener(this);
@@ -206,7 +206,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 		else if(v.getId()==R.id.checkinButton && isOnline())
 		{
-			mFsqApp.authorize();
+			Intent intent = new Intent(InformationActivity.this, FoursquareActivity.class);
+        	this.startActivity(intent);
 		}
 		else if(v.getId()==R.id.tweetButton && isOnline())
 		{
