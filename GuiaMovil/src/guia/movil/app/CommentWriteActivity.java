@@ -7,14 +7,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+
 public class CommentWriteActivity extends Activity implements OnClickListener {
 	
-	private ImageButton send;
-	private ImageButton cancel;
+	private ImageButton enviar;
+	private ImageButton cancelar;
 	private EditText nick;
 	private EditText comment;
 	@Override
@@ -23,12 +23,13 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 		 requestWindowFeature(Window.FEATURE_NO_TITLE);
 	     this.setContentView(R.layout.commentnew);
 	     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-	     send =(ImageButton) this.findViewById(R.id.comment_button);
-	     cancel =(ImageButton) this.findViewById(R.id.cancel_button);
+	     
+	     enviar =(ImageButton) this.findViewById(R.id.comments_button);
+	     cancelar =(ImageButton) this.findViewById(R.id.cancel_button);
 	     nick= (EditText) findViewById(R.id.nickText);
 	     comment= (EditText) findViewById(R.id.commentText);
-	     cancel.setOnClickListener(this);
-	     send.setOnClickListener(this);
+	     cancelar.setOnClickListener(this);
+	     enviar.setOnClickListener(this);
 	 }
 	@Override
 	public void onClick(View v) {
@@ -39,7 +40,7 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 			finish();
 			this.startActivity(intent);
 		}
-		else if(v.getId()== R.id.comment_button)
+		else if(v.getId()== R.id.comments_button)
 		{
 			
 			 String methodname = "addComment";
