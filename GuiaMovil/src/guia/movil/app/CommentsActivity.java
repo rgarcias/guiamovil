@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.facebook.android.FbDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,11 +15,13 @@ import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,6 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,29 +82,38 @@ public class CommentsActivity extends Activity implements OnClickListener {
 
         commentaries.setAdapter(adaptador);
         commentaries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        	final Dialog commentView = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
+        	
+        	
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
+				
+				
 				// TODO Auto-generated method stub
 				nick=datos[arg2].getNick();
 				comment=datos[arg2].getComment();
 				
 				
-				final Dialog commentView = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
+				
 				commentView.setContentView(R.layout.commentview);
 				commentView.setCancelable(true);
 		        
 		        TextView nick = (TextView) commentView.findViewById(R.id.nickName);
 		        TextView comment = (TextView) commentView.findViewById(R.id.commentSpace);
-		        comment.setMovementMethod(new ScrollingMovementMethod());
+		        
 		        nick.setText(CommentsActivity.nick);
 		        comment.setText(CommentsActivity.comment);
+		        ImageButton back = (ImageButton)commentView.findViewById(R.id.commentBack);
+		        back.setOnClickListener(new View.OnClickListener() {
+		            @Override
+		            public void onClick(View v) {
+		            	commentView.dismiss();
+		            }
+		        });
+		        
 		        commentView.show(); 
-				//Intent intent = new Intent(CommentsActivity.this,CommentViewActivity.class);
-				
-				
-				//CommentsActivity.this.startActivity(intent);
+
 				
 			}
 		});
