@@ -44,7 +44,7 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name="FacebookWallPostActivity"
             android:screenOrientation="portrait"></activity>
-        <activity android:name="CommentViewActivity"
+         <activity android:name="FoursquareActivity"
             android:screenOrientation="portrait"></activity>
     </application>
 </manifest> 
