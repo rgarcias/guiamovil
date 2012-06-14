@@ -4,28 +4,31 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical" >
-
+
     <TextView
         android:id="@+id/nickName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/nickId"
-        android:textAppearance="?android:attr/textAppearanceLarge" 
-        android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-       android:layout_marginTop="15dp"
-       android:textStyle="bold"/>
-
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/nickId"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/commentSpace"
         android:layout_width="match_parent"
-        android:layout_height="406dp"
+        android:layout_height="158dp"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="15dp"
         android:text="@string/comentario"
+        android:maxLines = "7"
+
+        android:scrollbars = "vertical"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    
 </LinearLayout>
