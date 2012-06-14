@@ -1,34 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/background"
+    android:gravity="left|right"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/nickName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/nickId"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/commentSpace"
-        android:layout_width="match_parent"
-        android:layout_height="158dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/comentario"
-        android:maxLines = "7"
 
-        android:scrollbars = "vertical"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    
+        <ImageButton
+            android:id="@+id/commentBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_categories_back" />
+
+        <TextView
+            android:id="@+id/nickName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal|center_vertical|right"
+            android:text="@string/nickId"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="238dp"
+        android:gravity="left|right"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/LinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+        </LinearLayout>
+
+        
+
+            <LinearLayout
+                android:id="@+id/linearLoi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                
+                android:layout_marginTop="15dp"
+                android:orientation="vertical" >
+
+				<ScrollView
+				    android:id="@+id/SCROLLER_ID"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+
+				    android:layout_weight="0.88"
+				    android:fillViewport="true"
+				    android:scrollbars="vertical" >
+
+                <TextView
+                    android:id="@+id/commentSpace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="115dp"
+                    android:text="@string/comentario"
+                    android:layout_marginLeft="15dp"
+                	android:layout_marginRight="15dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                </ScrollView>
+            </LinearLayout>
+        
+    </LinearLayout>
+
 </LinearLayout>
