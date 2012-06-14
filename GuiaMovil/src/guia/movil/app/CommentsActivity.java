@@ -10,10 +10,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -83,10 +85,22 @@ public class CommentsActivity extends Activity implements OnClickListener {
 				// TODO Auto-generated method stub
 				nick=datos[arg2].getNick();
 				comment=datos[arg2].getComment();
-				Intent intent = new Intent(CommentsActivity.this,CommentViewActivity.class);
 				
 				
-				CommentsActivity.this.startActivity(intent);
+				final Dialog commentView = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
+				commentView.setContentView(R.layout.commentview);
+				commentView.setCancelable(true);
+		        
+		        TextView nick = (TextView) commentView.findViewById(R.id.nickName);
+		        TextView comment = (TextView) commentView.findViewById(R.id.commentSpace);
+		        comment.setMovementMethod(new ScrollingMovementMethod());
+		        nick.setText(CommentsActivity.nick);
+		        comment.setText(CommentsActivity.comment);
+		        commentView.show(); 
+				//Intent intent = new Intent(CommentsActivity.this,CommentViewActivity.class);
+				
+				
+				//CommentsActivity.this.startActivity(intent);
 				
 			}
 		});
