@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="appName">Guia Movil Curicó</string>
+    <string name="appName">Guía Móvil Curicó</string>
     <string-array name="categoriesESP">
         <item >Sitios Turísticos</item>
         <item >Sitios de Interés</item>
@@ -95,5 +95,7 @@
     <string name="comentario">Buen lugar, me parece una excelente alternativa para pasear, junto a la familia y/o amigos....</string>
     <string name="aceptESP">Aceptar</string>
     <string name="cancelesp">Cancelar</string>
+    <string name="exitDialogESP">No estás conectado a internet o plan de datos en este momento, cerrando aplicación.</string>
+    <string name="exitDialogING">You\'re not connected to internet or data plan right now, closing app.</string>
 
 </resources>

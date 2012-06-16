@@ -1,51 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:background="@color/background"
     android:gravity="center_horizontal|right"
     android:orientation="vertical"
     android:padding="2dip" >
-     
-     <RatingBar
-         android:id="@+id/dialog_ratingbar"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_gravity="center"
-         android:layout_marginBottom="10dp"
-         android:layout_marginLeft="15dp"
-         android:layout_marginRight="15dp"
-         android:layout_marginTop="10dp"
-         android:clickable="true"
-         android:isIndicator="false"
-         android:numStars="5"
-         android:rating="2"
-         android:stepSize="0.5"
-         style="?android:attr/ratingBarStyleIndicator" />
-
-     <LinearLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:gravity="center" >
-
-         <Button
-             android:id="@+id/starAcept"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_margin="5dip"
-             android:focusable="false"
-             android:text="@string/aceptESP"
-             android:textSize="20dip" />
-
-         <Button
-             android:id="@+id/starCancel"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_margin="5dip"
-             android:focusable="false"
-             android:text="@string/cancelesp"
-             android:textSize="20dip" />
 
-     </LinearLayout>
+    <RatingBar
+        android:id="@+id/dialog_ratingbar"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:rating="2"
+        android:stepSize="0.5" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.94"
+        android:gravity="center" >
+
+        <ImageButton
+            android:id="@+id/starAcept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/accept_button" />
+
+        <ImageButton
+            android:id="@+id/starCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="15dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/cancel_button" />
+
+    </LinearLayout>
 
 </LinearLayout>

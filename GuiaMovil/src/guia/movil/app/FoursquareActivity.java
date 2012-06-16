@@ -1,11 +1,14 @@
 package guia.movil.app;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import com.fsq.android.FoursquareApp;
 import com.fsq.android.FoursquareApp.FsqAuthListener;
 import com.fsq.android.FsqVenue;
 import com.fsq.android.NearbyAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -19,8 +22,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class FoursquareActivity extends ListActivity {
-	public static final String CLIENT_ID = "QDLB4XF1BRCAP3X0KBOX04MQ43F1SJ0GPYYNX1H2A2EV11FX";
-	public static final String CLIENT_SECRET = "AMII1DTTF4WCKMTTJ4JUN0XFBARKV1QY4IWTVG4QPMQFMLYW";
+	public static final String CLIENT_ID = "US20XZDXCS11UWUIVBFPZT3PN2JIQUJX0WU4CRBJ30DKXBFX";
+	public static final String CLIENT_SECRET = "35XSC3TDZINLK0R4IAJ4HCGCVMVPOZBQ4KUDPEAMF5YMAO24";
 	
 	private com.fsq.android.FoursquareApp mFsqApp;
 	private ListView mListView;
@@ -34,40 +37,46 @@ public class FoursquareActivity extends ListActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.foursquare);
 		
-        mListView = (ListView) findViewById(R.id.lv_places);
+        mListView = this.getListView();
         mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
         mAdapter = new NearbyAdapter(this);
         mNearbyList = new ArrayList<FsqVenue>();
         mProgress = new ProgressDialog(this);
- 
-        mFsqApp.authorize();
-        mProgress.setMessage("Loading data ...");
- 
-        FsqAuthListener listener = new FsqAuthListener() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(FoursquareActivity.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
-            }
- 
-            @Override
-            public void onFail(String error) {
-                Toast.makeText(FoursquareActivity.this, error, Toast.LENGTH_SHORT).show();
-            }
-        };
         
+        mProgress.setMessage("Loading data ...");
+        
+        String methodname = "getLatitude";
+        String soap = "http://turismo/" + methodname;
+        String latitude = Services.getLatitude(methodname, soap, "place", CategoryActivity.PLACE);
+        
+        String methodname2 = "getLongitude";
+        String soap2 = "http://turismo/" + methodname;
+        String longitude = Services.getLongitude(methodname2, soap2, "place", CategoryActivity.PLACE);
+
+        double lat  = Double.valueOf("-34.988508");
+        double lon  = Double.valueOf("-71.243992");
+
         if(mFsqApp.hasAccessToken()){
-        	String methodname = "getLatitude";
-            String soap = "http://turismo/" + methodname;
-            String latitude = Services.getLatitude(methodname, soap, "place", CategoryActivity.PLACE);
+        	loadNearbyPlaces(lat, lon);
+        }
+        else{
+        	mFsqApp.authorize();
+            FsqAuthListener listener = new FsqAuthListener() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(FoursquareActivity.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
+                }
+     
+                @Override
+                public void onFail(String error) {
+                    Toast.makeText(FoursquareActivity.this, error, Toast.LENGTH_SHORT).show();
+                }
+            };   
+            mFsqApp.setListener(listener);
             
-            String methodname2 = "getLongitude";
-            String soap2 = "http://turismo/" + methodname;
-            String longitude = Services.getLongitude(methodname2, soap2, "place", CategoryActivity.PLACE);
-
-            double lat  = Double.valueOf(latitude);
-            double lon  = Double.valueOf(longitude);
-
-            loadNearbyPlaces(lat, lon);
+            if(mFsqApp.hasAccessToken()){
+            	loadNearbyPlaces(lat, lon);
+            }
         }
     }
  

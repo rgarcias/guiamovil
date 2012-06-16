@@ -89,29 +89,29 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         this.setContentView(R.layout.information);
         
         rb = (RatingBar) this.findViewById(R.id.ratingBar1);
-        
+        rb.setRating(Float.valueOf(0)); 
         title = (TextView) this.findViewById(R.id.textView1);
         title.setText(CategoryActivity.PLACE);
         text = (TextView) this.findViewById(R.id.textView2);
-        
-        /* get descriptions */
-        String methodname = "getDescription";
-        String soap = "http://turismo/" + methodname;
-        text.setText(Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(CategoryActivity.english)));
-        
-        String methodnameID = "getPlaceID";
-        String soapID = "http://turismo/" + methodnameID;
-    	placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE);
-        
-        /*rating*/
-    	refreshRat();
-        rb.setRating(Float.valueOf(rat)); 
-        
-        /* photos */
-        ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
-        ImageView image = (ImageView) this.findViewById(R.id.imageView1);
-        image.setImageBitmap(this.getImageBitmap(photos.get(0)));
-        
+        if(isOnline()){
+	        /* get descriptions */
+	        String methodname = "getDescription";
+	        String soap = "http://turismo/" + methodname;
+	        text.setText(Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(PresentationActivity.english)));
+	        
+	        String methodnameID = "getPlaceID";
+	        String soapID = "http://turismo/" + methodnameID;
+	    	placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE);
+	        
+	        /*rating*/
+	    	refreshRat();
+	        rb.setRating(Float.valueOf(rat)); 
+	        
+	        /* photos */
+	        ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
+	        ImageView image = (ImageView) this.findViewById(R.id.imageView1);
+	        image.setImageBitmap(this.getImageBitmap(photos.get(0)));
+        }
         mContext=this;
         btnShare= (ImageButton) findViewById(R.id.shareButton); 
         btnTwitt= (ImageButton) findViewById(R.id.tweetButton);
@@ -120,19 +120,14 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         btnStar=(ImageButton) findViewById(R.id.starButton);
         
         mFsqApp 		= new com.fsq.android.FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
-        
         mAdapter 		= new com.fsq.android.NearbyAdapter(this);
         mNearbyList	= new ArrayList<com.fsq.android.FsqVenue>();
         mProgress		= new ProgressDialog(this);
         
         btnShare.setOnClickListener(this);
-            
-        
         btnTwitt.setOnClickListener(this);
-        
         btnComment.setOnClickListener(this);
         btnStar.setOnClickListener(this);
-        
         btnCheck.setOnClickListener(this); 
     }
     
@@ -176,16 +171,11 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        rankDialog.setContentView(R.layout.stardialog);
 	        rankDialog.setCancelable(true);
 	        ratingBar = (RatingBar)rankDialog.findViewById(R.id.dialog_ratingbar);
-	       
-	       
-	 
-	        Button aceptar = (Button) rankDialog.findViewById(R.id.starAcept);
+
+	        ImageButton aceptar = (ImageButton) rankDialog.findViewById(R.id.starAcept);
 	        aceptar.setOnClickListener(new View.OnClickListener() {
 	            @Override
 	            public void onClick(View v) {
-	            	
-	            	
-	            	
 	            	String methodname = "sendRating";
 	                String soap = "http://turismo/" + methodname;
 	            	Services.addRating(methodname, soap, String.valueOf(ratingBar.getRating()),placeID );
@@ -194,7 +184,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	            }
 	        });
 	        
-	        Button cancelar = (Button) rankDialog.findViewById(R.id.starCancel);
+	        ImageButton cancelar = (ImageButton) rankDialog.findViewById(R.id.starCancel);
 	        cancelar.setOnClickListener(new View.OnClickListener() {
 	            @Override
 	            public void onClick(View v) {
@@ -231,31 +221,42 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
     		else
     			Toast.makeText(this, "Mensaje  publicado", Toast.LENGTH_LONG).show();
 		}
-		else if(!isOnline())
-		{
-			
+		else if(v.getId()==R.id.exitButton){
+			this.finish();
 		}
-		
 	}
+	
 	public boolean isOnline() {
 		Context context = getApplicationContext();
-		ConnectivityManager connectMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		Toast.makeText(this, "Verificando conexion", Toast.LENGTH_SHORT).show();
-		if (connectMgr != null) {
-			NetworkInfo[] netInfo = connectMgr.getAllNetworkInfo();
-			if (netInfo != null) {
-				for (NetworkInfo net : netInfo) {
-					if (net.getState() == NetworkInfo.State.CONNECTED) {
-						return true;
-					}
-				}
-			}
-		} 
-		else {
-			Log.d("NETWORK", "No network available");
-			Toast.makeText(this, "No conectado a internet", Toast.LENGTH_SHORT).show();
+	    ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	    android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+	    if (wifi.isConnected()) {
+	        return true;
+	    } else if (mobile.isConnected()) {
+	        return true;
+	    }
+	    Dialog exitDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
+        exitDialog.setContentView(R.layout.exitdialog);
+		if(PresentationActivity.english){
+	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        exit.setImageResource(R.drawable.quit_button2);
+	        
+	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        exitText.setText(R.string.exitDialogING);
+	        exit.setOnClickListener(this);
 		}
-		return false;
+		else{
+			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        exit.setImageResource(R.drawable.quit_button);
+	        
+	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        exitText.setText(R.string.exitDialogESP);
+	        exit.setOnClickListener(this);
+		}
+		exitDialog.show(); 
+	    return false;
 	}
 	
 	public static Bitmap getImageBitmap(String url) { 

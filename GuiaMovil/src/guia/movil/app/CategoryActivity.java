@@ -12,8 +12,11 @@ import com.google.gson.reflect.TypeToken;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,11 +28,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CategoryActivity extends ListActivity implements OnClickListener {
 	protected static final int DIALOG_BACK_ID = 0;
 	protected static String PLACE = "";
-	protected static boolean english = false;
     /* Variables*/
     private int depth;
     private ArrayList<String> itemes;
@@ -56,7 +59,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
        setContentView(R.layout.category);
        Bundle bundle = getIntent().getExtras();
-       CategoryActivity.english = bundle.getBoolean("english");
        selectLanguage();
        
        itemes = new ArrayList<String>();
@@ -133,7 +135,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     }
 	
     private void selectLanguage(){
-    	if(!CategoryActivity.english){
+    	if(!PresentationActivity.english){
     		main = getResources().getString(R.string.mainESP);
             categories = getResources().getStringArray(R.array.categoriesESP);
             attractions = getResources().getStringArray(R.array.touristAttractionsESP);
@@ -167,8 +169,14 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     		}
     	}
     	else if(depth == 2){
-    		String[] aux = retrievePlaces(item);
-    		return aux;
+    		if(isOnline()){
+    			String[] aux = retrievePlaces(item);
+        		return aux;
+    		}
+    		else{
+    			String[] aux = new String[]{""};
+        		return aux;
+    		}
     	}
 		return categories;
     }
@@ -216,6 +224,9 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		if(v.getId() == R.id.imageButton2){
 			this.home();
 		}
+		if(v.getId() == R.id.exitButton){
+			this.finish();
+		}
 	}
 	
 	public void home(){
@@ -233,5 +244,39 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	    tv.setText(itemes.get(0));
 	    stv.setVisibility(View.INVISIBLE);
 	    depth = 0;
+	}
+	
+	public boolean isOnline() {
+		Context context = getApplicationContext();
+	    ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	    android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+	    if (wifi.isConnected()) {
+	        return true;
+	    } else if (mobile.isConnected()) {
+	        return true;
+	    }
+	    Dialog exitDialog = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+        exitDialog.setContentView(R.layout.exitdialog);
+		if(PresentationActivity.english){
+	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        exit.setImageResource(R.drawable.quit_button2);
+	        
+	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        exitText.setText(R.string.exitDialogING);
+	        exit.setOnClickListener(this);
+		}
+		else{
+			
+			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        exit.setImageResource(R.drawable.quit_button);
+	        
+	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        exitText.setText(R.string.exitDialogESP);
+	        exit.setOnClickListener(this);
+		}
+		exitDialog.show(); 
+	    return false;
 	}
 }
