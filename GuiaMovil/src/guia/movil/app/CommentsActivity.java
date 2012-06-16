@@ -62,10 +62,15 @@ public class CommentsActivity extends Activity implements OnClickListener {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         comentar= (ImageButton)findViewById(R.id.comment);
+        if(PresentationActivity.english){
+        	comentar.setImageResource(R.drawable.comment_button2);
+        }
+        else{
+        	comentar.setImageResource(R.drawable.comment_button);
+        }
         title = (TextView)findViewById(R.id.comentaryTitle);
         title.setText("Comentarios");       
-       
-        
+      
         commentaries = (ListView) findViewById(R.id.commentaryList);
         String methodname = "getComment";
         String soap = "http://turismo/" + methodname;
@@ -77,31 +82,22 @@ public class CommentsActivity extends Activity implements OnClickListener {
         String consulta =Services.getComments(methodname, soap, "placeID", placeID);
         procesarConsulta(consulta);
  
-        AdaptadorTitulares adaptador = 
-            	new AdaptadorTitulares(this);
+        AdaptadorTitulares adaptador = new AdaptadorTitulares(this);
 
         commentaries.setAdapter(adaptador);
         commentaries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        	final Dialog commentView = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
-        	
-        	
+        final Dialog commentView = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				
-				
+
 				// TODO Auto-generated method stub
 				nick=datos[arg2].getNick();
-				comment=datos[arg2].getComment();
-				
-				
-				
+				comment=datos[arg2].getComment();	
 				commentView.setContentView(R.layout.commentview);
 				commentView.setCancelable(true);
-		        
 		        TextView nick = (TextView) commentView.findViewById(R.id.nickName);
-		        TextView comment = (TextView) commentView.findViewById(R.id.commentSpace);
-		        
+		        TextView comment = (TextView) commentView.findViewById(R.id.commentSpace);      
 		        nick.setText(CommentsActivity.nick);
 		        comment.setText(CommentsActivity.comment);
 		        ImageButton back = (ImageButton)commentView.findViewById(R.id.commentBack);
@@ -111,21 +107,14 @@ public class CommentsActivity extends Activity implements OnClickListener {
 		            	commentView.dismiss();
 		            }
 		        });
-		        
-		        commentView.show(); 
-
-				
+		        commentView.show(); 	
 			}
-		});
-        
-        
-        comentar.setOnClickListener(this);
-        
+		}); 
+        comentar.setOnClickListener(this); 
         // ToDo add your GUI initialization code here        
     }
 
 	private void procesarConsulta(String consulta) {
-		
 		Gson gson = new Gson();
 		HashMap<String,String> arreglo = new HashMap<String, String>();
         Type collectionType = new TypeToken<HashMap<String,String> >(){}.getType();
@@ -134,10 +123,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
         ArrayList<CommentResume> temp= new  ArrayList<CommentResume>();
         
         Iterator iter = arreglo.entrySet().iterator();
-        
         Map.Entry e;
-
-        
         while (iter.hasNext()) {
         	e = (Map.Entry)iter.next();
         	temp.add(new CommentResume(e.getKey().toString(), e.getValue().toString()));
@@ -152,30 +138,19 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
-		
-		
 		Intent intent = new Intent(CommentsActivity.this,CommentWriteActivity.class);
 		finish();
 		this.startActivity(intent);
-		
 	}
-	
-	
-	
+
 	class AdaptadorTitulares extends ArrayAdapter<CommentResume>{
-		 
 	    Activity context;
-		
-	 
 	        AdaptadorTitulares(Activity context) {
 	            super(context, R.layout.commentlistitem, datos);
 	            this.context = context;
 	        }
-	        
-	 
-	        public View getView(int position, View convertView, ViewGroup parent) {
-	        	
-	        	
+
+	        public View getView(int position, View convertView, ViewGroup parent) {    	
 	        	LayoutInflater inflater = context.getLayoutInflater();
 	        	View item = inflater.inflate(R.layout.commentlistitem, null);
 	 
@@ -188,29 +163,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	        	else
 	        		lblSubtitulo.setText(datos[position].getComment());
 	        	item.setTag(position);
-	        	
-	        	
-	        	
-	        	
-
-	        	
-	 
 	        	return(item);
-	    }
-
-			
-
-
-		
-			
-			
+	    }	
 	}
-
-
-
-
 	}
-	
-	
-	
-	

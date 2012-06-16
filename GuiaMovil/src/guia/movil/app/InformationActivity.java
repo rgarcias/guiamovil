@@ -173,6 +173,17 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        ratingBar = (RatingBar)rankDialog.findViewById(R.id.dialog_ratingbar);
 
 	        ImageButton aceptar = (ImageButton) rankDialog.findViewById(R.id.starAcept);
+	        ImageButton cancelar = (ImageButton) rankDialog.findViewById(R.id.starCancel);
+	        
+	        if(PresentationActivity.english){
+	        	aceptar.setImageResource(R.drawable.accept_button2);
+	        	cancelar.setImageResource(R.drawable.cancel_button2);
+	        }
+	        else{
+	        	aceptar.setImageResource(R.drawable.accept_button);
+	        	cancelar.setImageResource(R.drawable.cancel_button);
+	        }
+	        
 	        aceptar.setOnClickListener(new View.OnClickListener() {
 	            @Override
 	            public void onClick(View v) {
@@ -182,9 +193,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	            	refreshRat();
 	                rankDialog.dismiss();
 	            }
-	        });
-	        
-	        ImageButton cancelar = (ImageButton) rankDialog.findViewById(R.id.starCancel);
+	        }); 
 	        cancelar.setOnClickListener(new View.OnClickListener() {
 	            @Override
 	            public void onClick(View v) {

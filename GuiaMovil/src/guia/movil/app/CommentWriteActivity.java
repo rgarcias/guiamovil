@@ -26,6 +26,16 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 	     
 	     enviar =(ImageButton) this.findViewById(R.id.comments_button);
 	     cancelar =(ImageButton) this.findViewById(R.id.cancel_button);
+	     
+	     if(PresentationActivity.english){
+	        	enviar.setImageResource(R.drawable.comment_button2);
+	        	cancelar.setImageResource(R.drawable.cancel_button2);
+	        }
+	        else{
+	        	enviar.setImageResource(R.drawable.comment_button);
+	        	cancelar.setImageResource(R.drawable.cancel_button);
+	        }
+	     
 	     nick= (EditText) findViewById(R.id.nickText);
 	     comment= (EditText) findViewById(R.id.commentText);
 	     cancelar.setOnClickListener(this);
