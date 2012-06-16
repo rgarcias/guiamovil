@@ -30,11 +30,6 @@ import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
 
-/**
- * 
- * @author Lorensius W. L. T <lorenz@londatiga.net>
- *
- */
 public class FoursquareApp {
 	private FoursquareSession mSession;
 	private FoursquareDialog mDialog;
@@ -43,9 +38,6 @@ public class FoursquareApp {
 	private String mTokenUrl;
 	private String mAccessToken;
 	
-	/**
-	 * Callback url, as set in 'Manage OAuth Costumers' page (https://developer.foursquare.com/)
-	 */
 	public static final String CALLBACK_URL = "myapp://connect";
 	private static final String AUTH_URL = "https://foursquare.com/oauth2/authenticate?response_type=code";
 	private static final String TOKEN_URL = "https://foursquare.com/oauth2/access_token?grant_type=authorization_code";	
@@ -55,12 +47,9 @@ public class FoursquareApp {
 	
 	public FoursquareApp(Context context, String clientId, String clientSecret) {
 		mSession		= new FoursquareSession(context);
-		
 		mAccessToken	= mSession.getAccessToken();
-		
 		mTokenUrl		= TOKEN_URL + "&client_id=" + clientId + "&client_secret=" + clientSecret
 						+ "&redirect_uri=" + CALLBACK_URL;
-		
 		String url		= AUTH_URL + "&client_id=" + clientId + "&redirect_uri=" + CALLBACK_URL;
 		
 		FsqDialogListener listener = new FsqDialogListener() {
@@ -77,7 +66,6 @@ public class FoursquareApp {
 		
 		mDialog			= new FoursquareDialog(context, url, listener);
 		mProgress		= new ProgressDialog(context);
-		
 		mProgress.setCancelable(false);
 	}
 	
@@ -88,31 +76,21 @@ public class FoursquareApp {
 		new Thread() {
 			@Override
 			public void run() {
-				Log.i(TAG, "Getting access token");
-				
+				Log.i(TAG, "Getting access token");		
 				int what = 0;
-				
 				try {
 					URL url = new URL(mTokenUrl + "&code=" + code);
-					
-					Log.i(TAG, "Opening URL " + url.toString());
-					
-					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-					
-					urlConnection.setRequestMethod("GET");
-					
+					Log.i(TAG, "Opening URL " + url.toString());		
+					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();	
+					urlConnection.setRequestMethod("GET");		
 					urlConnection.connect();
-					
 					JSONObject jsonObj  = (JSONObject) new JSONTokener(streamToString(urlConnection.getInputStream())).nextValue();
-		        	mAccessToken 		= jsonObj.getString("access_token");
-		        	
+		        	mAccessToken 		= jsonObj.getString("access_token"); 	
 		        	Log.i(TAG, "Got access token: " + mAccessToken);
 				} catch (Exception ex) {
-					what = 1;
-					
+					what = 1;	
 					ex.printStackTrace();
-				}
-				
+				}		
 				mHandler.sendMessage(mHandler.obtainMessage(what, 1, 0));
 			}
 		}.start();
@@ -128,34 +106,25 @@ public class FoursquareApp {
 				int what = 0;
 		
 				try {
-					URL url = new URL(API_URL + "/users/self?oauth_token=" + mAccessToken);
-					
-					Log.d(TAG, "Opening URL " + url.toString());
-					
-					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-					
-					urlConnection.setRequestMethod("GET");
-					
-					urlConnection.connect();
-					
+					URL url = new URL(API_URL + "/users/self?oauth_token=" + mAccessToken);	
+					Log.d(TAG, "Opening URL " + url.toString());			
+					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();			
+					urlConnection.setRequestMethod("GET");		
+					urlConnection.connect();		
 					String response		= streamToString(urlConnection.getInputStream());
 					JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
-		       
 					JSONObject resp		= (JSONObject) jsonObj.get("response");
 					JSONObject user		= (JSONObject) resp.get("user");
 					
 					String firstName 	= user.getString("firstName");
 		        	String lastName		= user.getString("lastName");
 		        
-		        	Log.i(TAG, "Got user name: " + firstName + " " + lastName);
-		        	
+		        	Log.i(TAG, "Got user name: " + firstName + " " + lastName);  	
 		        	mSession.storeAccessToken(mAccessToken, firstName + " " + lastName);
 				} catch (Exception ex) {
-					what = 1;
-					
+					what = 1;		
 					ex.printStackTrace();
-				}
-				
+				}	
 				mHandler.sendMessage(mHandler.obtainMessage(what, 2, 0));
 			}
 		}.start();
@@ -168,13 +137,11 @@ public class FoursquareApp {
 				if (msg.what == 0) {
 					fetchUserName();
 				} else {
-					mProgress.dismiss();
-					
+					mProgress.dismiss();	
 					mListener.onFail("Failed to get access token");
 				}
 			} else {
-				mProgress.dismiss();
-				
+				mProgress.dismiss();	
 				mListener.onSuccess();
 			}
 		}
@@ -202,16 +169,11 @@ public class FoursquareApp {
 		
 		try {
 			String ll 	= String.valueOf(latitude) + "," + String.valueOf(longitude);
-			URL url 	= new URL(API_URL + "/venues/search?ll=" + ll + "&oauth_token=" + mAccessToken + "&v=20120614");
-			
-			Log.e(TAG, "Opening URL " + url.toString());
-			
-			HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-			
+			URL url 	= new URL(API_URL + "/venues/search?ll=" + ll + "&oauth_token=" + mAccessToken + "&v=20120614");	
+			Log.e(TAG, "Opening URL " + url.toString());	
+			HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();	
 			urlConnection.setRequestMethod("GET");
-			
 			urlConnection.connect();
-			
 			response		= streamToString(urlConnection.getInputStream());
 			/*JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
 			
@@ -263,16 +225,13 @@ public class FoursquareApp {
 			
 			try {
 				BufferedReader reader 	= new BufferedReader(new InputStreamReader(is));
-				
 				while ((line = reader.readLine()) != null) {
 					sb.append(line);
-				}
-				
+				}		
 				reader.close();
 			} finally {
 				is.close();
-			}
-			
+			}	
 			str = sb.toString();
 		}
 		
