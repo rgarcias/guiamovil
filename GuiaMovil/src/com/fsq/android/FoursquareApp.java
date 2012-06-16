@@ -1,21 +1,27 @@
 package com.fsq.android;
 
 import com.fsq.android.FoursquareDialog.FsqDialogListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.content.Context;
+import android.text.format.Time;
 import android.util.Log;
 import android.app.ProgressDialog;
 
@@ -91,11 +97,9 @@ public class FoursquareApp {
 					
 					Log.i(TAG, "Opening URL " + url.toString());
 					
-					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
 					
 					urlConnection.setRequestMethod("GET");
-					urlConnection.setDoInput(true);
-					urlConnection.setDoOutput(true);
 					
 					urlConnection.connect();
 					
@@ -128,11 +132,9 @@ public class FoursquareApp {
 					
 					Log.d(TAG, "Opening URL " + url.toString());
 					
-					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
 					
 					urlConnection.setRequestMethod("GET");
-					urlConnection.setDoInput(true);
-					urlConnection.setDoOutput(true);
 					
 					urlConnection.connect();
 					
@@ -196,37 +198,30 @@ public class FoursquareApp {
 	
 	public ArrayList<FsqVenue> getNearby(double latitude, double longitude) throws Exception {
 		ArrayList<FsqVenue> venueList = new ArrayList<FsqVenue>();
+		String response = "";
 		
 		try {
 			String ll 	= String.valueOf(latitude) + "," + String.valueOf(longitude);
-			URL url 	= new URL(API_URL + "/venues/search?ll=" + ll + "&oauth_token=" + mAccessToken);
+			URL url 	= new URL(API_URL + "/venues/search?ll=" + ll + "&oauth_token=" + mAccessToken + "&v=20120614");
 			
-			Log.d(TAG, "Opening URL " + url.toString());
+			Log.e(TAG, "Opening URL " + url.toString());
 			
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
 			
 			urlConnection.setRequestMethod("GET");
-			urlConnection.setDoInput(true);
-			urlConnection.setDoOutput(true);
 			
 			urlConnection.connect();
 			
-			String response		= streamToString(urlConnection.getInputStream());
-			JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
+			response		= streamToString(urlConnection.getInputStream());
+			/*JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
 			
-			JSONArray groups	= (JSONArray) jsonObj.getJSONObject("response").getJSONArray("groups");
+			JSONArray groups	= (JSONArray) jsonObj.getJSONObject("response").getJSONArray("venues");
 			
-			int length			= groups.length();
+			int length= groups.length();
 			
 			if (length > 0) {
 				for (int i = 0; i < length; i++) {
-					JSONObject group 	= (JSONObject) groups.get(i);
-					JSONArray items 	= (JSONArray) group.getJSONArray("items");
-					
-					int ilength 		= items.length();
-					
-					for (int j = 0; j < ilength; j++) {
-						JSONObject item = (JSONObject) items.get(j);
+						JSONObject item = (JSONObject) groups.get(i);
 						
 						FsqVenue venue 	= new FsqVenue();
 						
@@ -244,16 +239,18 @@ public class FoursquareApp {
 						venue.address	= location.getString("address");
 						venue.distance	= location.getInt("distance");
 						venue.herenow	= item.getJSONObject("hereNow").getInt("count");
-						venue.type		= group.getString("type");
 						
 						venueList.add(venue);
 					}
-				}
-			}
+				}*/
 		} catch (Exception ex) {
 			throw ex;
 		}
-		
+				
+		Gson gson = new Gson();
+		Type collectionType = new TypeToken<ArrayList<FsqVenue> >(){}.getType();
+		venueList = gson.fromJson(response, collectionType);
+		        
 		return venueList;
 	}
 	

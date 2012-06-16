@@ -44,10 +44,11 @@
             <requestFocus />
         </EditText>
     </LinearLayout>
-
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="vertical" >
 
         <TextView
@@ -70,27 +71,27 @@
             android:inputType="textMultiLine"
             android:singleLine="false"
             android:text="@string/comentario" />
-
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
+            android:gravity="center|center_horizontal" >
+
             <ImageButton
                 android:id="@+id/comments_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginRight="15dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/comment_button" />
-
+
             <ImageButton
                 android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginRight="15dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/cancel_button" />
 
