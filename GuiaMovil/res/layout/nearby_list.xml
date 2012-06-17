@@ -4,25 +4,17 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:paddingBottom="10dp">
-	
-	<ImageView
-		android:id="@+id/iv_ribbon"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/ic_corner_trending"/>
-		
+		
 	<TextView
-		android:id="@+id/tv_distance"
-		android:layout_alignParentRight="true"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginRight="5dp"
-		android:layout_centerVertical="true"
-		android:text="10 km"
-		android:textSize="12sp"
-		android:textColor="#88945f"/>
+	    android:id="@+id/tv_distance"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_centerVertical="true"
+	    android:layout_marginRight="5dp"
+	    android:text="0 km"
+	    android:textColor="#bbb"
+	    android:textSize="12sp" />
 
 	<TextView 
 		android:id="@+id/tv_name"
@@ -33,36 +25,22 @@
 		android:layout_marginRight="5dp"
 		android:layout_marginTop="10dp"
 		android:layout_marginLeft="10dp"
-		android:textSize="14sp" 
-		android:textColor="#ccc"  
-		android:text="Ciwalk"/>
-	
+		android:textSize="16sp" 
+		android:textColor="#fff"  
+		android:text=""/>
+	
 	<TextView
-		android:id="@+id/tv_address"
-		android:layout_toLeftOf="@id/tv_distance"
-		android:layout_alignParentLeft="true"
-		android:layout_below="@id/tv_name"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginRight="5dp"
-		android:layout_marginTop="5dp"
-		android:layout_marginLeft="10dp"
-		android:textSize="14sp"
-		android:text="Jl. Cihampelas"
-		android:textColor="#ccc"/>
-	
-	<TextView
-		android:id="@+id/tv_here_now"
-		android:layout_toLeftOf="@id/tv_distance"
-		android:layout_alignParentLeft="true"
-		android:layout_below="@id/tv_address"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginRight="5dp"
-		android:layout_marginTop="5dp"
-		android:layout_marginLeft="10dp"
-		android:textSize="13sp"
-		android:text="(2 people here)"
-		android:textColor="#ccc"/>
+	    android:id="@+id/tv_here_now"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@id/tv_name"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="5dp"
+	    android:layout_marginTop="5dp"
+	    android:layout_toLeftOf="@id/tv_distance"
+	    android:text="(0 people here)"
+	    android:textColor="#fff"
+	    android:textSize="13sp" />
 		
 </RelativeLayout>

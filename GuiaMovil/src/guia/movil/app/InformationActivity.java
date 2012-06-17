@@ -160,12 +160,12 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		if(v.getId()== R.id.commentsButton)
+		if(v.getId()== R.id.commentsButton && isOnline())
 		{
 			Intent intent = new Intent(InformationActivity.this,CommentsActivity.class);
 			this.startActivity(intent);
 		}
-		else if(v.getId()==R.id.starButton)
+		else if(v.getId()==R.id.starButton && isOnline())
 		{
 			final Dialog rankDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
 	        rankDialog.setContentView(R.layout.stardialog);

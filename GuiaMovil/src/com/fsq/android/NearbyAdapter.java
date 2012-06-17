@@ -45,11 +45,9 @@ public class NearbyAdapter extends BaseAdapter {
 			
 			holder = new ViewHolder();
 			
-			holder.mNameTxt 		= (TextView) convertView.findViewById(guia.movil.app.R.id.tv_name);
-			holder.mAddressTxt 		= (TextView) convertView.findViewById(guia.movil.app.R.id.tv_address);
+			holder.mNameTxt 		= (TextView) convertView.findViewById(guia.movil.app.R.id.tv_name);;
 			holder.mHereNowTxt 		= (TextView) convertView.findViewById(guia.movil.app.R.id.tv_here_now);
 			holder.mDistanceTxt 	= (TextView) convertView.findViewById(guia.movil.app.R.id.tv_distance);
-			holder.mRibbonImg		= (ImageView) convertView.findViewById(guia.movil.app.R.id.iv_ribbon);
 			
 			convertView.setTag(holder);
 		} else {
@@ -59,11 +57,19 @@ public class NearbyAdapter extends BaseAdapter {
 		FsqVenue venue 	= mVenueList.get(position);
 	
 		holder.mNameTxt.setText(venue.name);
-		holder.mAddressTxt.setText(venue.address);
-		holder.mHereNowTxt.setText("(" + String.valueOf(venue.herenow) + " people here)");
-		holder.mDistanceTxt.setText(formatDistance(venue.direction));
-
-		holder.mRibbonImg.setVisibility((venue.type.equals("trending")) ? View.VISIBLE : View.INVISIBLE);
+		if(guia.movil.app.PresentationActivity.english){
+			holder.mHereNowTxt.setText("(" + venue.herenow + " people here)");
+		}
+		else{
+			if(venue.herenow == 1){
+				holder.mHereNowTxt.setText("(" + venue.herenow + " persona aquí)");
+			}
+			else{
+				holder.mHereNowTxt.setText("(" + venue.herenow + " personas aquí)");
+			}
+		}
+		
+		holder.mDistanceTxt.setText(formatDistance(venue.distance));
 		
         return convertView;
 	}
@@ -86,9 +92,7 @@ public class NearbyAdapter extends BaseAdapter {
 	}
 	static class ViewHolder {
 		TextView mNameTxt;
-		TextView mAddressTxt;
 		TextView mHereNowTxt;
 		TextView mDistanceTxt;
-		ImageView mRibbonImg;
 	}
 }

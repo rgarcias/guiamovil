@@ -1,7 +1,10 @@
 package guia.movil.app;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -9,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 
 public class CommentWriteActivity extends Activity implements OnClickListener {
@@ -50,22 +54,50 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 			finish();
 			this.startActivity(intent);
 		}
-		else if(v.getId()== R.id.comments_button)
+		else if(v.getId()== R.id.comments_button && isOnline())
 		{
 			
 			 String methodname = "addComment";
 		     String soap = "http://turismo/" + methodname;
 		     Services.addComments(methodname, soap, comment.getText().toString(), nick.getText().toString(), CommentsActivity.placeID);
-			
-			
-			
+
 			Intent intent = new Intent(CommentWriteActivity.this,CommentsActivity.class);
 			finish();
 			this.startActivity(intent);
+	    }	
+	}
+	
+	public boolean isOnline() {
+		Context context = getApplicationContext();
+	    ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	    android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+	    if (wifi.isConnected()) {
+	        return true;
+	    } else if (mobile.isConnected()) {
+	        return true;
 	    }
-			
-		
-		
+	    Dialog exitDialog = new Dialog(CommentWriteActivity.this, R.style.FullHeightDialog);
+        exitDialog.setContentView(R.layout.exitdialog);
+		if(PresentationActivity.english){
+	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        exit.setImageResource(R.drawable.quit_button2);
+	        
+	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        exitText.setText(R.string.exitDialogING);
+	        exit.setOnClickListener(this);
+		}
+		else{
+			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        exit.setImageResource(R.drawable.quit_button);
+	        
+	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        exitText.setText(R.string.exitDialogESP);
+	        exit.setOnClickListener(this);
+		}
+		exitDialog.show(); 
+	    return false;
 	}
 
 }

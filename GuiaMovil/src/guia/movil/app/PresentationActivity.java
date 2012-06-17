@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class PresentationActivity extends Activity implements OnClickListener {
-	protected static boolean english;
+	public static boolean english;
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
