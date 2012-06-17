@@ -4,10 +4,13 @@ import com.fsq.android.FoursquareDialog.FsqDialogListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import java.lang.reflect.Type;
@@ -244,8 +247,12 @@ public class FoursquareApp {
 			Log.e(TAG, "Opening URL " + url.toString());	
 			HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();	
 			urlConnection.setDoOutput(true);
-			urlConnection.connect();
+
+			OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
+		    wr.write(url.toString());
 			
+		    wr.close();
+		    BufferedReader rd = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 		} catch (Exception ex) {
 
 		}
