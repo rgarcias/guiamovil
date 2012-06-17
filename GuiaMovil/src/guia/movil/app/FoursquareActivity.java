@@ -70,8 +70,6 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
         double lat2 = lat / 1e6;
         double lon2 = lon / 1e6;
         
-        Log.e("Location", "latitude: " + lat2 + ", longitude: " + lon2);
-
         if(mFsqApp.hasAccessToken()){
         	loadNearbyPlaces(lat2, lon2);
         }
@@ -94,10 +92,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
                 }
             };   
             mFsqApp.setListener(listener);
-            
-            if(mFsqApp.hasAccessToken()){
-            	loadNearbyPlaces(lat, lon);
-            }
+            loadNearbyPlaces(lat, lon);
         }
     }
  
