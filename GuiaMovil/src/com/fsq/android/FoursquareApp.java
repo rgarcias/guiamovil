@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -37,11 +38,13 @@ public class FoursquareApp {
 	private ProgressDialog mProgress;
 	private String mTokenUrl;
 	private String mAccessToken;
+	private ArrayList<FsqVenue> venueList;
 	
 	public static final String CALLBACK_URL = "myapp://connect";
 	private static final String AUTH_URL = "https://foursquare.com/oauth2/authenticate?response_type=code";
 	private static final String TOKEN_URL = "https://foursquare.com/oauth2/access_token?grant_type=authorization_code";	
 	private static final String API_URL = "https://api.foursquare.com/v2";
+	private static final String CHECKIN_URL = "https://api.foursquare.com/v2/checkins/add";
 	
 	private static final String TAG = "FoursquareApi";
 	
@@ -164,7 +167,7 @@ public class FoursquareApp {
 	}
 	
 	public ArrayList<FsqVenue> getNearby(double latitude, double longitude) throws Exception {
-		ArrayList<FsqVenue> venueList = new ArrayList<FsqVenue>();
+		 venueList = new ArrayList<FsqVenue>();
 		String response = "";
 		
 		try {
@@ -175,21 +178,19 @@ public class FoursquareApp {
 			urlConnection.setRequestMethod("GET");
 			urlConnection.connect();
 			response		= streamToString(urlConnection.getInputStream());
-			/*JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
+			JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
 			
-			JSONArray groups	= (JSONArray) jsonObj.getJSONObject("response").getJSONArray("venues");
+			JSONArray venues = (JSONArray) jsonObj.getJSONObject("response").getJSONArray("venues");
 			
-			int length= groups.length();
+			int length= venues.length();
 			
 			if (length > 0) {
 				for (int i = 0; i < length; i++) {
-						JSONObject item = (JSONObject) groups.get(i);
+						JSONObject item = (JSONObject) venues.get(i);
 						
-						FsqVenue venue 	= new FsqVenue();
-						
-						venue.id 		= item.getString("id");
-						venue.name		= item.getString("name");
-						
+						FsqVenue venue = new FsqVenue();
+						venue.id = item.getString("id");
+						venue.name = item.getString("name");
 						JSONObject location = (JSONObject) item.getJSONObject("location");
 						
 						Location loc 	= new Location(LocationManager.GPS_PROVIDER);
@@ -198,21 +199,15 @@ public class FoursquareApp {
 						loc.setLongitude(Double.valueOf(location.getString("lng")));
 						
 						venue.location	= loc;
-						venue.address	= location.getString("address");
-						venue.distance	= location.getInt("distance");
+						venue.distance	= item.getJSONObject("location").getInt("distance");
 						venue.herenow	= item.getJSONObject("hereNow").getInt("count");
 						
 						venueList.add(venue);
 					}
-				}*/
+				}
 		} catch (Exception ex) {
 			throw ex;
 		}
-				
-		Gson gson = new Gson();
-		Type collectionType = new TypeToken<ArrayList<FsqVenue> >(){}.getType();
-		venueList = gson.fromJson(response, collectionType);
-		        
 		return venueList;
 	}
 	
@@ -241,5 +236,18 @@ public class FoursquareApp {
 	public interface FsqAuthListener {
 		public abstract void onSuccess();
 		public abstract void onFail(String error);
+	}
+	
+	public void checkin(String id){
+		try {
+			URL url 	= new URL(API_URL + "/checkins/add?venueId=" + id + "&oauth_token=" + mAccessToken);	
+			Log.e(TAG, "Opening URL " + url.toString());	
+			HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();	
+			urlConnection.setDoOutput(true);
+			urlConnection.connect();
+			
+		} catch (Exception ex) {
+
+		}
 	}
 }

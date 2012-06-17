@@ -97,5 +97,7 @@
     <string name="cancelesp">Cancelar</string>
     <string name="exitDialogESP">No estás conectado a internet o plan de datos en este momento, cerrando aplicación.</string>
     <string name="exitDialogING">You\'re not connected to internet or data plan right now, closing app.</string>
+    <string name="checkinESP">¿Desea hacer checkin en esta localización?</string>
+    <string name="checkinING">¿Do you want to check you in this location?</string>
 
 </resources>

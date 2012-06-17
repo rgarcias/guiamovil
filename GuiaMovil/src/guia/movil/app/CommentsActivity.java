@@ -13,9 +13,11 @@ import com.google.gson.reflect.TypeToken;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -79,9 +81,11 @@ public class CommentsActivity extends Activity implements OnClickListener {
         
         placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE); 
         
-        String consulta =Services.getComments(methodname, soap, "placeID", placeID);
-        procesarConsulta(consulta);
- 
+        if(isOnline()){
+        	String consulta =Services.getComments(methodname, soap, "placeID", placeID);
+            procesarConsulta(consulta);
+        }
+
         AdaptadorTitulares adaptador = new AdaptadorTitulares(this);
 
         commentaries.setAdapter(adaptador);
@@ -127,9 +131,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
         while (iter.hasNext()) {
         	e = (Map.Entry)iter.next();
         	temp.add(new CommentResume(e.getKey().toString(), e.getValue().toString()));
-        	
         }
-        
         datos=new CommentResume[temp.size()];
         temp.toArray(datos);
 		
@@ -141,6 +143,39 @@ public class CommentsActivity extends Activity implements OnClickListener {
 		Intent intent = new Intent(CommentsActivity.this,CommentWriteActivity.class);
 		finish();
 		this.startActivity(intent);
+	}
+	
+	public boolean isOnline() {
+		Context context = getApplicationContext();
+	    ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	    android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+	    if (wifi.isConnected()) {
+	        return true;
+	    } else if (mobile.isConnected()) {
+	        return true;
+	    }
+	    Dialog exitDialog = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
+        exitDialog.setContentView(R.layout.exitdialog);
+		if(PresentationActivity.english){
+	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        exit.setImageResource(R.drawable.quit_button2);
+	        
+	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        exitText.setText(R.string.exitDialogING);
+	        exit.setOnClickListener(this);
+		}
+		else{
+			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        exit.setImageResource(R.drawable.quit_button);
+	        
+	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        exitText.setText(R.string.exitDialogESP);
+	        exit.setOnClickListener(this);
+		}
+		exitDialog.show(); 
+	    return false;
 	}
 
 	class AdaptadorTitulares extends ArrayAdapter<CommentResume>{
