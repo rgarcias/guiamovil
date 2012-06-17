@@ -40,6 +40,9 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 	private ProgressDialog mProgress;
 	private FsqVenue selectedVenue;
 	private Dialog checkinDialog;
+	private ProgressDialog cProgress;
+	private double lat2;
+	private double lon2;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,8 +70,8 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
         Integer lat  = Integer.valueOf(latitude);
         Integer lon  = Integer.valueOf(longitude);
         
-        double lat2 = lat / 1e6;
-        double lon2 = lon / 1e6;
+        lat2 = lat / 1e6;
+        lon2 = lon / 1e6;
         
         if(mFsqApp.hasAccessToken()){
         	loadNearbyPlaces(lat2, lon2);
@@ -76,23 +79,25 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
         else{
         	mFsqApp.authorize();
             FsqAuthListener listener = new FsqAuthListener() {
-                @Override
+            
+            	@Override
                 public void onSuccess() {
-                	if(PresentationActivity.english){
-                		 Toast.makeText(FoursquareActivity.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
-                	}
-                	else{
-                		 Toast.makeText(FoursquareActivity.this, "Conectado como " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
-                	}
+                   	if(PresentationActivity.english){
+                   		Toast.makeText(FoursquareActivity.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
+                   		 
+                   	}
+                   	else{
+                   		 Toast.makeText(FoursquareActivity.this, "Conectado como " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
+                   	}
+                   	loadNearbyPlaces(lat2, lon2);
                 }
-     
+         
                 @Override
                 public void onFail(String error) {
                     Toast.makeText(FoursquareActivity.this, error, Toast.LENGTH_SHORT).show();
                 }
             };   
             mFsqApp.setListener(listener);
-            loadNearbyPlaces(lat, lon);
         }
     }
  
@@ -159,14 +164,44 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 		else{
 			checkinText.setText(R.string.checkinESP);
 		}
-		Button checkin = (Button) checkinDialog.findViewById(R.id.checkinbutton);
+		ImageButton checkin = (ImageButton) checkinDialog.findViewById(R.id.checkinbutton);
         checkin.setOnClickListener(this);
 		checkinDialog.show();	
 	}
 
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		mFsqApp.checkin(selectedVenue.id);
 		checkinDialog.dismiss();
+		// TODO Auto-generated method stub
+		cProgress = new ProgressDialog(this);
+		cProgress.setMessage("Checking you in...");
+		cProgress.show();
+		
+		 new Thread() {
+	            @Override
+	            public void run() {
+	                int what = 0;
+
+	                mFsqApp.checkin(selectedVenue.id);
+	 
+	                cHandler.sendMessage(mHandler.obtainMessage(what));
+	            }
+	        }.start();
 	}
+	
+	private Handler cHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            cProgress.dismiss();
+ 
+            if (msg.what == 0) {
+                	if(PresentationActivity.english){
+                		Toast.makeText(FoursquareActivity.this, "Checked in!", Toast.LENGTH_SHORT).show();
+                	}
+                	else{
+                		Toast.makeText(FoursquareActivity.this, "Check-in realizado!", Toast.LENGTH_SHORT).show();
+                	}
+                    return;
+            }
+        }
+    };
 }
