@@ -45,13 +45,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	private TextView title;
 	private ListView commentaries;
 	private View tempView;
-	private CommentResume[] datos= new CommentResume[]{new CommentResume("Juan", "Buen lugar"),
-			new CommentResume("Pedro", "Mal lugar"),new CommentResume("Peter", "Nice place"),
-			new CommentResume("James", "Is not bad"),new CommentResume("Juan", "Buen lugar"),
-			new CommentResume("Pedro", "Mal lugar"),new CommentResume("Peter", "Nice place"),
-			new CommentResume("James", "Is not bad"),new CommentResume("Juan", "Buen lugar"),
-			new CommentResume("Pedro", "Mal lugar"),new CommentResume("Peter", "Nice place"),
-			new CommentResume("James", "Is not bad")};
+	private serv.CommentResume[] datos= new serv.CommentResume[]{new serv.CommentResume("Juan", "Buen lugar")};
 	private ImageButton comentar;
 	protected static String placeID;
 	
@@ -120,20 +114,16 @@ public class CommentsActivity extends Activity implements OnClickListener {
 
 	private void procesarConsulta(String consulta) {
 		Gson gson = new Gson();
-		HashMap<String,String> arreglo = new HashMap<String, String>();
-        Type collectionType = new TypeToken<HashMap<String,String> >(){}.getType();
+		ArrayList<serv.CommentResume> arreglo = new ArrayList<serv.CommentResume>();
+        Type collectionType = new TypeToken<ArrayList<serv.CommentResume> >(){}.getType();
         arreglo = gson.fromJson(consulta, collectionType);
         
-        ArrayList<CommentResume> temp= new  ArrayList<CommentResume>();
         
-        Iterator iter = arreglo.entrySet().iterator();
-        Map.Entry e;
-        while (iter.hasNext()) {
-        	e = (Map.Entry)iter.next();
-        	temp.add(new CommentResume(e.getKey().toString(), e.getValue().toString()));
-        }
-        datos=new CommentResume[temp.size()];
-        temp.toArray(datos);
+        
+       
+        
+        datos=new serv.CommentResume[arreglo.size()];
+        arreglo.toArray(datos);
 		
 	}
 
@@ -178,7 +168,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	    return false;
 	}
 
-	class AdaptadorTitulares extends ArrayAdapter<CommentResume>{
+	class AdaptadorTitulares extends ArrayAdapter<serv.CommentResume>{
 	    Activity context;
 	        AdaptadorTitulares(Activity context) {
 	            super(context, R.layout.commentlistitem, datos);
