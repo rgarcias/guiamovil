@@ -56,10 +56,18 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 		}
 		else if(v.getId()== R.id.comments_button && isOnline())
 		{
+			String apodo=nick.getText().toString();
+			if(nick.getText().toString().trim().length()==0)
+			{
+				if(PresentationActivity.english)
+					apodo="Anonymous";
+				else
+					apodo ="Anonimo";
+			}
 			
 			 String methodname = "addComment";
 		     String soap = "http://turismo/" + methodname;
-		     Services.addComments(methodname, soap, comment.getText().toString(), nick.getText().toString(), CommentsActivity.placeID);
+		     Services.addComments(methodname, soap, comment.getText().toString(), apodo, CommentsActivity.placeID);
 
 			Intent intent = new Intent(CommentWriteActivity.this,CommentsActivity.class);
 			finish();
