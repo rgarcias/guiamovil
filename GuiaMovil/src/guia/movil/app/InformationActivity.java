@@ -119,6 +119,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         btnComment =(ImageButton) findViewById(R.id.commentsButton);
         btnStar=(ImageButton) findViewById(R.id.starButton);
         
+        isFacebookLogged();
+        
         mFsqApp 		= new com.fsq.android.FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
         mAdapter 		= new com.fsq.android.NearbyAdapter(this);
         mNearbyList	= new ArrayList<com.fsq.android.FsqVenue>();
@@ -155,7 +157,16 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 	}
 
-
+	public void isFacebookLogged()
+	{
+		if(!isLogged())
+        {
+        	btnShare.setImageResource(R.drawable.facebook_inactive);
+        }
+		else
+			btnShare.setImageResource(R.drawable.facebook);
+			
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -219,12 +230,14 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 		else if(v.getId()==R.id.shareButton && isOnline())
 		{
+			
+
 			Toast.makeText(this, "Publicando mensaje", Toast.LENGTH_LONG).show();
-			setConnection();
-    		getID();
+			conect();
     		String text= this.text.getText().toString();
     		String title = this.title.getText().toString();
     		String response= postOnWall(title,text);
+    		isFacebookLogged();
     		if(response.equals("{\"error\":{\"message\":\"(#506) Duplicate status message\",\"type\":\"OAuthException\",\"code\":506}}"))
     			Toast.makeText(this, "Mensaje ya publicado", Toast.LENGTH_LONG).show();
     		else
