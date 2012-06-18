@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class CommentWriteActivity extends Activity implements OnClickListener {
@@ -60,9 +61,15 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 			if(nick.getText().toString().trim().length()==0)
 			{
 				if(PresentationActivity.english)
+				{
 					apodo="Anonymous";
+					Toast.makeText(this, "Published as Anonymous", Toast.LENGTH_LONG).show();
+				}
 				else
+				{
 					apodo ="Anonimo";
+					Toast.makeText(this, "Publicado como Anonimo", Toast.LENGTH_LONG).show();
+				}
 			}
 			
 			 String methodname = "addComment";
