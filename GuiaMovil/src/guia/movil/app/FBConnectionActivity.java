@@ -53,6 +53,7 @@ public abstract class FBConnectionActivity extends Activity {
     }
 
     public boolean isSession() {
+    	
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
             String access_token = sharedPrefs.getString("access_token", "x");
             Long expires = sharedPrefs.getLong("access_expires", -1);
@@ -65,11 +66,20 @@ public abstract class FBConnectionActivity extends Activity {
             return mFacebook.isSessionValid();
     }
     
+    public void conect()
+    {
+    	setConnection();
+		getID();
+    }
     public boolean isLogged()
     {
-    	if(mFacebook==null)
-    		return false;
-    	return true;
+    	mContext = this;
+    	sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+    	String access_token = sharedPrefs.getString("access_token", "x");
+         Long expires = sharedPrefs.getLong("access_expires", -1);
+    	if(access_token != null && expires != -1)
+    		return true;
+    	return false;
     }
 
     private class LoginDialogListener implements DialogListener {
