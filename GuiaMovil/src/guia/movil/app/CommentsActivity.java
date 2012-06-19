@@ -48,6 +48,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	private serv.CommentResume[] datos= new serv.CommentResume[]{new serv.CommentResume("Juan", "Buen lugar")};
 	private ImageButton comentar;
 	protected static String placeID;
+	private Dialog exitDialog;
 	
     @Override
     public void onCreate(Bundle icicle) {
@@ -133,9 +134,17 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(CommentsActivity.this,CommentWriteActivity.class);
-		finish();
-		this.startActivity(intent);
+		if(arg0.getId() == R.id.comment){
+			Intent intent = new Intent(CommentsActivity.this,CommentWriteActivity.class);
+			finish();
+			this.startActivity(intent);
+		}
+		if(arg0.getId() == R.id.exitButton){
+			Intent temp = new Intent(Intent.ACTION_MAIN);
+			temp.addCategory(Intent.CATEGORY_HOME);
+			exitDialog.dismiss();
+			startActivity(temp);
+		}
 	}
 	
 	public boolean isOnline() {
@@ -149,8 +158,9 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	    } else if (mobile.isConnected()) {
 	        return true;
 	    }
-	    Dialog exitDialog = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
+	    exitDialog = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
         exitDialog.setContentView(R.layout.exitdialog);
+        exitDialog.setCancelable(false);
 		if(PresentationActivity.english){
 	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
 	        exit.setImageResource(R.drawable.quit_button2);

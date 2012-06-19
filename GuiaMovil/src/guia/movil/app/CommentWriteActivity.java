@@ -22,6 +22,8 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 	private ImageButton cancelar;
 	private EditText nick;
 	private EditText comment;
+	private Dialog exitDialog;
+	
 	@Override
 	 public void onCreate(Bundle icicle) {
 		 super.onCreate(icicle);
@@ -80,6 +82,12 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 			finish();
 			this.startActivity(intent);
 	    }	
+		if(v.getId() == R.id.exitButton){
+			Intent temp = new Intent(Intent.ACTION_MAIN);
+			temp.addCategory(Intent.CATEGORY_HOME);
+			exitDialog.dismiss();
+			startActivity(temp);
+		}
 	}
 	
 	public boolean isOnline() {
@@ -93,8 +101,9 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 	    } else if (mobile.isConnected()) {
 	        return true;
 	    }
-	    Dialog exitDialog = new Dialog(CommentWriteActivity.this, R.style.FullHeightDialog);
+	    exitDialog = new Dialog(CommentWriteActivity.this, R.style.FullHeightDialog);
         exitDialog.setContentView(R.layout.exitdialog);
+        exitDialog.setCancelable(false);
 		if(PresentationActivity.english){
 	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
 	        exit.setImageResource(R.drawable.quit_button2);
