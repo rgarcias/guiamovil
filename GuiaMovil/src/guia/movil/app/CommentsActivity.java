@@ -56,7 +56,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
         this.setContentView(R.layout.comments);
         
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        
+        title = (TextView)findViewById(R.id.comentaryTitle);
         comentar= (ImageButton)findViewById(R.id.comment);
         title.setText("Comentarios"); 
         if(PresentationActivity.english){
@@ -66,7 +66,7 @@ public class CommentsActivity extends Activity implements OnClickListener {
         else{
         	comentar.setImageResource(R.drawable.comment_button);
         }
-        title = (TextView)findViewById(R.id.comentaryTitle);
+        
         
               
       
