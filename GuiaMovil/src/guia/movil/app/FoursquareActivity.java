@@ -73,6 +73,8 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
         lat2 = lat / 1e6;
         lon2 = lon / 1e6;
         
+        /* authorize */
+        
         if(mFsqApp.hasAccessToken()){
         	loadNearbyPlaces(lat2, lon2);
         }
