@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 public class PresentationActivity extends Activity implements OnClickListener {
 	public static boolean english;
+	
+	private  Dialog exitDialog;
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +53,10 @@ public class PresentationActivity extends Activity implements OnClickListener {
 			}
 		}
 		else if(view.getId() == R.id.exitButton){
-			this.finish();
+			Intent temp = new Intent(Intent.ACTION_MAIN);
+			temp.addCategory(Intent.CATEGORY_HOME);
+			exitDialog.dismiss();
+			startActivity(temp);
 		}
 	}
 	
@@ -66,8 +71,9 @@ public class PresentationActivity extends Activity implements OnClickListener {
 	    } else if (mobile.isConnected()) {
 	        return true;
 	    }
-	    Dialog exitDialog = new Dialog(PresentationActivity.this, R.style.FullHeightDialog);
+	    exitDialog = new Dialog(PresentationActivity.this, R.style.FullHeightDialog);
         exitDialog.setContentView(R.layout.exitdialog);
+        exitDialog.setCancelable(false);
 		if(PresentationActivity.english){
 	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
 	        exit.setImageResource(R.drawable.quit_button2);
