@@ -51,6 +51,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     private ImageButton ib2;
     private ArrayAdapter<String> listAdapter;
     private String[] dialogItems;
+    private Dialog exitDialog;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -88,10 +89,12 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if(depth >= 2){
-        	Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
-        	String place = (String) lv.getAdapter().getItem(position);
-        	this.PLACE = place;
-        	this.startActivity(intent);
+        	if(isOnline()){
+	        	Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
+	        	String place = (String) lv.getAdapter().getItem(position);
+	        	this.PLACE = place;
+	        	this.startActivity(intent);
+        	}
         }
         else{
         	this.depth += 1;
@@ -186,10 +189,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     	
     	return aux;
     }
-
-	public void onClick(int which) {
-		
-	}
 	
 	public String arrayListtoString(){
 		String aux = "";
@@ -225,7 +224,11 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			this.home();
 		}
 		if(v.getId() == R.id.exitButton){
-			this.finish();
+			this.onBackPressed();
+			exitDialog.dismiss();
+			Intent temp = new Intent(Intent.ACTION_MAIN);
+			temp.addCategory(Intent.CATEGORY_HOME);
+			startActivity(temp);
 		}
 	}
 	
@@ -257,8 +260,9 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	    } else if (mobile.isConnected()) {
 	        return true;
 	    }
-	    Dialog exitDialog = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+	    exitDialog = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
         exitDialog.setContentView(R.layout.exitdialog);
+        exitDialog.setCancelable(false);
 		if(PresentationActivity.english){
 	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
 	        exit.setImageResource(R.drawable.quit_button2);
@@ -268,7 +272,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	        exit.setOnClickListener(this);
 		}
 		else{
-			
 			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
 	        exit.setImageResource(R.drawable.quit_button);
 	        

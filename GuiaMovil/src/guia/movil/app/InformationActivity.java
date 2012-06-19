@@ -3,6 +3,9 @@ package guia.movil.app;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
@@ -28,7 +31,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,6 +48,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class InformationActivity extends FBConnectionActivity implements OnClickListener {
+	public static boolean ERROR = false;
+	
 	private ImageButton btnShare;
 	private ImageButton btnTwitt;
 	private ImageButton btnCheck;
@@ -81,6 +88,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private RatingBar rb;
 	private TextView text;
 	private TextView title;
+	private Dialog exitDialog;
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -118,14 +126,13 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         btnCheck= (ImageButton) findViewById(R.id.checkinButton);
         btnComment =(ImageButton) findViewById(R.id.commentsButton);
         btnStar=(ImageButton) findViewById(R.id.starButton);
-        
-       
+   
         
         mFsqApp 		= new com.fsq.android.FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
         mAdapter 		= new com.fsq.android.NearbyAdapter(this);
         mNearbyList	= new ArrayList<com.fsq.android.FsqVenue>();
         mProgress		= new ProgressDialog(this);
-        
+            
         btnShare.setOnClickListener(this);
         btnTwitt.setOnClickListener(this);
         btnComment.setOnClickListener(this);
@@ -142,8 +149,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         rb.setRating(Float.valueOf(rat));
     }
     
-   
-	
 	private void enviaTweet() {
 		try {
 			Twitter twitter = new TwitterFactory().getInstance();
@@ -156,7 +161,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			
 		}
 	}
-
 
 	@Override
 	public void onClick(View v) {
@@ -188,12 +192,48 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        aceptar.setOnClickListener(new View.OnClickListener() {
 	            @Override
 	            public void onClick(View v) {
-	            	String methodname = "sendRating";
-	                String soap = "http://turismo/" + methodname;
-	            	Services.addRating(methodname, soap, String.valueOf(ratingBar.getRating()),placeID );
-	            	refreshRat();
-	                rankDialog.dismiss();
+	            	if(this.isOnline()){
+	            		String methodname = "sendRating";
+		                String soap = "http://turismo/" + methodname;
+		            	Services.addRating(methodname, soap, String.valueOf(ratingBar.getRating()),placeID );
+		            	refreshRat(); 
+	            	}
+	            	rankDialog.dismiss();
 	            }
+	            
+	            public boolean isOnline() {
+	        		Context context = getApplicationContext();
+	        	    ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	        	    android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	        	    android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+	        	    if (wifi.isConnected()) {
+	        	        return true;
+	        	    } else if (mobile.isConnected()) {
+	        	        return true;
+	        	    }
+	        	    Dialog exitDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
+	                exitDialog.setContentView(R.layout.exitdialog);
+	                exitDialog.setCanceledOnTouchOutside(true);
+	        		if(PresentationActivity.english){
+	        	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        	        exit.setImageResource(R.drawable.quit_button2);
+	        	        
+	        	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        	        exitText.setText(R.string.exitDialogING);
+	        	        exit.setOnClickListener(this);
+	        		}
+	        		else{
+	        			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
+	        	        exit.setImageResource(R.drawable.quit_button);
+	        	        
+	        	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
+	        	        exitText.setText(R.string.exitDialogESP);
+	        	        exit.setOnClickListener(this);
+	        		}
+	        		exitDialog.show(); 
+	        	    return false;
+	        	}
 	        }); 
 	        cancelar.setOnClickListener(new View.OnClickListener() {
 	            @Override
@@ -234,7 +274,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	
 			}
 
-			
 			if (!isLogged())
 			{
 				Toast.makeText(this, conect, Toast.LENGTH_LONG).show();
@@ -255,6 +294,10 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 		else if(v.getId()==R.id.exitButton){
 			this.finish();
+			exitDialog.dismiss();
+			Intent temp = new Intent(Intent.ACTION_MAIN);
+			temp.addCategory(Intent.CATEGORY_HOME);
+			startActivity(temp);
 		}
 	}
 	
@@ -269,8 +312,9 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	    } else if (mobile.isConnected()) {
 	        return true;
 	    }
-	    Dialog exitDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
+	    exitDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
         exitDialog.setContentView(R.layout.exitdialog);
+        exitDialog.setCancelable(false);
 		if(PresentationActivity.english){
 	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
 	        exit.setImageResource(R.drawable.quit_button2);

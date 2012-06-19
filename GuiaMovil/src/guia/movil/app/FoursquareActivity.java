@@ -84,7 +84,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
                 public void onSuccess() {
                    	if(PresentationActivity.english){
                    		Toast.makeText(FoursquareActivity.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
-                   		 
+                   		
                    	}
                    	else{
                    		 Toast.makeText(FoursquareActivity.this, "Conectado como " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
@@ -183,7 +183,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 
 	                mFsqApp.checkin(selectedVenue.id);
 	 
-	                cHandler.sendMessage(mHandler.obtainMessage(what));
+	                cHandler.sendMessage(cHandler.obtainMessage(what));
 	            }
 	        }.start();
 	}

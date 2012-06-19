@@ -70,7 +70,7 @@
             android:layout_marginLeft="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/twitter" />
-
+
         <ImageButton
             android:id="@+id/checkinButton"
             android:layout_width="wrap_content"
