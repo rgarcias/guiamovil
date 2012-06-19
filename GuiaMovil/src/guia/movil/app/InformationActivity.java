@@ -268,8 +268,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		{
 		    onTwitterClick();
 			if(accessToken!=null){
-				//postReview("Hola!, he visitado"+ CategoryActivity.PLACE +"en la aplicación Guía Movil Curicó.");
-				//postToTwitter("Hola!, he visitado"+ CategoryActivity.PLACE +"en la aplicación Guía Movil Curicó.");
+				postReview("Hola!, he visitado"+ CategoryActivity.PLACE +"en la aplicación Guía Movil Curicó.");
+				postToTwitter("Hola!, he visitado"+ CategoryActivity.PLACE +"en la aplicación Guía Movil Curicó.");
 			}
 			else
 			{
