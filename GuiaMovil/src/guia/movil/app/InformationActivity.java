@@ -14,26 +14,34 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.android.*;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.twitter.android.TwitterApp;
+import com.twitter.android.TwitterApp.TwDialogListener;
 
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -67,6 +75,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private static final String AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize";
 	private static final String ACCESS_URL = "https://api.twitter.com/oauth/access_token";
 	private static final String CALLBACK_URL = "app://twitt";
+	private TwitterApp mTwitter;
 	
 	final String ACCES="accesToken", SECRET="secret", PREFERENCIAS="pref";
 	
@@ -88,6 +97,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private RatingBar rb;
 	private TextView text;
 	private TextView title;
+	private boolean usuarioTwitter;
+	
 	private Dialog exitDialog;
     @Override
     public void onCreate(Bundle icicle) {
@@ -96,6 +107,13 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.setContentView(R.layout.information);
         
+        usuarioTwitter = false;
+        mTwitter = new TwitterApp(this, CONSUMER_KEY,CONSUMER_SECRET);	
+        mTwitter.setListener(mTwLoginDialogListener);
+        if (mTwitter.hasAccessToken()) {
+			String username = mTwitter.getUsername();
+			username		= (username.equals("")) ? "Unknown" : username;
+        }
         rb = (RatingBar) this.findViewById(R.id.ratingBar1);
         rb.setRating(Float.valueOf(0)); 
         title = (TextView) this.findViewById(R.id.textView1);
@@ -162,7 +180,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 	}
 
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v.getId()== R.id.commentsButton && isOnline())
@@ -190,7 +207,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        }
 	        
 	        aceptar.setOnClickListener(new View.OnClickListener() {
-	            @Override
 	            public void onClick(View v) {
 	            	if(this.isOnline()){
 	            		String methodname = "sendRating";
@@ -236,7 +252,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        	}
 	        }); 
 	        cancelar.setOnClickListener(new View.OnClickListener() {
-	            @Override
 	            public void onClick(View v) {
 	                rankDialog.dismiss();
 	            }
@@ -251,11 +266,14 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 		else if(v.getId()==R.id.tweetButton && isOnline())
 		{
-			if(accessToken!=null)
-				enviaTweet();
+		    onTwitterClick();
+			if(accessToken!=null){
+				//postReview("Hola!, he visitado"+ CategoryActivity.PLACE +"en la aplicación Guía Movil Curicó.");
+				//postToTwitter("Hola!, he visitado"+ CategoryActivity.PLACE +"en la aplicación Guía Movil Curicó.");
+			}
 			else
 			{
-				
+
 			}
 		}
 		else if(v.getId()==R.id.shareButton && isOnline())
@@ -361,4 +379,77 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         
         return arreglo;
 	}
+	
+	
+	private void onTwitterClick() {
+		if (mTwitter.hasAccessToken()) {
+			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			
+			builder.setMessage("Delete current Twitter connection?")
+			       .setCancelable(false)
+			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			        	   mTwitter.resetAccessToken();
+			        	   usuarioTwitter = false;
+			           }
+			       })
+			       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			                dialog.cancel();
+			                usuarioTwitter = true;
+			           }
+			       });
+			final AlertDialog alert = builder.create();
+			
+			alert.show();
+		} else {	
+			mTwitter.authorize();
+			usuarioTwitter = true;
+		}
+	}
+	
+	private final TwDialogListener mTwLoginDialogListener = new TwDialogListener() {
+		public void onComplete(String value) {
+			String username = mTwitter.getUsername();
+			username = (username.equals("")) ? "No Name" : username;			
+			Toast.makeText(InformationActivity.this, "Connected to Twitter as " + username, Toast.LENGTH_LONG).show();
+		}
+		
+		public void onError(String value) {		
+			Toast.makeText(InformationActivity.this, "Twitter connection failed", Toast.LENGTH_LONG).show();
+		}
+	};
+	
+	
+	private void postReview(String review) {
+		//post to server
+		
+		Toast.makeText(this, "Review posted", Toast.LENGTH_SHORT).show();
+	}
+	
+	private void postToTwitter(final String review) {
+		new Thread() {
+			@Override
+			public void run() {
+				int what = 0;
+				
+				try {
+					mTwitter.updateStatus(review);
+				} catch (Exception e) {
+					what = 1;
+				}
+				
+				mHandler.sendMessage(mHandler.obtainMessage(what));
+			}
+		}.start();
+	}
+	
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			String text = (msg.what == 0) ? "Posted to Twitter" : "Post to Twitter failed";
+			
+			Toast.makeText(InformationActivity.this, text, Toast.LENGTH_SHORT).show();
+		}
+	};
 }
