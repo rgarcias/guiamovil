@@ -220,18 +220,38 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 		else if(v.getId()==R.id.shareButton && isOnline())
 		{
+			String conect="Conectando";
+			String published="Publicando mensaje";
+			String yaPublicado="Mensaje ya publicado";
+			String publicado="Mensaje  publicado";
 			
+			if(PresentationActivity.english)
+			{
+				conect="Connecting";
+				published="Posting a message";
+				yaPublicado="Message has been published";
+				publicado="Post correctly";
+	
+			}
 
-			Toast.makeText(this, "Publicando mensaje", Toast.LENGTH_LONG).show();
-			conect();
-    		String text= this.text.getText().toString();
-    		String title = this.title.getText().toString();
-    		String response= postOnWall(title,text);
+			
+			if (!isLogged())
+			{
+				Toast.makeText(this, conect, Toast.LENGTH_LONG).show();
+				conect();
+			}
+			else{
+				conect();
+				Toast.makeText(this, published, Toast.LENGTH_LONG).show();
+				String text= this.text.getText().toString();
+				String title = this.title.getText().toString();
+				String response= postOnWall(title,text);
     		
-    		if(response.equals("{\"error\":{\"message\":\"(#506) Duplicate status message\",\"type\":\"OAuthException\",\"code\":506}}"))
-    			Toast.makeText(this, "Mensaje ya publicado", Toast.LENGTH_LONG).show();
-    		else
-    			Toast.makeText(this, "Mensaje  publicado", Toast.LENGTH_LONG).show();
+				if(response.equals("{\"error\":{\"message\":\"(#506) Duplicate status message\",\"type\":\"OAuthException\",\"code\":506}}"))
+					Toast.makeText(this, yaPublicado, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(this,publicado, Toast.LENGTH_LONG).show();
+			}
 		}
 		else if(v.getId()==R.id.exitButton){
 			this.finish();
