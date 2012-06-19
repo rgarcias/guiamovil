@@ -58,14 +58,17 @@ public class CommentsActivity extends Activity implements OnClickListener {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         comentar= (ImageButton)findViewById(R.id.comment);
+        title.setText("Comentarios"); 
         if(PresentationActivity.english){
+        	title.setText("Comments"); 
         	comentar.setImageResource(R.drawable.comment_button2);
         }
         else{
         	comentar.setImageResource(R.drawable.comment_button);
         }
         title = (TextView)findViewById(R.id.comentaryTitle);
-        title.setText("Comentarios");       
+        
+              
       
         commentaries = (ListView) findViewById(R.id.commentaryList);
         String methodname = "getComment";
