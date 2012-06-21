@@ -31,7 +31,7 @@
             android:layout_marginLeft="15dp"
             android:text="@string/apodoESP"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
         <EditText
             android:id="@+id/nickText"
             android:layout_width="match_parent"
@@ -39,7 +39,8 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
-            android:ems="10" >
+            android:ems="10"
+            android:singleLine="true" >
 
             <requestFocus />
         </EditText>
@@ -58,7 +59,7 @@
             android:layout_marginLeft="15dp"
             android:text="@string/comentEspaceESP"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
         <EditText
             android:id="@+id/commentText"
             android:layout_width="match_parent"
@@ -68,9 +69,9 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
             android:ems="10"
+            android:gravity="top"
             android:inputType="textMultiLine"
-            android:singleLine="false"
-            android:text="@string/comentario" />
+            android:singleLine="false" />
 
         <LinearLayout
             android:layout_width="match_parent"
