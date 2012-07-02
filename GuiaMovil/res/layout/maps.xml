@@ -9,19 +9,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp" >
-        
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextMaps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:text="Buscar"
-            android:textColor="@color/searchColor" >
-
-            <requestFocus />
-        </AutoCompleteTextView>
+
+		<TextView
+		    android:id="@+id/mapText"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:text=""
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
     <LinearLayout
@@ -35,9 +29,15 @@
             android:id="@+id/mapview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:apiKey="0gZ9nODwKbRm9vB42s0I2UQdn0v0VMxOvVrFBRg"
+            android:apiKey="0wPcdjWv4YQL0xyiAODxiAyq2DiKc7GeCbeS_AQ"
             android:clickable="true" >
         </com.google.android.maps.MapView>
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_star" />
 
     </LinearLayout>
 

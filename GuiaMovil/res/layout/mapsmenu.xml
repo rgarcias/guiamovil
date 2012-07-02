@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+      <item
+            android:id="@+id/btTrazar"
+            android:title="Trazar ruta">
+<!--             android:icon="@drawable/config"> -->
+      </item>
+      <item
+            android:id="@+id/btLlegar"
+            android:title="Como llegar">
+<!--             android:icon="@drawable/info"> -->
+      </item>
+</menu>
