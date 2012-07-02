@@ -19,6 +19,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -206,4 +208,15 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
             }
         }
     };
+    
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.layout.ctxmenu, menu);
+	    if(PresentationActivity.english){
+			menu.getItem(0).setTitle("Language");
+			menu.getItem(1).setTitle("About");
+	    }
+	    return true;
+	}
 }

@@ -45,6 +45,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -450,4 +452,15 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			Toast.makeText(InformationActivity.this, text, Toast.LENGTH_SHORT).show();
 		}
 	};
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.layout.ctxmenu2, menu);
+	    if(PresentationActivity.english){
+			menu.getItem(0).setTitle("Language");
+			menu.getItem(1).setTitle("About");
+	    }
+	    return true;
+	}
 }
