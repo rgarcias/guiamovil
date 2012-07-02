@@ -24,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -180,6 +182,17 @@ public class CommentsActivity extends Activity implements OnClickListener {
 		exitDialog.show(); 
 	    return false;
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.layout.ctxmenu2, menu);
+	    if(PresentationActivity.english){
+			menu.getItem(0).setTitle("Language");
+			menu.getItem(1).setTitle("About");
+	    }
+	    return true;
+	}
 
 	class AdaptadorTitulares extends ArrayAdapter<serv.CommentResume>{
 	    Activity context;
@@ -204,4 +217,4 @@ public class CommentsActivity extends Activity implements OnClickListener {
 	        	return(item);
 	    }	
 	}
-	}
+}
