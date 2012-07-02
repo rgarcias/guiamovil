@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -52,6 +53,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
     GeoPoint point;
     Location userLocation =null ;
     LocationManager mlocManager;
+    String descripcion ="";
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps);
@@ -81,7 +83,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
             MapController control = mapView.getController();
             control.setCenter(point);
             control.setZoom(13);
-            OverlayItem overlayitem = new OverlayItem(point, "Hola mundo!", "I'm in "+ CategoryActivity.PLACE);
+            OverlayItem overlayitem = new OverlayItem(point, CategoryActivity.PLACE, "I'm in "+ CategoryActivity.PLACE);
             
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);
@@ -95,8 +97,8 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	
 	public void showDriveIndicationRoute(double lat2,double lon2)
 	{
-		 double fromLat = userLocation.getLatitude(), fromLon = userLocation.getLongitude(), toLat = lat2, toLon = lon2;
-         mlocManager.removeUpdates(locListener);
+		double fromLat = userLocation.getLatitude(), fromLon = userLocation.getLongitude(), toLat = lat2, toLon = lon2;
+        mlocManager.removeUpdates(locListener);
 		String url = RoadProvider.getUrlR(fromLat, fromLon, toLat, toLon);
         Log.d("url",url);
         InputStream is = getConnection(url);
@@ -105,23 +107,53 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 		{
 		
 			String[] arreglo= new String[this.mRoad.getmPoints().length];
+			ArrayList<String> arreglin = new ArrayList<String>();
 			for (int i=0; (this.mRoad.getmPoints().length)>i; i++ )
 			{
-				arreglo[i]=(mRoad.getmPoints()[i].getmName()+"\n"+mRoad.getmPoints()[i].getmDescription());
-				Log.e("route", arreglo[i]);
+				if(mRoad.getmPoints()[i].getmDescription()!=null&&mRoad.getmPoints()[i].getmName()!=null)
+					arreglin.add(mRoad.getmPoints()[i].getmName()+"\n"+mRoad.getmPoints()[i].getmDescription());
+				else if (mRoad.getmPoints()[i].getmName()!=null)
+					arreglin.add(mRoad.getmPoints()[i].getmName());
+				
+				
 			}
+			
+			arreglo=new String[arreglin.size()];
+			arreglin.toArray(arreglo);
 			
 			final Dialog routDialog = new Dialog(MapsActivity.this, R.style.FullHeightDialog);
 			routDialog.setContentView(R.layout.showroute);
+			ImageButton back = (ImageButton)routDialog.findViewById(R.id.routBack);
+			TextView title = (TextView)routDialog.findViewById(R.id.routName);	        
+	        title.setText("Como llegar"); 
+	        if(PresentationActivity.english)
+	        	title.setText("Getting there"); 
+	
 			
+		    back.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		           routDialog.dismiss();
+		        }
+		    });
 			ListView list = (ListView) routDialog.findViewById(R.id.listaRuta);
 			
 			ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(routDialog.getContext(), android.R.layout.simple_list_item_1, arreglo);
 		
 		    list.setAdapter(listAdapter);
 			routDialog.setCancelable(true);
+			
+			 if (mRoad.getmName()!=null)
+				 routDialog.show();
+			    else
+			    {
+			    	if(PresentationActivity.english)
+     				Toast.makeText(getApplicationContext(), "This place has not route", Toast.LENGTH_SHORT).show();
+     			else
+     				Toast.makeText(getApplicationContext(), "Este lugar no posee ruta", Toast.LENGTH_SHORT).show();
+			    }
 		
-			routDialog.show();
+			
 		
 		}
 		else
@@ -161,11 +193,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	public void localizar()
 	{
 		mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		if (!mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-        	Toast.makeText(getApplicationContext(), "GPS no habilitado", 
-	                 Toast.LENGTH_SHORT).show();
-            
-       }
+		
         
         userLocation =mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(userLocation==null)
@@ -214,13 +242,16 @@ public class MapsActivity extends MapActivity implements OnClickListener{
         public void handleMessage(android.os.Message msg) {
         	if (mRoad.mName==null)
             {
-        		TextView textView = (TextView) findViewById(R.id.mapText);
-                textView.setText("No hay ruta ");
+        
+        		if(PresentationActivity.english)
+        			Toast.makeText(getApplicationContext(), "Route not found", Toast.LENGTH_SHORT).show();
+        		else
+        			Toast.makeText(getApplicationContext(), "No hay ruta ", Toast.LENGTH_SHORT).show();
+        		
             }
         	else
         	{
-                TextView textView = (TextView) findViewById(R.id.mapText);
-                textView.setText(mRoad.mName + " " + mRoad.mDescription);
+                descripcion=mRoad.mName + " " + mRoad.mDescription;
                 MapOverlay mapOverlay = new MapOverlay(mRoad, mapView);
                 List<Overlay> listOfOverlays = mapView.getOverlays();
                 listOfOverlays.clear();
@@ -294,6 +325,13 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	   public boolean onCreateOptionsMenu(Menu menu) {
 	          MenuInflater inflater = getMenuInflater();
 	          inflater.inflate(R.layout.mapsmenu, menu);
+	          if(PresentationActivity.english)
+	          {
+  				menu.getItem(1).setTitle("Getting there");
+  				menu.getItem(2).setTitle("Description");
+  				menu.getItem(0).setTitle("Trace route");
+	          }
+
 	          return true;
 	      }
 	public boolean haveRouteConnector()
@@ -361,8 +399,11 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	        		if(haveRouteConnector())
 	        		{
 	        			localizar();
-	        		
-	        			Toast.makeText(getApplicationContext(), "Trazando ruta", Toast.LENGTH_SHORT).show();
+	        			
+	        			if(PresentationActivity.english)
+	        				Toast.makeText(getApplicationContext(), "Tracing route", Toast.LENGTH_SHORT).show();
+	        			else
+	        				Toast.makeText(getApplicationContext(), "Trazando ruta", Toast.LENGTH_SHORT).show();
 	        			double latt2 =  point.getLatitudeE6() / 1e6;
 	        			double lont2 = point.getLongitudeE6() / 1e6;
 	        			try
@@ -375,9 +416,75 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	        			}
 	        		}
 	           return true;
+	        case R.id.btDescripcion:
+	        	if(haveRouteConnector())
+        		{
+		        	try{
+		        	final Dialog commentView = new Dialog(MapsActivity.this, R.style.FullHeightDialog);
+					commentView.setContentView(R.layout.commentview);
+					commentView.setCancelable(true);
+				    TextView nick = (TextView) commentView.findViewById(R.id.nickName);
+				    TextView comment = (TextView) commentView.findViewById(R.id.commentSpace);
+				    
+				    localizar();
+			    	double lat2 =  point.getLatitudeE6() / 1e6;
+        			double lon2 = point.getLongitudeE6() / 1e6;
+        			double fromLat = userLocation.getLatitude(), fromLon = userLocation.getLongitude(), toLat = lat2, toLon = lon2;
+        	        mlocManager.removeUpdates(locListener);
+        	        
+				    if(PresentationActivity.english)
+				    {
+				    	
+	        			String url = RoadProvider.getUrl(fromLat, fromLon, toLat, toLon);
+	        	        Log.d("url",url);
+	        	        InputStream is = getConnection(url);
+	        	        mRoad = RoadProvider.getRoute(is);
+				    	nick.setText("Description");
+				    	comment.setText(mRoad.mName + " " + mRoad.mDescription);
+				    }
+				    else
+				    {
+				    	
+				    	
+	        			String url = RoadProvider.getUrlR(fromLat, fromLon, toLat, toLon);
+	        	        Log.d("url",url);
+	        	        InputStream is = getConnection(url);
+	        	        mRoad = RoadProvider.getRoute(is);
+				    	nick.setText("Descripcion");
+				    	comment.setText(mRoad.getmPoints()[mRoad.getmPoints().length-1].getmName() +" "+ 
+				    mRoad.getmPoints()[mRoad.getmPoints().length-1].getmDescription());
+				    }
+	
+				    
+				    ImageButton back = (ImageButton)commentView.findViewById(R.id.commentBack);
+				    back.setOnClickListener(new View.OnClickListener() {
+				    @Override
+				    public void onClick(View v) {
+				           commentView.dismiss();
+				        }
+				    });
+				    if (mRoad.getmName()!=null)
+				    	commentView.show();
+				    else
+				    {
+				    	if(PresentationActivity.english)
+	        				Toast.makeText(getApplicationContext(), "This place has not description", Toast.LENGTH_SHORT).show();
+	        			else
+	        				Toast.makeText(getApplicationContext(), "Este lugar no posee descripcion", Toast.LENGTH_SHORT).show();
+				    }
+		        	}
+		        	catch (Exception e)
+		        	{
+		        		if(PresentationActivity.english)
+	        				Toast.makeText(getApplicationContext(), "First trace the route or see indications", Toast.LENGTH_SHORT).show();
+	        			else
+	        				Toast.makeText(getApplicationContext(), "Primero trazar la ruta o ver indicaciones", Toast.LENGTH_SHORT).show();
+		        	}
+        		}
+	           return true;
 	        default:
 	           return super.onOptionsItemSelected(item);
-	    }
+	    
 	}
 }
 
@@ -443,4 +550,5 @@ class MapOverlay extends com.google.android.maps.Overlay {
 	            }
        
     }
+}
 }
