@@ -320,4 +320,92 @@ public class Services {
 	        return null;
 	    }
 	} 
+	
+	public static String getLocationsSearched(String methodname,String soap,String nombre,String parametrovalor){
+	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
+	    PropertyInfo parametro = new PropertyInfo();
+	    parametro.setName(nombre);
+	    parametro.setValue(parametrovalor);
+	    parametro.setType(String.class);
+	    Solicitud.addProperty(parametro);
+	    SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
+	    Envoltorio.setOutputSoapObject (Solicitud);
+	    HttpTransportSE TransporteHttp = new HttpTransportSE(URL);
+	    try {
+	    	TransporteHttp.call (soap, Envoltorio);
+	    }
+	    catch (IOException ex) {
+	        return null;
+	    }
+	    catch (XmlPullParserException ex) {
+	        return null;
+	    }
+	    try {
+	        String CadenaDevuelta =  Envoltorio.getResponse().toString();
+	        return CadenaDevuelta;  
+	    } 
+	    catch (SoapFault ex) {
+	        return null;
+	    }
+	} 
+	
+	
+	public static String getPlacesSortAsc(String methodname,String soap,String nombre,String parametrovalor){
+	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
+	    PropertyInfo parametro = new PropertyInfo();
+	    parametro.setName(nombre);
+	    parametro.setValue(parametrovalor);
+	    parametro.setType(String.class);
+	    Solicitud.addProperty(parametro);
+	    SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
+	    Envoltorio.setOutputSoapObject (Solicitud);
+	    HttpTransportSE TransporteHttp = new HttpTransportSE(URL);
+	    try {
+	    	TransporteHttp.call (soap, Envoltorio);
+	    }
+	    catch (IOException ex) {
+	        return null;
+	    }
+	    catch (XmlPullParserException ex) {
+	        return null;
+	    }
+	    try {
+	        String CadenaDevuelta =  Envoltorio.getResponse().toString();
+	        return CadenaDevuelta;  
+	    } 
+	    catch (SoapFault ex) {
+	        return null;
+	    }
+	}
+	
+	
+	public static String getPlacesSortDsc(String methodname,String soap,String nombre,String parametrovalor){
+	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
+	    PropertyInfo parametro = new PropertyInfo();
+	    parametro.setName(nombre);
+	    parametro.setValue(parametrovalor);
+	    parametro.setType(String.class);
+	    Solicitud.addProperty(parametro);
+	    SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
+	    Envoltorio.setOutputSoapObject (Solicitud);
+	    HttpTransportSE TransporteHttp = new HttpTransportSE(URL);
+	    try {
+	    	TransporteHttp.call (soap, Envoltorio);
+	    }
+	    catch (IOException ex) {
+	        return null;
+	    }
+	    catch (XmlPullParserException ex) {
+	        return null;
+	    }
+	    try {
+	        String CadenaDevuelta =  Envoltorio.getResponse().toString();
+	        return CadenaDevuelta;  
+	    } 
+	    catch (SoapFault ex) {
+	        return null;
+	    }
+	}
+	
+	
 }
