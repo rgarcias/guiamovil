@@ -47,9 +47,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -57,7 +62,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InformationActivity extends FBConnectionActivity implements OnClickListener {
+public class InformationActivity extends FBConnectionActivity implements OnClickListener, OnItemClickListener {
 	public static boolean ERROR = false;
 	
 	private ImageButton btnShare;
@@ -100,6 +105,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private TextView text;
 	private TextView title;
 	private boolean usuarioTwitter;
+	private MyAdapter myAdapter;
 	
 	private Dialog exitDialog;
     @Override
@@ -136,9 +142,20 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        rb.setRating(Float.valueOf(rat)); 
 	        
 	        /* photos */
-	        ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
+	        Gallery g = (Gallery) findViewById(R.id.gallery);
+	        myAdapter = new MyAdapter(this);
+	        g.setOnItemClickListener(this);
+	        
+	        /*ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
 	        ImageView image = (ImageView) this.findViewById(R.id.imageView1);
-	        image.setImageBitmap(this.getImageBitmap(photos.get(0)));
+	        image.setImageBitmap(this.getImageBitmap(photos.get(0)));*/
+	        ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
+	        for(int i=0;i<photos.size();i++){
+	        	insertImageItem(photos.size(), photos.get(i));
+	        }
+	        /*insertDummyImageItem(2);
+	        insertDummyImageItem(3);*/
+	        g.setAdapter(myAdapter);
         }
         mContext=this;
         btnShare= (ImageButton) findViewById(R.id.shareButton); 
@@ -352,24 +369,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		exitDialog.show(); 
 	    return false;
 	}
-	
-	public static Bitmap getImageBitmap(String url) { 
-        Bitmap bm = null; 
-        try { 
-            URL aURL = new URL(url); 
-            URLConnection conn = aURL.openConnection(); 
-            conn.connect(); 
-            InputStream is = conn.getInputStream(); 
-            BufferedInputStream bis = new BufferedInputStream(is); 
-            bm = BitmapFactory.decodeStream(bis); 
-            bis.close(); 
-            is.close(); 
-       } catch (IOException e) { 
-           Log.e("1", "Error getting bitmap", e); 
-       } 
-       return bm; 
-    } 
-	
+
 	private ArrayList<String> procesarConsulta(String consulta) {
 		
 		Gson gson = new Gson();
@@ -462,5 +462,108 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			menu.getItem(1).setTitle("About");
 	    }
 	    return true;
+	}
+	
+	private void insertDummyImageItem(int cnt){
+		 
+		   //Insert dummy ImageItem into myAdapter
+		for(int i = 0; i < cnt; i++){
+		    myAdapter.addImageItem(new ImageItem());
+		}	 
+	}
+	
+	private void insertImageItem(int cnt, String link){
+		for(int i = 0; i < cnt; i++){
+		    myAdapter.addImageItem(new ImageItem(link));
+		}	 
+	}
+	
+	public class MyAdapter extends BaseAdapter {
+		   Context context;
+		   ArrayList<ImageItem> _arrayImageItem;
+		  
+		   MyAdapter(Context c){
+		    context = c;
+		    _arrayImageItem = new ArrayList<ImageItem>();
+		   }
+		  
+		   public void addImageItem(ImageItem item){
+		    _arrayImageItem.add(item);
+		   }
+		 
+		public int getCount() {
+		 // TODO Auto-generated method stub
+		 return _arrayImageItem.size();
+		}
+		 
+		public Object getItem(int position) {
+		 // TODO Auto-generated method stub
+		 return _arrayImageItem.get(position);
+		}
+		 
+		public long getItemId(int position) {
+		 // TODO Auto-generated method stub
+		 return position;
+		}
+		 
+		public View getView(int position, View convertView, ViewGroup parent) {
+		 // TODO Auto-generated method stub
+		 ImageView imageView;
+		 imageView = new ImageView(context);
+		 
+		 imageView.setLayoutParams(new Gallery.LayoutParams(150, 150));
+		 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		 imageView.setImageBitmap(_arrayImageItem.get(position).getImage());
+		 
+		 return imageView;
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		// TODO Auto-generated method stub
+		//Toast.makeText(InformationActivity.this, "" + arg2, Toast.LENGTH_SHORT).show();
+		Intent image = new Intent();
+		ImageActivity.setImageItem((ImageItem)myAdapter.getItem(arg2));
+		startActivity(image);
+	}
+	
+	public class ImageItem {
+		   Bitmap bitmapImage;
+		   String link;
+		  
+		   public ImageItem(){
+			   bitmapImage = BitmapFactory.decodeResource(InformationActivity.this.getResources(), R.drawable.icon);
+		   }
+		   
+		   public ImageItem(String link){
+			   link = link;
+			   bitmapImage = getImageBitmap(link);
+		   }
+		   
+		   public String getLink(){
+			   return link;
+		   }
+		  
+		   public Bitmap getImage(){
+			   return bitmapImage;
+		   }
+		   
+		   public Bitmap getImageBitmap(String url) { 
+		        Bitmap bm = null; 
+		        try { 
+		            URL aURL = new URL(url); 
+		            URLConnection conn = aURL.openConnection(); 
+		            conn.connect(); 
+		            InputStream is = conn.getInputStream(); 
+		            BufferedInputStream bis = new BufferedInputStream(is); 
+		            bm = BitmapFactory.decodeStream(bis); 
+		            bis.close(); 
+		            is.close(); 
+		       } catch (IOException e) { 
+		           Log.e("1", "Error getting bitmap", e); 
+		       } 
+		       return bm; 
+		    } 
 	}
 }
