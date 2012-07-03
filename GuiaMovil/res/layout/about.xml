@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:gravity="center"
+    android:gravity="center|left"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
+
         <ImageButton
             android:id="@+id/aboutBack"
             android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
             android:layout_marginTop="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_categories_back" />
-
+
         <TextView
             android:id="@+id/aboutName"
             android:layout_width="match_parent"
@@ -31,17 +31,29 @@
             android:text="Acerca de"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
+
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitStart"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_launcher_logo" />
+
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
+        android:id="@+id/aboutText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_gravity="center_vertical|right"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:layout_weight="0.46"
         android:text="@string/about"
         android:textAppearance="?android:attr/textAppearanceMedium" />

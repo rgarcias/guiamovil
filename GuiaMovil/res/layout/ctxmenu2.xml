@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
        <item
-            android:id="@+id/languageMenu"
+            android:id="@+id/languageMenu2"
             android:background="@color/background"
             android:textColor="#fff"  
             android:title="Idioma">
 <!--             android:icon="@drawable/config"> -->
       </item>
       <item
-            android:id="@+id/aboutMenu"
+            android:id="@+id/aboutMenu2"
             android:background="@color/background"
             android:textColor="#fff"  
             android:title="Acerca de">

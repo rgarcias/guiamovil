@@ -35,7 +35,7 @@
         <ListView
             android:id="@+id/listaRuta"
             android:layout_width="wrap_content"
-            android:layout_height="438dp"
+            android:layout_height="match_parent"
             android:background="@color/background" >
         </ListView>
 
