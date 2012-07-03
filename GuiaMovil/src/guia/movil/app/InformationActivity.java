@@ -47,6 +47,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -462,6 +463,61 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			menu.getItem(1).setTitle("About");
 	    }
 	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		   switch (item.getItemId()) {
+		   
+		        		           
+		        case R.id.languageMenu2:
+	        		
+			      return true;
+			           
+		        case R.id.aboutMenu2:
+		        	
+		        	
+		        	final Dialog commentView = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
+					commentView.setContentView(R.layout.about);
+					commentView.setCancelable(true);
+				    TextView name = (TextView) commentView.findViewById(R.id.aboutName);
+				    TextView text = (TextView) commentView.findViewById(R.id.aboutText);
+				    
+			    	
+        	        
+				    if(PresentationActivity.english)
+				    {
+				    	name.setText("About");
+	        			text.setText(R.string.abouting);
+				    }
+				    else
+				    {
+				    	
+				    	
+	        			
+				    }
+	
+				    
+				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
+				    back.setOnClickListener(new View.OnClickListener() {
+				    @Override
+				    public void onClick(View v) {
+				           commentView.dismiss();
+				        }
+				    });
+				    
+				    	commentView.show();
+				   
+		        	
+		        	
+        		
+	        		
+			       return true;
+		        
+		        default:
+		           return super.onOptionsItemSelected(item);
+		    
+		}
 	}
 	
 	private void insertImageItem(String link){

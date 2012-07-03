@@ -1,5 +1,6 @@
 package guia.movil.app;
 
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -296,5 +298,60 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			menu.getItem(3).setTitle("About");
 	    }
 	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		   switch (item.getItemId()) {
+		   
+		        case R.id.searchMenu:
+		        	
+		           return true;
+		        case R.id.sortMenu:
+		        		
+		           return true;
+		           
+		        case R.id.languageMenu:
+	        		
+			      return true;
+			           
+		        case R.id.aboutMenu:
+		        	final Dialog commentView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+					commentView.setContentView(R.layout.about);
+					commentView.setCancelable(true);
+				    TextView name = (TextView) commentView.findViewById(R.id.aboutName);
+				    TextView text = (TextView) commentView.findViewById(R.id.aboutText);
+				    
+			    	
+        	        
+				    if(PresentationActivity.english)
+				    {
+				    	name.setText("About");
+	        			text.setText(R.string.abouting);
+				    }
+				    else
+				    {
+				    	
+				    	
+	        			
+				    }
+	
+				    
+				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
+				    back.setOnClickListener(new View.OnClickListener() {
+				    @Override
+				    public void onClick(View v) {
+				           commentView.dismiss();
+				        }
+				    });
+				    
+				    	commentView.show();
+	        		
+			       return true;
+		        
+		        default:
+		           return super.onOptionsItemSelected(item);
+		    
+		}
 	}
 }
