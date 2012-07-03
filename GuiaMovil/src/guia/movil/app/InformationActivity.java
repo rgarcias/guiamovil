@@ -107,8 +107,13 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private TextView title;
 	private boolean usuarioTwitter;
 	private MyAdapter myAdapter;
+	private ArrayList<String> photos;
+	private int successful;
+	private String description;
 	
 	private Dialog exitDialog;
+
+	private ProgressDialog iProgress;
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -129,7 +134,52 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         title.setText(CategoryActivity.PLACE);
         text = (TextView) this.findViewById(R.id.textView2);
         if(isOnline()){
-	        /* get descriptions */
+        	iProgress = new ProgressDialog(this);
+			
+			iProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			iProgress.setProgress(0);
+			iProgress.setMessage("Cargando...");
+			iProgress.show();
+        	
+        	new Thread() {
+				@Override
+	            public void run() {
+	                int what = 0;
+
+	                try{
+	                	String methodname = "getDescription";
+		         	    String soap = "http://turismo/" + methodname;
+		         	    description = Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(PresentationActivity.english));
+		         	    iProgress.setProgress(25);
+			         	String methodnameID = "getPlaceID";
+			       	    String soapID = "http://turismo/" + methodnameID;
+			       	    placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE);
+			       	    iProgress.setProgress(50);
+			       	    String methodnameAv = "getPlaceRatingAverage";
+			       	    String soapAv = "http://turismo/" + methodnameAv;
+			       	    rat = Services.getPlaceID(methodnameAv, soapAv, "placeId", placeID);
+			       	    iProgress.setProgress(75);
+		                photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
+		                try{
+		                	for(int i=0;i<photos.size();i++){
+					        	insertImageItem(photos.get(i));
+					        }
+		                }
+		                catch(Exception e){
+		                	what = 2;
+		                }
+		                iProgress.setProgress(100);
+	                }
+	                catch(Exception e){
+	                	if(what!=2){
+	                		what = 1;
+	                	}
+	                }
+	                cHandler.sendMessage(cHandler.obtainMessage(what));
+	            }
+	        }.start();
+        	
+	        /* get descriptions 
 	        String methodname = "getDescription";
 	        String soap = "http://turismo/" + methodname;
 	        text.setText(Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(PresentationActivity.english)));
@@ -138,25 +188,19 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        String soapID = "http://turismo/" + methodnameID;
 	    	placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE);
 	        
-	        /*rating*/
-	    	refreshRat();
-	        rb.setRating(Float.valueOf(rat)); 
-	        
-	        /* photos */
-	        Gallery g = (Gallery) findViewById(R.id.gallery);
-	        myAdapter = new MyAdapter(this);
-	        g.setOnItemClickListener(this);
-	        
-	        /*ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
-	        ImageView image = (ImageView) this.findViewById(R.id.imageView1);
-	        image.setImageBitmap(this.getImageBitmap(photos.get(0)));*/
-	        ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
-	        for(int i=0;i<photos.size();i++){
-	        	insertImageItem(photos.get(i));
-	        }
-	        /*insertDummyImageItem(2);
-	        insertDummyImageItem(3);*/
-	        g.setAdapter(myAdapter);
+	        /*rating
+	        	Log.e("asd", "asdasd");
+	        	refreshRat();
+		        rb.setRating(Float.valueOf(rat)); 
+		        
+		        Gallery g = (Gallery) findViewById(R.id.gallery);
+		        myAdapter = new MyAdapter(this);
+		        g.setOnItemClickListener(this);
+		        
+		        for(int i=0;i<photos.size();i++){
+		        	insertImageItem(photos.get(i));
+		        }
+		        g.setAdapter(myAdapter);*/
         }
         mContext=this;
         btnShare= (ImageButton) findViewById(R.id.shareButton); 
@@ -164,8 +208,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         btnCheck= (ImageButton) findViewById(R.id.checkinButton);
         btnComment =(ImageButton) findViewById(R.id.commentsButton);
         btnStar=(ImageButton) findViewById(R.id.starButton);
-   
-        
+
         mFsqApp 		= new com.fsq.android.FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
         mAdapter 		= new com.fsq.android.NearbyAdapter(this);
         mNearbyList	= new ArrayList<com.fsq.android.FsqVenue>();
@@ -178,12 +221,37 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         btnCheck.setOnClickListener(this); 
     }
     
+    private Handler cHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            iProgress.dismiss();
+ 
+            if (msg.what == 0) {
+                text.setText(description);
+	        	refreshRat();
+		        rb.setRating(Float.valueOf(rat)); 
+		        
+		        Gallery g = (Gallery) findViewById(R.id.gallery);
+		        myAdapter = new MyAdapter(InformationActivity.this);
+		        g.setOnItemClickListener(InformationActivity.this);
+
+		        g.setAdapter(myAdapter);
+		        Toast.makeText(InformationActivity.this, "Cargado con éxito", Toast.LENGTH_SHORT).show();
+            }
+            else if(msg.what == 2){
+            	text.setText(description);
+	        	refreshRat();
+		        rb.setRating(Float.valueOf(rat)); 
+		        Toast.makeText(InformationActivity.this, "Fotos no cargadas", Toast.LENGTH_SHORT).show();
+            }
+            else{
+            	finish();
+            }
+        }
+    };
+    
     private void refreshRat()
     {
-    	String methodnameAv = "getPlaceRatingAverage";
-        String soapAv = "http://turismo/" + methodnameAv;
-    	rat = Services.getPlaceID(methodnameAv, soapAv, "placeId", placeID);
-    	
         rb.setRating(Float.valueOf(rat));
     }
     
@@ -475,53 +543,41 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			      return true;
 			           
 		        case R.id.aboutMenu2:
-		        	
-		        	
 		        	final Dialog commentView = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
 					commentView.setContentView(R.layout.about);
 					commentView.setCancelable(true);
 				    TextView name = (TextView) commentView.findViewById(R.id.aboutName);
 				    TextView text = (TextView) commentView.findViewById(R.id.aboutText);
-				    
-			    	
-        	        
+
 				    if(PresentationActivity.english)
 				    {
 				    	name.setText("About");
 	        			text.setText(R.string.abouting);
 				    }
-				    else
-				    {
-				    	
-				    	
-	        			
-				    }
-	
-				    
+
 				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
 				    back.setOnClickListener(new View.OnClickListener() {
 				    @Override
 				    public void onClick(View v) {
 				           commentView.dismiss();
 				        }
-				    });
-				    
-				    	commentView.show();
-				   
-		        	
-		        	
-        		
-	        		
+				    }); 
+				    commentView.show();
+
 			       return true;
 		        
 		        default:
 		           return super.onOptionsItemSelected(item);
-		    
 		}
 	}
 	
-	private void insertImageItem(String link){
-		    myAdapter.addImageItem(new ImageItem(link));
+	private void insertImageItem(String link) throws IOException{
+		    try {
+				myAdapter.addImageItem(new ImageItem(link));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				throw e;
+			}
 	}
 	
 	public class MyAdapter extends BaseAdapter {
@@ -581,15 +637,20 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			   bitmapImage = BitmapFactory.decodeResource(InformationActivity.this.getResources(), R.drawable.icon);
 		   }
 		   
-		   public ImageItem(String link){
-			   bitmapImage = getImageBitmap(link);
+		   public ImageItem(String link) throws IOException{
+			   try {
+				bitmapImage = getImageBitmap(link);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					throw e;
+				}
 		   }
 		  
 		   public Bitmap getImage(){
 			   return bitmapImage;
 		   }
 		   
-		   public Bitmap getImageBitmap(String url) { 
+		   public Bitmap getImageBitmap(String url) throws IOException { 
 		        Bitmap bm = null; 
 		        try { 
 		            URL aURL = new URL(url); 
@@ -601,7 +662,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		            bis.close(); 
 		            is.close(); 
 		       } catch (IOException e) { 
-		           Log.e("1", "Error getting bitmap", e); 
+		    	   throw e;
 		       } 
 		       bitmapImage = bm;
 		       return bm; 
