@@ -5,21 +5,21 @@
             android:id="@+id/btTrazar"
             android:background="@color/background"
             android:textColor="#fff"  
-            android:title="Trazar ruta"
-            android:icon="@drawable/map">
+            android:title="Trazar ruta">
+<!--             android:icon="@drawable/map"> -->
       </item>
       <item
             android:id="@+id/btLlegar"
             android:background="@color/background"
             android:textColor="#fff"  
-            android:title="Como llegar"
-            android:icon="@drawable/directions">
+            android:title="Como llegar">
+<!--             android:icon="@drawable/directions"> -->
       </item>
        <item
             android:id="@+id/btDescripcion"
             android:background="@color/background"
             android:textColor="#fff"  
-            android:title="Descripcion"
-            android:icon="@drawable/place">
+            android:title="Descripcion">
+<!--             android:icon="@drawable/place"> -->
       </item>
 </menu>
