@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -192,6 +193,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 			
 		}
 	};
+	private ProgressDialog cProgress;
 	public void localizar()
 	{
 		mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -222,6 +224,14 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	
 	public void traceRoad(final double lat2, final double lon2)
 	{
+		cProgress = new ProgressDialog(this);
+		if(PresentationActivity.english)
+			cProgress.setMessage("Tracing route...");
+		else
+			cProgress.setMessage("Trazando ruta...");
+
+		cProgress.show();
+		cProgress.setCancelable(false);
 		new Thread() {
             @Override
             public void run() {
@@ -277,6 +287,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
                 
                 mapView.invalidate();
         	}
+        	cProgress.dismiss();
                 
         };
 	};
@@ -419,10 +430,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	        		{
 	        			localizar();
 	        			
-	        			if(PresentationActivity.english)
-	        				Toast.makeText(getApplicationContext(), "Tracing route", Toast.LENGTH_SHORT).show();
-	        			else
-	        				Toast.makeText(getApplicationContext(), "Trazando ruta", Toast.LENGTH_SHORT).show();
+	        			
 	        			double latt2 =  point.getLatitudeE6() / 1e6;
 	        			double lont2 = point.getLongitudeE6() / 1e6;
 	        			try
