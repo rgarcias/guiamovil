@@ -99,5 +99,7 @@
     <string name="exitDialogING">You\'re not connected to internet right now, activate wifi or 3g please.</string>
     <string name="checkinESP">¿Desea hacer checkin en esta localización?</string>
     <string name="checkinING">¿Do you want to check you in this location?</string>
+    <string name="about">Guía móvil Curicó es una plataforma de información diseñada para ser usada en la provincia de Curicó con el fin de entregar información de utilidad tanto a turistas como gente de la provincia. El objetivo de esta aplicación es facilitar la búsqueda de lugares de atracción y/o puntos de interés existentes en la provincia de Curicó.</string>
+    <string name="abouting">Curicó Mobile Guide is an information platform designed for use in the province of Curicó to deliver useful information to both tourists and people of the province. The purpose of this application is easier to find places of attraction and / or points of interest in the province of Curicó</string>
 
 </resources>
