@@ -13,12 +13,15 @@ import com.google.gson.reflect.TypeToken;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -93,11 +96,12 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if(depth >= 2){
+        	
         	if(isOnline()){
-	        	Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
+	        	final Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
 	        	String place = (String) lv.getAdapter().getItem(position);
 	        	this.PLACE = place;
-	        	this.startActivity(intent);
+	        	startActivity(intent);
         	}
         }
         else{
@@ -303,7 +307,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		   switch (item.getItemId()) {
-		   
 		        case R.id.searchMenu:
 		        	
 		           return true;
@@ -322,20 +325,11 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				    TextView name = (TextView) commentView.findViewById(R.id.aboutName);
 				    TextView text = (TextView) commentView.findViewById(R.id.aboutText);
 				    
-			    	
-        	        
 				    if(PresentationActivity.english)
 				    {
 				    	name.setText("About");
 	        			text.setText(R.string.abouting);
 				    }
-				    else
-				    {
-				    	
-				    	
-	        			
-				    }
-	
 				    
 				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
 				    back.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +339,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				        }
 				    });
 				    
-				    	commentView.show();
+				    commentView.show();
 	        		
 			       return true;
 		        
