@@ -151,7 +151,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        image.setImageBitmap(this.getImageBitmap(photos.get(0)));*/
 	        ArrayList<String> photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
 	        for(int i=0;i<photos.size();i++){
-	        	insertImageItem(photos.size(), photos.get(i));
+	        	insertImageItem(photos.get(i));
 	        }
 	        /*insertDummyImageItem(2);
 	        insertDummyImageItem(3);*/
@@ -464,18 +464,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	    return true;
 	}
 	
-	private void insertDummyImageItem(int cnt){
-		 
-		   //Insert dummy ImageItem into myAdapter
-		for(int i = 0; i < cnt; i++){
-		    myAdapter.addImageItem(new ImageItem());
-		}	 
-	}
-	
-	private void insertImageItem(int cnt, String link){
-		for(int i = 0; i < cnt; i++){
+	private void insertImageItem(String link){
 		    myAdapter.addImageItem(new ImageItem(link));
-		}	 
 	}
 	
 	public class MyAdapter extends BaseAdapter {
@@ -523,26 +513,20 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		//Toast.makeText(InformationActivity.this, "" + arg2, Toast.LENGTH_SHORT).show();
-		Intent image = new Intent();
+		Intent image = new Intent(InformationActivity.this, ImageActivity.class);
 		ImageActivity.setImageItem((ImageItem)myAdapter.getItem(arg2));
 		startActivity(image);
 	}
 	
 	public class ImageItem {
 		   Bitmap bitmapImage;
-		   String link;
 		  
 		   public ImageItem(){
 			   bitmapImage = BitmapFactory.decodeResource(InformationActivity.this.getResources(), R.drawable.icon);
 		   }
 		   
 		   public ImageItem(String link){
-			   link = link;
 			   bitmapImage = getImageBitmap(link);
-		   }
-		   
-		   public String getLink(){
-			   return link;
 		   }
 		  
 		   public Bitmap getImage(){
@@ -563,6 +547,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		       } catch (IOException e) { 
 		           Log.e("1", "Error getting bitmap", e); 
 		       } 
+		       bitmapImage = bm;
 		       return bm; 
 		    } 
 	}
