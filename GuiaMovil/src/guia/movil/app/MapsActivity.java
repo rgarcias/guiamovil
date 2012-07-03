@@ -54,6 +54,8 @@ public class MapsActivity extends MapActivity implements OnClickListener{
     Location userLocation =null ;
     LocationManager mlocManager;
     String descripcion ="";
+	private String latitude;
+	private String longitude;
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps);
@@ -72,18 +74,18 @@ public class MapsActivity extends MapActivity implements OnClickListener{
         	
         	String methodname = "getLatitude";
             String soap = "http://turismo/" + methodname;
-            String latitude = Services.getLatitude(methodname, soap, "place", CategoryActivity.PLACE);
+            latitude = Services.getLatitude(methodname, soap, "place", CategoryActivity.PLACE);
             
             String methodname2 = "getLongitude";
             String soap2 = "http://turismo/" + methodname;
-            String longitude = Services.getLongitude(methodname2, soap2, "place", CategoryActivity.PLACE);
+            longitude = Services.getLongitude(methodname2, soap2, "place", CategoryActivity.PLACE);
             
             point = new GeoPoint(Integer.parseInt(latitude),Integer.parseInt(longitude));
             
             MapController control = mapView.getController();
             control.setCenter(point);
             control.setZoom(13);
-            OverlayItem overlayitem = new OverlayItem(point, CategoryActivity.PLACE, "I'm in "+ CategoryActivity.PLACE);
+            OverlayItem overlayitem = new OverlayItem(point, CategoryActivity.PLACE,Integer.parseInt(latitude)/1e6 +" "+Integer.parseInt(longitude)/1e6);
             
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);
@@ -256,6 +258,23 @@ public class MapsActivity extends MapActivity implements OnClickListener{
                 List<Overlay> listOfOverlays = mapView.getOverlays();
                 listOfOverlays.clear();
                 listOfOverlays.add(mapOverlay);
+                Drawable drawable = MapsActivity.this.getResources().getDrawable(R.drawable.blue_dot);
+                PointersActivity itemizedoverlay = new PointersActivity(drawable, MapsActivity.this);
+
+                OverlayItem overlayitem = new OverlayItem(point, CategoryActivity.PLACE,Integer.parseInt(latitude)/1e6 +" "+Integer.parseInt(longitude)/1e6);
+                            
+                itemizedoverlay.addOverlay(overlayitem);
+                listOfOverlays.add(itemizedoverlay);
+                int latitude=(int) (mRoad.getmPoints()[0].getmLatitude()*1e6);
+                int longitude =(int) (mRoad.getmPoints()[0].getmLongitude()*1e6);
+                GeoPoint point2 = new GeoPoint(latitude,longitude);
+                if(PresentationActivity.english)
+                	overlayitem = new OverlayItem(point2, "Start point", mRoad.getmPoints()[0].getmLatitude() +" "+mRoad.getmPoints()[0].getmLongitude());
+                else
+                	overlayitem = new OverlayItem(point2, "Punto de inicio", mRoad.getmPoints()[0].getmLatitude() +" "+mRoad.getmPoints()[0].getmLongitude());
+                itemizedoverlay.addOverlay(overlayitem);
+                listOfOverlays.add(itemizedoverlay);
+                
                 mapView.invalidate();
         	}
                 
@@ -507,11 +526,13 @@ class MapOverlay extends com.google.android.maps.Overlay {
                     int moveToLong = (mPoints.get(0).getLongitudeE6() + (mPoints.get(
                                     mPoints.size() - 1).getLongitudeE6() - mPoints.get(0)
                                     .getLongitudeE6()) / 2);
-                    GeoPoint moveTo = new GeoPoint(moveToLat, moveToLong);
+                    GeoPoint moveTo = new GeoPoint(mPoints.get(0).getLatitudeE6(), mPoints.get(0).getLongitudeE6());
 
                     MapController mapController = mv.getController();
                     mapController.animateTo(moveTo);
-                    mapController.setZoom(7);
+                    mapController.setZoom(13);
+                    
+                    
             }
     }
 

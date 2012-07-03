@@ -213,7 +213,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.layout.ctxmenu, menu);
+	    inflater.inflate(R.layout.ctxmenu2, menu);
 	    if(PresentationActivity.english){
 			menu.getItem(0).setTitle("Language");
 			menu.getItem(1).setTitle("About");
@@ -226,11 +226,11 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 		   switch (item.getItemId()) {
 		   
 		        		           
-		        case R.id.languageMenu:
+		        case R.id.languageMenu2:
 	        		
 			      return true;
 			           
-		        case R.id.aboutMenu:
+		        case R.id.aboutMenu2:
 		        	
 		        	
 		        	final Dialog commentView = new Dialog(FoursquareActivity.this, R.style.FullHeightDialog);
