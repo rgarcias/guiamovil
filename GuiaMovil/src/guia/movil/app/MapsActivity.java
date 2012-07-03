@@ -409,6 +409,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	        			try
 	        			{
 	        				traceRoad(latt2,lont2);
+	        				
 	        			}
 	        			catch (Exception e)
 	        			{
