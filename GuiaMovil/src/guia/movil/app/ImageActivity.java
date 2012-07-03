@@ -28,29 +28,11 @@ public class ImageActivity extends Activity {
         this.setContentView(R.layout.image);
         
         ImageView image = (ImageView) this.findViewById(R.id.image);
-        image.setImageBitmap(getImageBitmap(item.getLink()));
+        image.setImageBitmap(item.getImage());
     }
 
-	public static void setImageItem(ImageItem item) {
+	public static void setImageItem(ImageItem imageItem) {
 		// TODO Auto-generated method stub
-		item = item;
-		
+		item = imageItem;
 	}
-	
-	public Bitmap getImageBitmap(String url) { 
-        Bitmap bm = null; 
-        try { 
-            URL aURL = new URL(url); 
-            URLConnection conn = aURL.openConnection(); 
-            conn.connect(); 
-            InputStream is = conn.getInputStream(); 
-            BufferedInputStream bis = new BufferedInputStream(is); 
-            bm = BitmapFactory.decodeStream(bis); 
-            bis.close(); 
-            is.close(); 
-       } catch (IOException e) { 
-           Log.e("1", "Error getting bitmap", e); 
-       } 
-       return bm; 
-    } 
 }
