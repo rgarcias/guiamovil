@@ -43,6 +43,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     /* Variables*/
     private int depth;
     private ArrayList<String> itemes;
+    boolean ASC =true;
     
     /* Lista */
     private String[] categories;
@@ -59,6 +60,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     private ArrayAdapter<String> listAdapter;
     private String[] dialogItems;
     private Dialog exitDialog;
+    private String subCategoria;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -292,15 +294,54 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	}
 	
 	@Override
+	public boolean onPrepareOptionsMenu (Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+	    menu.clear();
+	    if(this.depth>=2)
+		{
+		    inflater.inflate(R.layout.ctxmenu, menu);
+		    if(PresentationActivity.english){
+		        menu.getItem(0).setTitle("Search");
+				menu.getItem(1).setTitle("Sort");
+				menu.getItem(2).setTitle("Language");
+				menu.getItem(3).setTitle("About");
+		    }
+		}
+		else
+		{
+		    inflater.inflate(R.layout.ctxmenu3, menu);
+		    if(PresentationActivity.english){
+		        menu.getItem(0).setTitle("Search");
+				menu.getItem(1).setTitle("Language");
+				menu.getItem(2).setTitle("About");
+		    }
+		}
+	    return true;
+	}
+
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.layout.ctxmenu, menu);
-	    if(PresentationActivity.english){
-	        menu.getItem(0).setTitle("Search");
-			menu.getItem(1).setTitle("Sort");
-			menu.getItem(2).setTitle("Language");
-			menu.getItem(3).setTitle("About");
-	    }
+		if(this.depth>=2)
+		{
+		    inflater.inflate(R.layout.ctxmenu, menu);
+		    if(PresentationActivity.english){
+		        menu.getItem(0).setTitle("Search");
+				menu.getItem(1).setTitle("Sort");
+				menu.getItem(2).setTitle("Language");
+				menu.getItem(3).setTitle("About");
+		    }
+		}
+		else
+		{
+		    inflater.inflate(R.layout.ctxmenu3, menu);
+		    if(PresentationActivity.english){
+		        menu.getItem(0).setTitle("Search");
+				menu.getItem(1).setTitle("Language");
+				menu.getItem(2).setTitle("About");
+		    }
+		}
 	    return true;
 	}
 	
@@ -311,6 +352,22 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		        	
 		           return true;
 		        case R.id.sortMenu:
+		        	if(ASC)
+		        	{
+		        		String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortAsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
+		        		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
+		        		lv.setAdapter(listAdapter);
+		        	
+		        		ASC=false;
+		        	}
+		        	else
+		        	{
+		        		String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortDsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
+		        		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
+		        		lv.setAdapter(listAdapter);
+		        		ASC=true;
+		        	}
+		        	
 		        		
 		           return true;
 		           
@@ -319,33 +376,50 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			      return true;
 			           
 		        case R.id.aboutMenu:
-		        	final Dialog commentView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
-					commentView.setContentView(R.layout.about);
-					commentView.setCancelable(true);
-				    TextView name = (TextView) commentView.findViewById(R.id.aboutName);
-				    TextView text = (TextView) commentView.findViewById(R.id.aboutText);
-				    
-				    if(PresentationActivity.english)
-				    {
-				    	name.setText("About");
-	        			text.setText(R.string.abouting);
-				    }
-				    
-				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
-				    back.setOnClickListener(new View.OnClickListener() {
-				    @Override
-				    public void onClick(View v) {
-				           commentView.dismiss();
-				        }
-				    });
-				    
-				    commentView.show();
+		        	showAbout();
 	        		
 			       return true;
 		        
+		        case R.id.searchMenu3:
+		        	
+			           return true;
+			        
+			           
+			    case R.id.languageMenu3:
+		        		
+				      return true;
+				           
+			    case R.id.aboutMenu3:
+			        	
+		        		showAbout();
+				       return true;
 		        default:
 		           return super.onOptionsItemSelected(item);
 		    
 		}
+	}
+	public void showAbout()
+	{
+		final Dialog commentView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		commentView.setContentView(R.layout.about);
+		commentView.setCancelable(true);
+	    TextView name = (TextView) commentView.findViewById(R.id.aboutName);
+	    TextView text = (TextView) commentView.findViewById(R.id.aboutText);
+	    
+	    if(PresentationActivity.english)
+	    {
+	    	name.setText("About");
+			text.setText(R.string.abouting);
+	    }
+	    
+	    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
+	    back.setOnClickListener(new View.OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+	           commentView.dismiss();
+	        }
+	    });
+	    
+	    commentView.show();
 	}
 }
