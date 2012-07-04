@@ -85,8 +85,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
         	mFsqApp.authorize();
             FsqAuthListener listener = new FsqAuthListener() {
             
-            	@Override
-                public void onSuccess() {
+            	public void onSuccess() {
                    	if(PresentationActivity.english){
                    		Toast.makeText(FoursquareActivity.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
                    		
@@ -97,7 +96,6 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
                    	loadNearbyPlaces(lat2, lon2);
                 }
          
-                @Override
                 public void onFail(String error) {
                     Toast.makeText(FoursquareActivity.this, error, Toast.LENGTH_SHORT).show();
                 }
@@ -156,7 +154,6 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
         }
     };
 
-	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		checkinDialog = new Dialog(FoursquareActivity.this, R.style.FullHeightDialog);
@@ -256,7 +253,6 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 				    
 				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
 				    back.setOnClickListener(new View.OnClickListener() {
-				    @Override
 				    public void onClick(View v) {
 				           commentView.dismiss();
 				        }

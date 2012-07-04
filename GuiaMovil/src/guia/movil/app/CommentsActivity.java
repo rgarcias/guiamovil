@@ -92,7 +92,6 @@ public class CommentsActivity extends Activity implements OnClickListener {
         commentaries.setAdapter(adaptador);
         commentaries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         final Dialog commentView = new Dialog(CommentsActivity.this, R.style.FullHeightDialog);
-			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 
@@ -107,7 +106,6 @@ public class CommentsActivity extends Activity implements OnClickListener {
 		        comment.setText(CommentsActivity.comment);
 		        ImageButton back = (ImageButton)commentView.findViewById(R.id.commentBack);
 		        back.setOnClickListener(new View.OnClickListener() {
-		            @Override
 		            public void onClick(View v) {
 		            	commentView.dismiss();
 		            }
@@ -134,7 +132,6 @@ public class CommentsActivity extends Activity implements OnClickListener {
 		
 	}
 
-	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		if(arg0.getId() == R.id.comment){

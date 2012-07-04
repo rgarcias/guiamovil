@@ -306,8 +306,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		else if(v.getId()==R.id.tweetButton && isOnline())
 		{
 			if(mTwitter.hasAccessToken()){
-				postReview("Hola!, he visitado"+ CategoryActivity.PLACE +"en la aplicación Guía Movil Curicó.");
-				postToTwitter("Hola!, he visitado"+ CategoryActivity.PLACE +"en la aplicación Guía Movil Curicó.");
+				postReview("Hola!, he visitado "+ CategoryActivity.PLACE +" en la aplicación Guía Movil Curicó.");
+				postToTwitter("Hola!, he visitado "+ CategoryActivity.PLACE +" en la aplicación Guía Movil Curicó.");
 			}
 			else{
 				onTwitterClick();
@@ -519,7 +519,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 
 				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
 				    back.setOnClickListener(new View.OnClickListener() {
-				    @Override
 				    public void onClick(View v) {
 				           commentView.dismiss();
 				        }
@@ -574,7 +573,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 	}
 
-	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		//Toast.makeText(InformationActivity.this, "" + arg2, Toast.LENGTH_SHORT).show();
