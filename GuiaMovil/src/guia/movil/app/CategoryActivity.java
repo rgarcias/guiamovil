@@ -421,7 +421,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				       
 			    case R.id.topTenMenu3:
 		        	
-	        		showAbout();
+			    	showTop10();
 			       return true;
 				       
 				       
