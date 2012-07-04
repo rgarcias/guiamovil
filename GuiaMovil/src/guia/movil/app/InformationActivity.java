@@ -39,6 +39,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -59,12 +60,15 @@ import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class InformationActivity extends FBConnectionActivity implements OnClickListener, OnItemClickListener {
 	public static boolean ERROR = false;
+	public static int RESULT_OK = 0;
+	public static int RESULT_WRONG = 1;
 	
 	private ImageButton btnShare;
 	private ImageButton btnTwitt;
@@ -108,7 +112,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private boolean usuarioTwitter;
 	private MyAdapter myAdapter;
 	private ArrayList<String> photos;
-	private int successful;
 	private String description;
 	
 	private Dialog exitDialog;
@@ -138,15 +141,19 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			
 			iProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			iProgress.setProgress(0);
-			iProgress.setMessage("Cargando...");
+			iProgress.setCancelable(false);
+			iProgress.setMessage("Cargando información");
+			if(PresentationActivity.english){
+				iProgress.setMessage("Loading information");
+			}
 			iProgress.show();
         	
         	new Thread() {
 				@Override
 	            public void run() {
 	                int what = 0;
-
-	                try{
+	                
+	                try{   	
 	                	String methodname = "getDescription";
 		         	    String soap = "http://turismo/" + methodname;
 		         	    description = Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(PresentationActivity.english));
@@ -160,20 +167,14 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			       	    rat = Services.getPlaceID(methodnameAv, soapAv, "placeId", placeID);
 			       	    iProgress.setProgress(75);
 		                photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
-		                try{
-		                	for(int i=0;i<photos.size();i++){
-					        	insertImageItem(photos.get(i));
-					        }
-		                }
-		                catch(Exception e){
-		                	what = 2;
-		                }
+		                
+		                /*for(int i=0;i<photos.size();i++){
+					       	insertImageItem(photos.get(i));
+					    }*/
 		                iProgress.setProgress(100);
 	                }
 	                catch(Exception e){
-	                	if(what!=2){
-	                		what = 1;
-	                	}
+	                	what = 1;
 	                }
 	                cHandler.sendMessage(cHandler.obtainMessage(what));
 	            }
@@ -230,21 +231,19 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
                 text.setText(description);
 	        	refreshRat();
 		        rb.setRating(Float.valueOf(rat)); 
-		        
-		        Gallery g = (Gallery) findViewById(R.id.gallery);
-		        myAdapter = new MyAdapter(InformationActivity.this);
-		        g.setOnItemClickListener(InformationActivity.this);
 
-		        g.setAdapter(myAdapter);
-		        Toast.makeText(InformationActivity.this, "Cargado con éxito", Toast.LENGTH_SHORT).show();
-            }
-            else if(msg.what == 2){
-            	text.setText(description);
-	        	refreshRat();
-		        rb.setRating(Float.valueOf(rat)); 
-		        Toast.makeText(InformationActivity.this, "Fotos no cargadas", Toast.LENGTH_SHORT).show();
+		        ImageTask iw = new ImageTask();
+                iw.execute(photos.toArray(new String[photos.size()]));
+		        
+                if(PresentationActivity.english){
+                	Toast.makeText(InformationActivity.this, "Successfully loading", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                	Toast.makeText(InformationActivity.this, "Cargado con éxito", Toast.LENGTH_SHORT).show();
+                }
             }
             else{
+            	setResult(InformationActivity.RESULT_WRONG, new Intent());
             	finish();
             }
         }
@@ -254,19 +253,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
     {
         rb.setRating(Float.valueOf(rat));
     }
-    
-	private void enviaTweet() {
-		try {
-			Twitter twitter = new TwitterFactory().getInstance();
-			twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-			twitter.setOAuthAccessToken(accessToken);
-	
-			// send the tweet
-			twitter.updateStatus("Probando twitter desde aplicacion android para la muni");
-		} catch(Exception e) {
-			
-		}
-	}
 
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -405,6 +391,12 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 	}
 	
+	public void refresh(){
+		Intent intent = new Intent(InformationActivity.this, MainActivity.class);
+		this.finish();
+		startActivity(intent);
+	}
+	
 	public boolean isOnline() {
 		Context context = getApplicationContext();
 	    ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -535,11 +527,15 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		   switch (item.getItemId()) {
-		   
-		        		           
+		   switch (item.getItemId()) {	           
 		        case R.id.languageMenu2:
-	        		
+	        		if(PresentationActivity.english){
+	        			PresentationActivity.english = false;
+	        		}
+	        		else{
+	        			PresentationActivity.english = true;
+	        		}
+	        		refresh();
 			      return true;
 			           
 		        case R.id.aboutMenu2:
@@ -570,16 +566,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		           return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	private void insertImageItem(String link) throws IOException{
-		    try {
-				myAdapter.addImageItem(new ImageItem(link));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				throw e;
-			}
-	}
-	
+
 	public class MyAdapter extends BaseAdapter {
 		   Context context;
 		   ArrayList<ImageItem> _arrayImageItem;
@@ -633,8 +620,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	public class ImageItem {
 		   Bitmap bitmapImage;
 		  
-		   public ImageItem(){
-			   bitmapImage = BitmapFactory.decodeResource(InformationActivity.this.getResources(), R.drawable.icon);
+		   public ImageItem(Bitmap bm){
+			   bitmapImage = bm;
 		   }
 		   
 		   public ImageItem(String link) throws IOException{
@@ -667,5 +654,63 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		       bitmapImage = bm;
 		       return bm; 
 		    } 
+	}
+	
+	private class ImageTask extends AsyncTask<String, Void, ArrayList<Bitmap>> {
+		ProgressBar progress;
+		Gallery g;
+		TextView tv;
+		
+		public ImageTask(){
+			progress = (ProgressBar) findViewById(R.id.progressBar);
+			tv = (TextView) findViewById(R.id.loadingText);
+			if(PresentationActivity.english){
+				tv.setText("Loading gallery");
+			}
+		}
+		
+		@Override
+		protected ArrayList<Bitmap> doInBackground(String... urls) {
+			ArrayList<Bitmap> bm = new ArrayList<Bitmap>();
+			progress.setVisibility(View.VISIBLE);
+			
+			for (String url : urls) {
+				try{
+		            URL aURL = new URL(url); 
+		            URLConnection conn = aURL.openConnection(); 
+		            conn.connect(); 
+		            InputStream is = conn.getInputStream(); 
+		            BufferedInputStream bis = new BufferedInputStream(is); 
+		            bm.add(BitmapFactory.decodeStream(bis)); 
+		            bis.close(); 
+		            is.close(); 
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return bm;
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			// TODO Auto-generated method stub
+			super.onProgressUpdate(values);
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<Bitmap> result) {
+			progress.setVisibility(View.GONE);
+			tv.setVisibility(View.GONE);
+			g = (Gallery) findViewById(R.id.gallery);
+	        myAdapter = new MyAdapter(InformationActivity.this);
+	        
+	        for(Bitmap e: result){
+				myAdapter.addImageItem(new ImageItem(e));
+			}
+	        g.setOnItemClickListener(InformationActivity.this);
+	        g.setAdapter(myAdapter);
+	        g.setVisibility(View.VISIBLE);
+		}
 	}
 }

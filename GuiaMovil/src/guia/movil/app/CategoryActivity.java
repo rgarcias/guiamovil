@@ -40,6 +40,7 @@ import android.widget.Toast;
 public class CategoryActivity extends ListActivity implements OnClickListener {
 	protected static final int DIALOG_BACK_ID = 0;
 	protected static String PLACE = "";
+	public final static int INFORMATION = 1;
     /* Variables*/
     private int depth;
     private ArrayList<String> itemes;
@@ -94,16 +95,26 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
        lv.requestFocus();
        lv.requestFocusFromTouch();
    }
-	
-    @Override
+
+   
+   
+	@Override
+protected void onRestart() {
+	// TODO Auto-generated method stub
+	super.onRestart();
+	refresh();
+}
+
+
+
+	@Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if(depth >= 2){
-        	
         	if(isOnline()){
 	        	final Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
 	        	String place = (String) lv.getAdapter().getItem(position);
 	        	this.PLACE = place;
-	        	startActivity(intent);
+	        	startActivityForResult(intent, CategoryActivity.INFORMATION);
         	}
         }
         else{
@@ -121,6 +132,18 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
         	lv.setAdapter(listAdapter);
         }
     }
+    
+    @Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		switch(requestCode){
+			case CategoryActivity.INFORMATION:
+				if(resultCode == InformationActivity.RESULT_WRONG){
+					Toast.makeText(this, "Error al cargar la información", Toast.LENGTH_SHORT).show();
+				}
+				break;
+		}
+	}
     
     @Override
     public void onBackPressed(){
@@ -285,6 +308,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
 	        exit.setImageResource(R.drawable.quit_button);
 	        
+	        
 	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
 	        exitText.setText(R.string.exitDialogESP);
 	        exit.setOnClickListener(this);
@@ -292,7 +316,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		exitDialog.show(); 
 	    return false;
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu (Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -372,27 +396,36 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		           return true;
 		           
 		        case R.id.languageMenu:
-	        		
-			      return true;
+		        	if(PresentationActivity.english){
+	        			PresentationActivity.english = false;
+	        		}
+	        		else{
+	        			PresentationActivity.english = true;
+	        		}
+	        		refresh();
+	        		return true;
 			           
 		        case R.id.aboutMenu:
 		        	showAbout();
 	        		
-			       return true;
-		        
+		        	return true;
 		        case R.id.searchMenu3:
-		        	
-			           return true;
+			        return true;
 			        
 			           
 			    case R.id.languageMenu3:
-		        		
-				      return true;
+			    	if(PresentationActivity.english){
+	        			PresentationActivity.english = false;
+	        		}
+	        		else{
+	        			PresentationActivity.english = true;
+	        		}
+	        		refresh();
+				    return true;
 				           
 			    case R.id.aboutMenu3:
-			        	
-		        		showAbout();
-				       return true;
+		        	showAbout();
+				    return true;
 		        default:
 		           return super.onOptionsItemSelected(item);
 		    
@@ -421,5 +454,11 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	    });
 	    
 	    commentView.show();
+	}
+	
+	public void refresh(){
+		Intent intent = new Intent(CategoryActivity.this, CategoryActivity.class);
+		this.finish();
+		startActivity(intent);
 	}
 }

@@ -30,19 +30,23 @@ public class MainActivity extends TabActivity {
         Intent intent = new Intent().setClass(this, InformationActivity.class);
         TabHost.TabSpec spec=tabs.newTabSpec("tabInfo");
         spec.setContent(intent);
-        //spec.setIndicator(iv);
-        spec.setIndicator("Información", getResources().getDrawable(R.drawable.ic_tab_list));
-        tabs.addTab(spec);
-         
-        spec=tabs.newTabSpec("tabMapa");
+
+        TabHost.TabSpec spec2=tabs.newTabSpec("tabMapa");
       
         Intent intent2 = new Intent().setClass(this, MapsActivity.class);
-        spec.setContent(intent2);
-        
-        //spec.setIndicator(iv2);
-        spec.setIndicator("Mapa", getResources().getDrawable(R.drawable.ic_tab_map));
-        tabs.addTab(spec);
+        spec2.setContent(intent2);
 
+        if(PresentationActivity.english){
+        	spec.setIndicator("Information", getResources().getDrawable(R.drawable.ic_tab_list));
+        	spec2.setIndicator("Map", getResources().getDrawable(R.drawable.ic_tab_map));
+        }
+        else{
+        	spec.setIndicator("Información", getResources().getDrawable(R.drawable.ic_tab_list));
+        	spec2.setIndicator("Mapa", getResources().getDrawable(R.drawable.ic_tab_map));
+        }
+        
+        tabs.addTab(spec);
+        tabs.addTab(spec2);
         tabs.setCurrentTab(0); 
         this.initTabsAppearance(tabs.getTabWidget());
     }
