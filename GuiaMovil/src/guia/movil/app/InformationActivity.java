@@ -138,9 +138,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
         text = (TextView) this.findViewById(R.id.textView2);
         if(isOnline()){
         	iProgress = new ProgressDialog(this);
-			
-			iProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			iProgress.setProgress(0);
 			iProgress.setCancelable(false);
 			iProgress.setMessage("Cargando información");
 			if(PresentationActivity.english){
@@ -157,21 +154,10 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	                	String methodname = "getDescription";
 		         	    String soap = "http://turismo/" + methodname;
 		         	    description = Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(PresentationActivity.english));
-		         	    iProgress.setProgress(25);
 			         	String methodnameID = "getPlaceID";
 			       	    String soapID = "http://turismo/" + methodnameID;
-			       	    placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE);
-			       	    iProgress.setProgress(50);
-			       	    String methodnameAv = "getPlaceRatingAverage";
-			       	    String soapAv = "http://turismo/" + methodnameAv;
-			       	    rat = Services.getPlaceID(methodnameAv, soapAv, "placeId", placeID);
-			       	    iProgress.setProgress(75);
+			       	    placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE); 
 		                photos = procesarConsulta(Services.getPhotos("getPhotos", "http://turismo/getPhotos", "placeID", placeID));
-		                
-		                /*for(int i=0;i<photos.size();i++){
-					       	insertImageItem(photos.get(i));
-					    }*/
-		                iProgress.setProgress(100);
 	                }
 	                catch(Exception e){
 	                	what = 1;
@@ -179,29 +165,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	                cHandler.sendMessage(cHandler.obtainMessage(what));
 	            }
 	        }.start();
-        	
-	        /* get descriptions 
-	        String methodname = "getDescription";
-	        String soap = "http://turismo/" + methodname;
-	        text.setText(Services.getDescription(methodname, soap, "place", CategoryActivity.PLACE, "english", new Boolean(PresentationActivity.english)));
-	        
-	        String methodnameID = "getPlaceID";
-	        String soapID = "http://turismo/" + methodnameID;
-	    	placeID = Services.getPlaceID(methodnameID, soapID, "place", CategoryActivity.PLACE);
-	        
-	        /*rating
-	        	Log.e("asd", "asdasd");
-	        	refreshRat();
-		        rb.setRating(Float.valueOf(rat)); 
-		        
-		        Gallery g = (Gallery) findViewById(R.id.gallery);
-		        myAdapter = new MyAdapter(this);
-		        g.setOnItemClickListener(this);
-		        
-		        for(int i=0;i<photos.size();i++){
-		        	insertImageItem(photos.get(i));
-		        }
-		        g.setAdapter(myAdapter);*/
         }
         mContext=this;
         btnShare= (ImageButton) findViewById(R.id.shareButton); 
@@ -230,7 +193,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
             if (msg.what == 0) {
                 text.setText(description);
 	        	refreshRat();
-		        rb.setRating(Float.valueOf(rat)); 
 
 		        ImageTask iw = new ImageTask();
                 iw.execute(photos.toArray(new String[photos.size()]));
@@ -251,6 +213,9 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
     
     private void refreshRat()
     {
+    	String methodnameAv = "getPlaceRatingAverage";
+   	    String soapAv = "http://turismo/" + methodnameAv;
+   	    rat = Services.getPlaceID(methodnameAv, soapAv, "placeId", placeID);
         rb.setRating(Float.valueOf(rat));
     }
 
@@ -615,6 +580,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		//Toast.makeText(InformationActivity.this, "" + arg2, Toast.LENGTH_SHORT).show();
 		Intent image = new Intent(InformationActivity.this, ImageActivity.class);
 		ImageActivity.setImageItem((ImageItem)myAdapter.getItem(arg2));
+		ImageActivity.setImages(myAdapter, arg2);
 		startActivity(image);
 	}
 	
