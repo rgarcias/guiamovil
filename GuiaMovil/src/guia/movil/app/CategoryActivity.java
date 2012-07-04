@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -64,6 +65,9 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     private String[] dialogItems;
     private Dialog exitDialog;
     private String subCategoria;
+    private AutoCompleteTextView searchAutoComplete;
+    private Dialog searchView;
+    private ListView results;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -251,7 +255,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
         return stringarray;
 	}
 
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v.getId() == R.id.imageButton1){
@@ -267,6 +270,75 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			Intent temp = new Intent(Intent.ACTION_MAIN);
 			temp.addCategory(Intent.CATEGORY_HOME);
 			startActivity(temp);
+		}
+		
+		if(v.getId() == R.id.acept){
+			if(this.isOnline()){
+	    		String keyword = String.valueOf(searchAutoComplete.getText());
+	    		if(keyword.length() == 0){
+	    			if(PresentationActivity.english){
+	    				Toast.makeText(this, "No results for this search", Toast.LENGTH_LONG).show();
+			        }
+			        else{
+			        	Toast.makeText(this, "No hay resultados para esta búsqueda", Toast.LENGTH_LONG).show();
+			        }
+	    			
+	    		}
+	    		else{
+	    		String[] resultado = procesarConsulta(Services.getLocationsSearched("getLocationsSearched", "http://turismo/getLocationsSearched", "Name", keyword));
+	    		 if(resultado.length == 0){
+	    			if(PresentationActivity.english){
+	    				Toast.makeText(this, "No results for this search", Toast.LENGTH_LONG).show();
+			        }
+			        else{
+			        	Toast.makeText(this, "No hay resultados para esta búsqueda", Toast.LENGTH_LONG).show();
+			        }
+	    		}
+	    		 else{
+	    			final Dialog resultSearchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		        	resultSearchView.setContentView(R.layout.listsearch);
+		        	resultSearchView.setCancelable(true);
+		        	ImageButton back = (ImageButton)resultSearchView.findViewById(R.id.sitesBack);
+		        	back.setOnClickListener(new View.OnClickListener() {
+		            public void onClick(View v) {
+		            	resultSearchView.dismiss();
+		            }
+		        	});
+		        	TextView titleSearch = (TextView) resultSearchView.findViewById(R.id.resultSearch);
+		        	results = (ListView) resultSearchView.findViewById(R.id.searchList);
+		        	ArrayAdapter<String> resultsAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resultado);
+    				results.setAdapter(resultsAdapter);
+    			
+    				results.setOnItemClickListener(new OnItemClickListener(){
+
+					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+						// TODO Auto-generated method stub
+						if(isOnline()){
+				    		   Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
+				    		   String place = (String) results.getAdapter().getItem(position);
+				    		   CategoryActivity.PLACE = place;
+				    		   startActivity(intent);
+				    		   resultSearchView.dismiss();
+				   	    	   searchView.dismiss();
+				    	   }
+						
+					}
+    				
+    			});
+    			
+		        if(PresentationActivity.english){
+		        	titleSearch.setText("Results");
+		        }
+		        else{
+		        	titleSearch.setText("Resultados");
+		        }
+		        
+	    		resultSearchView.show();
+	        }}}
+	    	
+		}
+		if(v.getId() == R.id.cancel){
+			searchView.dismiss();
 		}
 	}
 	
@@ -378,8 +450,34 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		   switch (item.getItemId()) {
 		        case R.id.searchMenu:
-		        	
+		        	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+			        searchView.setContentView(R.layout.search);
+			        searchView.setCancelable(true);
+			        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);;
+
+			        ImageButton aceptar = (ImageButton) searchView.findViewById(R.id.acept);
+			        ImageButton cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
+			        
+			        
+			        if(PresentationActivity.english){
+			        	aceptar.setImageResource(R.drawable.accept_button2);
+			        	cancelar.setImageResource(R.drawable.cancel_button2);
+			        	searchAutoComplete.setText("Insert place to search");
+			        }
+			        else{
+			        	aceptar.setImageResource(R.drawable.accept_button);
+			        	cancelar.setImageResource(R.drawable.cancel_button);
+			        	searchAutoComplete.setText("Ingrese sitio a buscar");
+			        }
+	    
+				    aceptar.setOnClickListener(this);
+				    
+				    cancelar.setOnClickListener(this);
+			        //now that the dialog is set up, it's time to show it    
+				    	searchView.show();
+	        		  	
 		           return true;
+		        	
 		        case R.id.sortMenu:
 		        	if(ASC)
 		        	{
@@ -462,7 +560,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	    
 	    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
 	    back.setOnClickListener(new View.OnClickListener() {
-	    @Override
 	    public void onClick(View v) {
 	           commentView.dismiss();
 	        }
@@ -479,7 +576,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
         title.setText("Top 10"); 
 
 	    back.setOnClickListener(new View.OnClickListener() {
-	    @Override
 	    public void onClick(View v) {
 	           routDialog.dismiss();
 	        }
@@ -493,7 +589,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	    list.setAdapter(listAdapter);
 	    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 

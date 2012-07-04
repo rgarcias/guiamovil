@@ -48,7 +48,6 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 	     cancelar.setOnClickListener(this);
 	     enviar.setOnClickListener(this);
 	 }
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v.getId() == R.id.cancel_button)

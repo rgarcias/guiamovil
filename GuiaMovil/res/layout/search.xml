@@ -3,25 +3,20 @@
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:background="@color/background"
-    android:gravity="center_horizontal|right"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="2dip" >
 
     <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView1"
-        android:layout_width="match_parent"
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="283dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="Ingrese sitio a buscar" >
-
-        <requestFocus />
-    </AutoCompleteTextView>
-
+        android:ems="30"
+        android:singleLine="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.94"
         android:gravity="center" >
 
         <ImageButton
@@ -33,7 +28,6 @@
             android:background="@android:color/transparent"
             android:src="@drawable/accept_button" />
 
-
         <ImageButton
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
@@ -42,7 +36,6 @@
             android:layout_marginLeft="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/cancel_button" />
-
     </LinearLayout>
 
 </LinearLayout>

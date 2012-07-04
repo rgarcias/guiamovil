@@ -134,7 +134,6 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	
 			
 		    back.setOnClickListener(new View.OnClickListener() {
-		    @Override
 		    public void onClick(View v) {
 		           routDialog.dismiss();
 		        }
@@ -169,25 +168,21 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	
 	LocationListener locListener = new LocationListener() {
 		
-		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 			// TODO Auto-generated method stub
 			
 		}
 		
-		@Override
 		public void onProviderEnabled(String provider) {
 			// TODO Auto-generated method stub
 			
 		}
 		
-		@Override
 		public void onProviderDisabled(String provider) {
 			// TODO Auto-generated method stub
 			
 		}
 		
-		@Override
 		public void onLocationChanged(Location location) {
 			// TODO Auto-generated method stub
 			
@@ -343,7 +338,6 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	    return false;
 	}
 
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v.getId()==R.id.exitButton){
@@ -399,7 +393,6 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	        });
 	        cancelar.setOnClickListener(new View.OnClickListener() {
 				
-				@Override
 				public void onClick(View arg0) {
 					 rankDialog.dismiss();
 					
@@ -486,7 +479,6 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 				    
 				    ImageButton back = (ImageButton)commentView.findViewById(R.id.commentBack);
 				    back.setOnClickListener(new View.OnClickListener() {
-				    @Override
 				    public void onClick(View v) {
 				           commentView.dismiss();
 				        }

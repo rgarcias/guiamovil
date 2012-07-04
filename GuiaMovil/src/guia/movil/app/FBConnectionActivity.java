@@ -84,7 +84,6 @@ public abstract class FBConnectionActivity extends Activity {
 
     private class LoginDialogListener implements DialogListener {
 
-            @Override
             public void onComplete(Bundle values) {
                     Log.d(TAG, "LoginONComplete");
                     String token = mFacebook.getAccessToken();
@@ -99,17 +98,14 @@ public abstract class FBConnectionActivity extends Activity {
                     mAsyncRunner.request("me", new IDRequestListener());
             }
 
-            @Override
             public void onFacebookError(FacebookError e) {
                     Log.d(TAG, "FacebookError: " + e.getMessage());
             }
 
-            @Override
             public void onError(DialogError e) {
                     Log.d(TAG, "Error: " + e.getMessage());
             }
 
-            @Override
             public void onCancel() {
                     Log.d(TAG, "OnCancel");
             }
@@ -117,7 +113,6 @@ public abstract class FBConnectionActivity extends Activity {
 
     private class IDRequestListener implements RequestListener {
 
-            @Override
             public void onComplete(String response, Object state) {
                     try {
                             Log.d(TAG, "IDRequestONComplete");
@@ -138,24 +133,20 @@ public abstract class FBConnectionActivity extends Activity {
                     }
             }
 
-            @Override
             public void onIOException(IOException e, Object state) {
                     Log.d(TAG, "IOException: " + e.getMessage());
             }
 
-            @Override
             public void onFileNotFoundException(FileNotFoundException e,
                             Object state) {
                     Log.d(TAG, "FileNotFoundException: " + e.getMessage());
             }
 
-            @Override
             public void onMalformedURLException(MalformedURLException e,
                             Object state) {
                     Log.d(TAG, "MalformedURLException: " + e.getMessage());
             }
 
-            @Override
             public void onFacebookError(FacebookError e, Object state) {
                     Log.d(TAG, "FacebookError: " + e.getMessage());
             }

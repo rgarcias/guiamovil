@@ -34,7 +34,6 @@ public class PresentationActivity extends Activity implements OnClickListener {
 	    ev.setOnClickListener(this);
     }
 
-	@Override
 	public void onClick(View view) {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(PresentationActivity.this, CategoryActivity.class);

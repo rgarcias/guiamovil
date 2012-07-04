@@ -59,12 +59,10 @@ public class FoursquareApp {
 		String url		= AUTH_URL + "&client_id=" + clientId + "&redirect_uri=" + CALLBACK_URL;
 		
 		FsqDialogListener listener = new FsqDialogListener() {
-			@Override
 			public void onComplete(String code) {
 				getAccessToken(code);
 			}
 			
-			@Override
 			public void onError(String error) {
 				mListener.onFail("Authorization failed");
 			}
