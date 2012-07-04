@@ -536,6 +536,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        			PresentationActivity.english = true;
 	        		}
 	        		refresh();
+	        		CategoryActivity.changed = 1;
 			      return true;
 			           
 		        case R.id.aboutMenu2:
