@@ -13,7 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class Services {
 	private static final String NAMESPACE  = "http://turismo/";
-    public static String URL="http://192.168.1.38:8084/TurismoCuricoWebService/TurismoCurico?wsdl";
+    public static String URL="http://192.168.1.8:8084/TurismoCuricoWebService/TurismoCurico?wsdl";
 
     public static String getDescription(String methodname,String soap,String nombre,String parametrovalor, String nombre2, Boolean english){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
@@ -406,6 +406,34 @@ public class Services {
 	        return null;
 	    }
 	}
+
+	public static String getTopTen(String methodname,String soap) {
+		// TODO Auto-generated method stub
+		 SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
+		    
+		    
+		    SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
+		    Envoltorio.setOutputSoapObject (Solicitud);
+		    HttpTransportSE TransporteHttp = new HttpTransportSE(URL);
+		    try {
+		    	TransporteHttp.call (soap, Envoltorio);
+		    }
+		    catch (IOException ex) {
+		        return null;
+		    }
+		    catch (XmlPullParserException ex) {
+		        return null;
+		    }
+		    try {
+		        String CadenaDevuelta =  Envoltorio.getResponse().toString();
+		        return CadenaDevuelta;  
+		    } 
+		    catch (SoapFault ex) {
+		        return null;
+		    }
+		
+	}
+	
 	
 	
 }
