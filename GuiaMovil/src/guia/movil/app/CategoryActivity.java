@@ -41,6 +41,7 @@ import android.widget.Toast;
 public class CategoryActivity extends ListActivity implements OnClickListener {
 	protected static final int DIALOG_BACK_ID = 0;
 	protected static String PLACE = "";
+	protected static int changed = 0;
 	public final static int INFORMATION = 1;
     /* Variables*/
     private int depth;
@@ -103,7 +104,10 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	protected void onRestart() {
 		// TODO Auto-generated method stub
 		super.onRestart();
-		refresh();
+		if(CategoryActivity.changed == 1){
+			refresh();
+			CategoryActivity.changed = 0;
+		}
 	}
 
 
@@ -397,7 +401,13 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		           return true;
 		           
 		        case R.id.languageMenu:
-	        		
+		        	if(PresentationActivity.english){
+	        			PresentationActivity.english = false;
+	        		}
+	        		else{
+	        			PresentationActivity.english = true;
+	        		}
+	        		refresh();
 			      return true;
 			           
 		        case R.id.aboutMenu:
@@ -411,8 +421,14 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			        
 			           
 			    case R.id.languageMenu3:
-		        		
-				      return true;
+			    	if(PresentationActivity.english){
+	        			PresentationActivity.english = false;
+	        		}
+	        		else{
+	        			PresentationActivity.english = true;
+	        		}
+	        		refresh();
+				   return true;
 				           
 			    case R.id.aboutMenu3:
 			        	
