@@ -263,7 +263,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
             }
         	else
         	{
-                descripcion=mRoad.mName + " " + mRoad.mDescription;
+                //descripcion=mRoad.mName + " " + mRoad.mDescription;
                 MapOverlay mapOverlay = new MapOverlay(mRoad, mapView);
                 List<Overlay> listOfOverlays = mapView.getOverlays();
                 listOfOverlays.clear();
@@ -479,7 +479,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 	        	        InputStream is = getConnection(url);
 	        	        mRoad = RoadProvider.getRoute(is);
 				    	nick.setText("Descripcion");
-				    	comment.setText(mRoad.getmPoints()[mRoad.getmPoints().length-1].getmName() +" "+ 
+				    	comment.setText(mRoad.getmName() +" "+ 
 				    mRoad.getmPoints()[mRoad.getmPoints().length-1].getmDescription());
 				    }
 	
