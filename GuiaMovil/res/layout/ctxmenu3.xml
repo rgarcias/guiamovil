@@ -23,4 +23,11 @@
             android:title="Acerca de">
 <!--             android:icon="@drawable/config"> -->
       </item>
+      <item
+            android:id="@+id/topTenMenu3"
+            android:background="@color/background"
+            android:textColor="#fff"  
+            android:title="Top 10">
+<!--             android:icon="@drawable/config"> -->
+      </item>
 </menu>
