@@ -38,50 +38,11 @@ public class ImageActivity extends Activity {
         startX = 0;
         endX = 0;
         ImageView image = (ImageView) this.findViewById(R.id.image);
-        /*image.setImageBitmap(item.getImage());*/
-        ImageItem im = (ImageItem) adapter.getItem(pos);
-        image.setImageBitmap(im.getImage());
+        image.setImageBitmap(item.getImage());
+        /*ImageItem im = (ImageItem) adapter.getItem(pos);
+        image.setImageBitmap(im.getImage());*/
+	}
         
-        gesture = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
-        	
-        	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY){
-        		int dx = (int) (e2.getX() - e1.getX());
-                // don't accept the fling if it's too short
-                // as it may conflict with a button push
-                if (Math.abs(dx) > 100 && Math.abs(velocityX) > Math.abs(velocityY)) {
-                    if (velocityX > 0) {
-                        moveRight();
-                    } else {
-                        moveLeft();
-                    }
-                    return true;
-                } else {
-                    return false;
-                }
-        	}
-        });
-    }
-
-	protected void moveLeft() {
-		// TODO Auto-generated method stub
-		if(pos > 1){
-			pos -=1;
-		}
-		else{
-			pos = adapter.getCount();
-		}
-	}
-
-	protected void moveRight() {
-		// TODO Auto-generated method stub
-		if(pos < adapter.getCount()){
-			pos +=1;		
-		}
-		else{
-			pos = 1;
-		}
-	}
-
 	public static void setImageItem(ImageItem imageItem) {
 		// TODO Auto-generated method stub
 		item = imageItem;
@@ -92,8 +53,7 @@ public class ImageActivity extends Activity {
 		pos = position;
 	}
 
-	/*
-	@Override
+	/*@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 
@@ -103,28 +63,35 @@ public class ImageActivity extends Activity {
 		}
 		if(event.getAction() == MotionEvent.ACTION_MOVE){
 			endX = event.getX(event.getPointerCount()-1);
-			Log.e("startX", ""+startX);
-			Log.e("endX", ""+endX);
 			if(endX < startX){
-				if(pos > 1){
-					pos -=1;
-				}
-				else{
-					pos = adapter.getCount();
+				float offsetX = endX - startX;
+				Log.e("asd","left, offset " + offsetX);
+				if(offsetX > -80){
+					if(pos <= 0){
+						pos = adapter.getCount()-1;
+					}
+					else{
+						pos -=1;
+					}
 				}
 			}
 			if(endX > startX){
-				if(pos < adapter.getCount()){
-					pos +=1;		
-				}
-				else{
-					pos = 1;
+				float offsetX = endX - startX;
+				Log.e("asd","right, offset " + offsetX);
+				if(offsetX > 80){
+					if(pos >= adapter.getCount()-1){
+						pos = 0;
+					}
+					else{
+						pos +=1;		
+					}
 				}
 			}
 		}
 		ImageView image = (ImageView) this.findViewById(R.id.image);
+		Log.e("pos", ""+pos);
 		ImageItem im = (ImageItem) adapter.getItem(pos);
         image.setImageBitmap(im.getImage());
-		return false;
+		return true;
 	}*/
 }
