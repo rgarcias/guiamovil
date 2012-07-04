@@ -332,7 +332,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				menu.getItem(3).setTitle("About");
 		    }
 		}
-		/*else
+		else
 		{
 		    inflater.inflate(R.layout.ctxmenu3, menu);
 		    if(PresentationActivity.english){
@@ -340,7 +340,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				menu.getItem(1).setTitle("Language");
 				menu.getItem(2).setTitle("About");
 		    }
-		}*/
+		}
 	    return true;
 	}
 
@@ -360,12 +360,12 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		}
 		else
 		{
-		    /*inflater.inflate(R.layout.ctxmenu3, menu);
+		    inflater.inflate(R.layout.ctxmenu3, menu);
 		    if(PresentationActivity.english){
 		        menu.getItem(0).setTitle("Search");
 				menu.getItem(1).setTitle("Language");
 				menu.getItem(2).setTitle("About");
-		    }*/
+		    }
 		}
 	    return true;
 	}
