@@ -30,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -403,7 +404,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		        	showAbout();
 	        		
 			       return true;
-		       /* 
+		       
 		        case R.id.searchMenu3:
 		        	
 			           return true;
@@ -416,7 +417,14 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			    case R.id.aboutMenu3:
 			        	
 		        		showAbout();
-				       return true;*/
+				       return true;
+				       
+			    case R.id.topTenMenu3:
+		        	
+	        		showAbout();
+			       return true;
+				       
+				       
 		        default:
 		           return super.onOptionsItemSelected(item);
 		    
@@ -445,6 +453,48 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	    });
 	    
 	    commentView.show();
+	}
+	public void showTop10()
+	{
+		final Dialog routDialog = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		routDialog.setContentView(R.layout.showroute);
+		ImageButton back = (ImageButton)routDialog.findViewById(R.id.routBack);
+		TextView title = (TextView)routDialog.findViewById(R.id.routName);	        
+        title.setText("Top 10"); 
+
+	    back.setOnClickListener(new View.OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+	           routDialog.dismiss();
+	        }
+	    });
+	    
+	    String[] aux = procesarConsulta(Services.getTopTen("getRaitingSort",  "http://turismo/getPlaces"));
+		final ListView list = (ListView) routDialog.findViewById(R.id.listaRuta);
+		
+		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(routDialog.getContext(), android.R.layout.simple_list_item_1, aux);
+	
+	    list.setAdapter(listAdapter);
+	    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+
+				if(isOnline()){
+		        	final Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
+		        	String place = list.getItemAtPosition(arg2).toString();
+		        	CategoryActivity.PLACE = place;
+			        routDialog.dismiss();
+		        	startActivity(intent);
+	        	}
+				
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		routDialog.setCancelable(true);
+		routDialog.show();
 	}
 	
 	public void refresh(){
