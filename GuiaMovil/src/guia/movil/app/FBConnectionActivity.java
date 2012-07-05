@@ -32,8 +32,6 @@ public abstract class FBConnectionActivity extends Activity {
     private SharedPreferences sharedPrefs;
     private Context mContext;
 
-    
-
     public void setConnection() {
             mContext = this;
             mFacebook = new Facebook(APP_ID);
@@ -41,7 +39,6 @@ public abstract class FBConnectionActivity extends Activity {
     }
 
     public void getID() {
-           
             if (isSession()) {
                     Log.d(TAG, "sessionValid");
                     mAsyncRunner.request("me", new IDRequestListener());
@@ -53,7 +50,6 @@ public abstract class FBConnectionActivity extends Activity {
     }
 
     public boolean isSession() {
-    	
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
             String access_token = sharedPrefs.getString("access_token", "x");
             Long expires = sharedPrefs.getLong("access_expires", -1);
@@ -66,13 +62,12 @@ public abstract class FBConnectionActivity extends Activity {
             return mFacebook.isSessionValid();
     }
     
-    public void conect()
-    {
+    public void conect(){
     	setConnection();
 		getID();
     }
-    public boolean isLogged()
-    {
+    
+    public boolean isLogged(){
     	mContext = this;
     	sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
     	String access_token = sharedPrefs.getString("access_token", "x");
@@ -83,7 +78,6 @@ public abstract class FBConnectionActivity extends Activity {
     }
 
     private class LoginDialogListener implements DialogListener {
-
             public void onComplete(Bundle values) {
                     Log.d(TAG, "LoginONComplete");
                     String token = mFacebook.getAccessToken();
@@ -112,23 +106,21 @@ public abstract class FBConnectionActivity extends Activity {
     }
 
     private class IDRequestListener implements RequestListener {
-
             public void onComplete(String response, Object state) {
                     try {
                             Log.d(TAG, "IDRequestONComplete");
                             Log.d(TAG, "Response: " + response.toString());
                             JSONObject json = Util.parseJson(response);
 
-                         
                             FBConnectionActivity.this.runOnUiThread(new Runnable() {
-                                    public void run() {
-                                            
+                                    public void run() { 
 
-                                    }
-                            });
-                    } catch (JSONException e) {
+                                    }});
+                    } 
+                    catch (JSONException e) {
                             Log.d(TAG, "JSONException: " + e.getMessage());
-                    } catch (FacebookError e) {
+                    } 
+                    catch (FacebookError e) {
                             Log.d(TAG, "FacebookError: " + e.getMessage());
                     }
             }
@@ -163,8 +155,6 @@ public abstract class FBConnectionActivity extends Activity {
          try {
                 String response = mFacebook.request("me");
                 Bundle parameters = new Bundle();
-                //parameters.putString("name", "Iloca");
-                //parameters.putString("link", "http://www.curico.cl");
                 parameters.putString("message", title+"\n"+msg);
                 parameters.putString("description", "");
                 response = mFacebook.request("me/feed", parameters, 
@@ -180,13 +170,4 @@ public abstract class FBConnectionActivity extends Activity {
              return e.getMessage();
          }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

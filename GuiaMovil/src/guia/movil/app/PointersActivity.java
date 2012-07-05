@@ -17,18 +17,15 @@ public class PointersActivity extends ItemizedOverlay {
 	public PointersActivity(Drawable icon_dot, Context context) {
 		super(boundCenterBottom(icon_dot));
 		mContext = context;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected OverlayItem createItem(int i) {
-		// TODO Auto-generated method stub
 		return pointers.get(i);
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
 		return pointers.size();
 	}
 	
@@ -45,6 +42,4 @@ public class PointersActivity extends ItemizedOverlay {
 		dialog.show();
 		return true;
 	}
-	
-
 }
