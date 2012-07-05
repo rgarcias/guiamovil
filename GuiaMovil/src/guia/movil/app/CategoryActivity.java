@@ -1,28 +1,17 @@
 package guia.movil.app;
 
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Menu;
@@ -62,9 +51,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     private ImageButton ib;
     private ImageButton ib2;
     private ArrayAdapter<String> listAdapter;
-    private String[] dialogItems;
     private Dialog exitDialog;
-    private String subCategoria;
     private AutoCompleteTextView searchAutoComplete;
     private Dialog searchView;
     private ListView results;
@@ -75,7 +62,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
        requestWindowFeature(Window.FEATURE_NO_TITLE);
        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
        setContentView(R.layout.category);
-       Bundle bundle = getIntent().getExtras();
        selectLanguage();
        
        itemes = new ArrayList<String>();
@@ -102,19 +88,14 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
        lv.requestFocusFromTouch();
    }
 
-   
-   
 	@Override
 	protected void onRestart() {
-		// TODO Auto-generated method stub
 		super.onRestart();
 		if(CategoryActivity.changed == 1){
 			refresh();
 			CategoryActivity.changed = 0;
 		}
 	}
-
-
 
 	@Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -144,7 +125,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		switch(requestCode){
 			case CategoryActivity.INFORMATION:
 				if(resultCode == InformationActivity.RESULT_WRONG){
@@ -228,7 +208,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     
     private String[] retrievePlaces(String item){
     	String[] aux = procesarConsulta(Services.getPlaces("getPlaces", "http://turismo/getPlaces", "subcategory", item));
-    	
     	return aux;
     }
 	
@@ -247,8 +226,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
         Type collectionType = new TypeToken<ArrayList<String>>(){}.getType();
         arreglo = gson.fromJson(consulta, collectionType);
         
-        String[] stringarray;
-        
+        String[] stringarray; 
         stringarray=new String[arreglo.size()];
         arreglo.toArray(stringarray);
 		
@@ -256,11 +234,9 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	}
 
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		if(v.getId() == R.id.imageButton1){
 			this.onBackPressed();
 		}
-		
 		if(v.getId() == R.id.imageButton2){
 			this.home();
 		}
@@ -271,7 +247,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			temp.addCategory(Intent.CATEGORY_HOME);
 			startActivity(temp);
 		}
-		
 		if(v.getId() == R.id.acept){
 			if(this.isOnline()){
 	    		String keyword = String.valueOf(searchAutoComplete.getText());
@@ -282,11 +257,10 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			        else{
 			        	Toast.makeText(this, "No hay resultados para esta búsqueda", Toast.LENGTH_LONG).show();
 			        }
-	    			
 	    		}
 	    		else{
 	    		String[] resultado = procesarConsulta(Services.getLocationsSearched("getLocationsSearched", "http://turismo/getLocationsSearched", "Name", keyword));
-	    		 if(resultado.length == 0){
+	    		if(resultado.length == 0){
 	    			if(PresentationActivity.english){
 	    				Toast.makeText(this, "No results for this search", Toast.LENGTH_LONG).show();
 			        }
@@ -294,21 +268,19 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			        	Toast.makeText(this, "No hay resultados para esta búsqueda", Toast.LENGTH_LONG).show();
 			        }
 	    		}
-	    		 else{
+	    		else{
 	    			final Dialog resultSearchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
 		        	resultSearchView.setContentView(R.layout.listsearch);
 		        	resultSearchView.setCancelable(true);
 		        	ImageButton back = (ImageButton)resultSearchView.findViewById(R.id.sitesBack);
 		        	back.setOnClickListener(new View.OnClickListener() {
-		            public void onClick(View v) {
-		            	resultSearchView.dismiss();
-		            }
-		        	});
+			            public void onClick(View v) {
+			            	resultSearchView.dismiss();
+			            }});
 		        	TextView titleSearch = (TextView) resultSearchView.findViewById(R.id.resultSearch);
 		        	results = (ListView) resultSearchView.findViewById(R.id.searchList);
 		        	ArrayAdapter<String> resultsAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resultado);
     				results.setAdapter(resultsAdapter);
-    			
     				results.setOnItemClickListener(new OnItemClickListener(){
 
 					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
@@ -321,21 +293,17 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				    		   resultSearchView.dismiss();
 				   	    	   searchView.dismiss();
 				    	   }
-						
-					}
-    				
-    			});
-    			
-		        if(PresentationActivity.english){
-		        	titleSearch.setText("Results");
-		        }
-		        else{
-		        	titleSearch.setText("Resultados");
-		        }
-		        
-	    		resultSearchView.show();
-	        }}}
-	    	
+					}});
+			        if(PresentationActivity.english){
+			        	titleSearch.setText("Results");
+			        }
+			        else{
+			        	titleSearch.setText("Resultados");
+			        }
+			        resultSearchView.show();
+	    			}
+	    		}
+	    	}
 		}
 		if(v.getId() == R.id.cancel){
 			searchView.dismiss();
@@ -384,8 +352,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		else{
 			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
 	        exit.setImageResource(R.drawable.quit_button);
-	        
-	        
+
 	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
 	        exitText.setText(R.string.exitDialogESP);
 	        exit.setOnClickListener(this);
@@ -398,8 +365,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	public boolean onPrepareOptionsMenu (Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 	    menu.clear();
-	    if(this.depth>=2)
-		{
+	    if(this.depth>=2){
 		    inflater.inflate(R.layout.ctxmenu, menu);
 		    if(PresentationActivity.english){
 		        menu.getItem(0).setTitle("Search");
@@ -408,8 +374,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				menu.getItem(3).setTitle("About");
 		    }
 		}
-		else
-		{
+		else{
 		    inflater.inflate(R.layout.ctxmenu3, menu);
 		    if(PresentationActivity.english){
 		        menu.getItem(0).setTitle("Search");
@@ -424,8 +389,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		if(this.depth>=2)
-		{
+		if(this.depth>=2){
 		    inflater.inflate(R.layout.ctxmenu, menu);
 		    if(PresentationActivity.english){
 		        menu.getItem(0).setTitle("Search");
@@ -434,8 +398,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				menu.getItem(3).setTitle("About");
 		    }
 		}
-		else
-		{
+		else{
 		    inflater.inflate(R.layout.ctxmenu3, menu);
 		    if(PresentationActivity.english){
 		        menu.getItem(0).setTitle("Search");
@@ -448,161 +411,120 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		   switch (item.getItemId()) {
-		        case R.id.searchMenu:
-		        	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
-			        searchView.setContentView(R.layout.search);
-			        searchView.setCancelable(true);
-			        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);;
-
-			        ImageButton aceptar = (ImageButton) searchView.findViewById(R.id.acept);
-			        ImageButton cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
-			        
-			        
-			        if(PresentationActivity.english){
-			        	aceptar.setImageResource(R.drawable.accept_button2);
-			        	cancelar.setImageResource(R.drawable.cancel_button2);
-			        	searchAutoComplete.setText("Insert place to search");
-			        }
-			        else{
-			        	aceptar.setImageResource(R.drawable.accept_button);
-			        	cancelar.setImageResource(R.drawable.cancel_button);
-			        	searchAutoComplete.setText("Ingrese sitio a buscar");
-			        }
-	    
-				    aceptar.setOnClickListener(this);
-				    
-				    cancelar.setOnClickListener(this);
-			        //now that the dialog is set up, it's time to show it    
-				    	searchView.show();
-	        		  	
-		           return true;
-		        	
-		        case R.id.sortMenu:
-		        	if(ASC)
-		        	{
-		        		String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortAsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
-		        		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
-		        		lv.setAdapter(listAdapter);
-		        	
-		        		ASC=false;
-		        	}
-		        	else
-		        	{
-		        		String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortDsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
-		        		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
-		        		lv.setAdapter(listAdapter);
-		        		ASC=true;
-		        	}
-		        	
-		        		
-		           return true;
-		           
-		        case R.id.languageMenu:
-		        	if(PresentationActivity.english){
-	        			PresentationActivity.english = false;
-	        		}
-	        		else{
-	        			PresentationActivity.english = true;
-	        		}
-	        		refresh();
-			      return true;
-			           
-		        case R.id.aboutMenu:
-		        	showAbout();
-	        		
-			       return true;
-		       
-		        case R.id.searchMenu3:
-		        	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
-			        searchView.setContentView(R.layout.search);
-			        searchView.setCancelable(true);
-			        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);;
-
-			        aceptar = (ImageButton) searchView.findViewById(R.id.acept);
-			        cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
-			        
-			        
-			        if(PresentationActivity.english){
-			        	aceptar.setImageResource(R.drawable.accept_button2);
-			        	cancelar.setImageResource(R.drawable.cancel_button2);
-			        }
-			        else{
-			        	aceptar.setImageResource(R.drawable.accept_button);
-			        	cancelar.setImageResource(R.drawable.cancel_button);
-			        }
-	    
-				    aceptar.setOnClickListener(this);
-				    
-				    cancelar.setOnClickListener(this);
-			        //now that the dialog is set up, it's time to show it    
-				    	searchView.show();
-	        		  	
-		            return true;
-			        
-			           
-			    case R.id.languageMenu3:
-			    	if(PresentationActivity.english){
-	        			PresentationActivity.english = false;
-	        		}
-	        		else{
-	        			PresentationActivity.english = true;
-	        		}
-	        		refresh();
-				   return true;
-				           
-			    case R.id.aboutMenu3:
-			        	
-		        		showAbout();
-				       return true;
-				       
-			    case R.id.topTenMenu3:
-		        	
-			    	showTop10();
-			       return true;
-				       
-				       
-		        default:
-		           return super.onOptionsItemSelected(item);
-		    
+		switch (item.getItemId()) {
+		    case R.id.searchMenu:
+		      	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		        searchView.setContentView(R.layout.search);
+		        searchView.setCancelable(true);
+		        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);;
+		        ImageButton aceptar = (ImageButton) searchView.findViewById(R.id.acept);
+		        ImageButton cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
+		        
+		        if(PresentationActivity.english){
+		        	aceptar.setImageResource(R.drawable.accept_button2);
+		        	cancelar.setImageResource(R.drawable.cancel_button2);
+		        }
+		        else{
+		        	aceptar.setImageResource(R.drawable.accept_button);
+		        	cancelar.setImageResource(R.drawable.cancel_button);
+		        }
+			    aceptar.setOnClickListener(this);
+			    cancelar.setOnClickListener(this);  
+			    searchView.show();
+			    return true;
+		    case R.id.sortMenu:
+		       	if(ASC){
+		       		String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortAsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
+		       		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
+		       		lv.setAdapter(listAdapter);
+		       		ASC=false;
+		       	}
+		       	else{
+		       		String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortDsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
+		       		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
+		       		lv.setAdapter(listAdapter);
+		       		ASC=true;
+		       	}
+		       	return true;
+		    case R.id.languageMenu:
+		       	if(PresentationActivity.english){
+	        		PresentationActivity.english = false;
+	        	}
+	        	else{
+        			PresentationActivity.english = true;
+        		}
+        		refresh();
+        		return true;
+	        case R.id.aboutMenu:
+	        	showAbout();
+	        	return true;
+	        case R.id.searchMenu3:
+	        	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		        searchView.setContentView(R.layout.search);
+		        searchView.setCancelable(true);
+		        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);;
+		        aceptar = (ImageButton) searchView.findViewById(R.id.acept);
+		        cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
+			    if(PresentationActivity.english){
+			       	aceptar.setImageResource(R.drawable.accept_button2);
+			       	cancelar.setImageResource(R.drawable.cancel_button2);
+			    }
+			    else{
+			      	aceptar.setImageResource(R.drawable.accept_button);
+			       	cancelar.setImageResource(R.drawable.cancel_button);
+			    }
+			    aceptar.setOnClickListener(this);
+			    cancelar.setOnClickListener(this);
+			    searchView.show();
+		        return true;
+		    case R.id.languageMenu3:
+		    	if(PresentationActivity.english){
+        			PresentationActivity.english = false;
+        		}
+        		else{
+        			PresentationActivity.english = true;
+        		}
+        		refresh();
+        		return true;
+		    case R.id.aboutMenu3:
+	        	showAbout();
+			    return true;   
+		    case R.id.topTenMenu3:
+		    	showTop10();
+		    	return true;
+	        default:
+	        	return super.onOptionsItemSelected(item);
 		}
 	}
-	public void showAbout()
-	{
+	
+	public void showAbout(){
 		final Dialog commentView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
 		commentView.setContentView(R.layout.about);
 		commentView.setCancelable(true);
 	    TextView name = (TextView) commentView.findViewById(R.id.aboutName);
 	    TextView text = (TextView) commentView.findViewById(R.id.aboutText);
-	    
 	    if(PresentationActivity.english)
 	    {
 	    	name.setText("About");
 			text.setText(R.string.abouting);
 	    }
-	    
 	    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
 	    back.setOnClickListener(new View.OnClickListener() {
 	    public void onClick(View v) {
 	           commentView.dismiss();
-	        }
-	    });
-	    
+	        }});
 	    commentView.show();
 	}
-	public void showTop10()
-	{
+	public void showTop10(){
 		final Dialog routDialog = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
 		routDialog.setContentView(R.layout.showroute);
 		ImageButton back = (ImageButton)routDialog.findViewById(R.id.routBack);
 		TextView title = (TextView)routDialog.findViewById(R.id.routName);	        
         title.setText("Top 10"); 
-
 	    back.setOnClickListener(new View.OnClickListener() {
 	    public void onClick(View v) {
 	           routDialog.dismiss();
-	        }
-	    });
+	        }});
 	    
 	    String[] aux = procesarConsulta(Services.getTopTen("getRaitingSort",  "http://turismo/getPlaces"));
 		final ListView list = (ListView) routDialog.findViewById(R.id.listaRuta);
@@ -611,7 +533,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	
 	    list.setAdapter(listAdapter);
 	    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 
@@ -622,11 +543,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			        routDialog.dismiss();
 		        	startActivity(intent);
 	        	}
-				
-				// TODO Auto-generated method stub
-				
-			}
-		});
+			}});
 		routDialog.setCancelable(true);
 		routDialog.show();
 	}

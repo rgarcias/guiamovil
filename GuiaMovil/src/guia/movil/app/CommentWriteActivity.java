@@ -15,9 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class CommentWriteActivity extends Activity implements OnClickListener {
-	
 	private ImageButton enviar;
 	private ImageButton cancelar;
 	private EditText nick;
@@ -42,40 +40,32 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 	        	enviar.setImageResource(R.drawable.comment_button);
 	        	cancelar.setImageResource(R.drawable.cancel_button);
 	        }
-	     
 	     nick= (EditText) findViewById(R.id.nickText);
 	     comment= (EditText) findViewById(R.id.commentText);
 	     cancelar.setOnClickListener(this);
 	     enviar.setOnClickListener(this);
 	 }
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		if(v.getId() == R.id.cancel_button)
-		{
+		if(v.getId() == R.id.cancel_button){
 			Intent intent = new Intent(CommentWriteActivity.this,CommentsActivity.class);
 			finish();
 			this.startActivity(intent);
 		}
-		else if(v.getId()== R.id.comments_button && isOnline())
-		{
+		else if(v.getId()== R.id.comments_button && isOnline()){
 			String apodo=nick.getText().toString();
-			if(nick.getText().toString().trim().length()==0)
-			{
-				if(PresentationActivity.english)
-				{
+			if(nick.getText().toString().trim().length()==0){
+				if(PresentationActivity.english){
 					apodo="Anonymous";
 					Toast.makeText(this, "Published as Anonymous", Toast.LENGTH_LONG).show();
 				}
-				else
-				{
+				else{
 					apodo ="Anonimo";
 					Toast.makeText(this, "Publicado como Anonimo", Toast.LENGTH_LONG).show();
 				}
 			}
-			
-			 String methodname = "addComment";
-		     String soap = "http://turismo/" + methodname;
-		     Services.addComments(methodname, soap, comment.getText().toString(), apodo, CommentsActivity.placeID);
+			String methodname = "addComment";
+		    String soap = "http://turismo/" + methodname;
+		    Services.addComments(methodname, soap, comment.getText().toString(), apodo, CommentsActivity.placeID);
 
 			Intent intent = new Intent(CommentWriteActivity.this,CommentsActivity.class);
 			finish();
@@ -122,5 +112,4 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 		exitDialog.show(); 
 	    return false;
 	}
-
 }

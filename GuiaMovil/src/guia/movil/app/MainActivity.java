@@ -3,8 +3,6 @@ package guia.movil.app;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -53,7 +51,6 @@ public class MainActivity extends TabActivity {
 	
 	private void initTabsAppearance(TabWidget tab_widget) 
 	{
-	    // Change background
 	    for(int i=0; i<tab_widget.getChildCount(); i++)
 	        tab_widget.getChildAt(i).setBackgroundResource(R.drawable.tab_selector);
 	}

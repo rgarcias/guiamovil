@@ -1,14 +1,11 @@
 package guia.movil.app;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import com.fsq.android.FoursquareApp;
 import com.fsq.android.FoursquareApp.FsqAuthListener;
 import com.fsq.android.FsqVenue;
 import com.fsq.android.NearbyAdapter;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -16,7 +13,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Menu;
@@ -26,7 +22,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -72,12 +67,8 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
                 
         Integer lat  = Integer.valueOf(latitude);
         Integer lon  = Integer.valueOf(longitude);
-        
         lat2 = lat / 1e6;
         lon2 = lon / 1e6;
-        
-        /* authorize */
-        
         if(mFsqApp.hasAccessToken()){
         	loadNearbyPlaces(lat2, lon2);
         }
@@ -111,15 +102,13 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
             @Override
             public void run() {
                 int what = 0;
- 
                 try {
- 
                     mNearbyList = mFsqApp.getNearby(latitude, longitude);
-                } catch (Exception e) {
+                } 
+                catch (Exception e) {
                     what = 1;
                     e.printStackTrace();
                 }
- 
                 mHandler.sendMessage(mHandler.obtainMessage(what));
             }
         }.start();
@@ -140,10 +129,10 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
                 	}
                     return;
                 }
- 
                 mAdapter.setData(mNearbyList);
                 mListView.setAdapter(mAdapter);
-            } else {
+            } 
+            else {
             	if(PresentationActivity.english){
             		Toast.makeText(FoursquareActivity.this, "Failed to load nearby places", Toast.LENGTH_SHORT).show();
             	}
@@ -155,7 +144,6 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
     };
 
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
 		checkinDialog = new Dialog(FoursquareActivity.this, R.style.FullHeightDialog);
         checkinDialog.setContentView(R.layout.checkindialog);    
         TextView checkinText = (TextView) checkinDialog.findViewById(R.id.checkintext);
@@ -173,18 +161,14 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 
 	public void onClick(View v) {
 		checkinDialog.dismiss();
-		// TODO Auto-generated method stub
 		cProgress = new ProgressDialog(this);
 		cProgress.setMessage("Checking you in...");
-		cProgress.show();
-		
-		 new Thread() {
-	            @Override
-	            public void run() {
-	                int what = 0;
-
+		cProgress.show();	
+		new Thread() {
+	           @Override
+	           public void run() {
+	        	   	int what = 0;
 	                mFsqApp.checkin(selectedVenue.id);
-	 
 	                cHandler.sendMessage(cHandler.obtainMessage(what));
 	            }
 	        }.start();
@@ -194,18 +178,16 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
         @Override
         public void handleMessage(Message msg) {
             cProgress.dismiss();
- 
             if (msg.what == 0) {
-                	if(PresentationActivity.english){
-                		Toast.makeText(FoursquareActivity.this, "Checked in!", Toast.LENGTH_SHORT).show();
-                	}
-                	else{
-                		Toast.makeText(FoursquareActivity.this, "Check-in realizado!", Toast.LENGTH_SHORT).show();
-                	}
-                    return;
+                if(PresentationActivity.english){
+                	Toast.makeText(FoursquareActivity.this, "Checked in!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                	Toast.makeText(FoursquareActivity.this, "Check-in realizado!", Toast.LENGTH_SHORT).show();
+                }
+                return;
             }
-        }
-    };
+        }};
     
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -220,55 +202,31 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
     
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		   switch (item.getItemId()) {
-		   
-		        		           
+		   switch (item.getItemId()) { 		           
 		        case R.id.languageMenu2:
-	        		
-			      return true;
-			           
+			      return true;    
 		        case R.id.aboutMenu2:
-		        	
-		        	
 		        	final Dialog commentView = new Dialog(FoursquareActivity.this, R.style.FullHeightDialog);
 					commentView.setContentView(R.layout.about);
 					commentView.setCancelable(true);
 				    TextView name = (TextView) commentView.findViewById(R.id.aboutName);
 				    TextView text = (TextView) commentView.findViewById(R.id.aboutText);
-				    
-			    	
-        	        
-				    if(PresentationActivity.english)
-				    {
+    
+				    if(PresentationActivity.english){
 				    	name.setText("About");
 	        			text.setText(R.string.abouting);
 				    }
-				    else
-				    {
-				    	
-				    	
-	        			
-				    }
-	
 				    
 				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
 				    back.setOnClickListener(new View.OnClickListener() {
 				    public void onClick(View v) {
 				           commentView.dismiss();
-				        }
-				    });
+				        }});
 				    
-				    	commentView.show();
-				   
-		        	
-		        	
-        		
-	        		
+				    commentView.show();
 			       return true;
-		        
 		        default:
 		           return super.onOptionsItemSelected(item);
-		    
 		}
 	}
 }

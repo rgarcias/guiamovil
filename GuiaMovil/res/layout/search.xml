@@ -11,6 +11,8 @@
         android:id="@+id/autoCompleteTextView"
         android:layout_width="283dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
         android:ems="30"
         android:singleLine="true" />
 
@@ -24,8 +26,9 @@
             android:id="@+id/acept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/accept_button" />
 
@@ -33,10 +36,12 @@
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/cancel_button" />
+
     </LinearLayout>
 
 </LinearLayout>

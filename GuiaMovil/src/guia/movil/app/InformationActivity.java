@@ -3,18 +3,10 @@ package guia.movil.app;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import com.android.*;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,8 +15,6 @@ import com.twitter.android.TwitterApp.TwDialogListener;
 
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import twitter4j.Twitter;
-import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -35,15 +25,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Menu;
@@ -55,7 +41,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -220,7 +205,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
     }
 
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		if(v.getId()== R.id.commentsButton && isOnline())
 		{
 			Intent intent = new Intent(InformationActivity.this,CommentsActivity.class);
@@ -294,8 +278,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	            public void onClick(View v) {
 	                rankDialog.dismiss();
 	            }
-	        });
-	        //now that the dialog is set up, it's time to show it    
+	        });  
 	        rankDialog.show();   
 		}
 		else if(v.getId()==R.id.checkinButton && isOnline())
@@ -397,7 +380,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	}
 
 	private ArrayList<String> procesarConsulta(String consulta) {
-		
 		Gson gson = new Gson();
 		ArrayList<String> arreglo = new ArrayList<String>();
         Type collectionType = new TypeToken<ArrayList<String> >(){}.getType();
@@ -445,11 +427,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			Toast.makeText(InformationActivity.this, "Twitter connection failed", Toast.LENGTH_LONG).show();
 		}
 	};
-	
-	
+
 	private void postReview(String review) {
-		//post to server
-		
 		Toast.makeText(this, "Review posted", Toast.LENGTH_SHORT).show();
 	}
 	
@@ -458,13 +437,11 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			@Override
 			public void run() {
 				int what = 0;
-				
 				try {
 					mTwitter.updateStatus(review);
 				} catch (Exception e) {
 					what = 1;
 				}
-				
 				mHandler.sendMessage(mHandler.obtainMessage(what));
 			}
 		}.start();
@@ -474,7 +451,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		@Override
 		public void handleMessage(Message msg) {
 			String text = (msg.what == 0) ? "Posted to Twitter" : "Post to Twitter failed";
-			
 			Toast.makeText(InformationActivity.this, text, Toast.LENGTH_SHORT).show();
 		}
 	};
@@ -502,8 +478,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        		}
 	        		refresh();
 	        		CategoryActivity.changed = 1;
-			      return true;
-			           
+			      return true;     
 		        case R.id.aboutMenu2:
 		        	final Dialog commentView = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
 					commentView.setContentView(R.layout.about);
@@ -516,7 +491,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 				    	name.setText("About");
 	        			text.setText(R.string.abouting);
 				    }
-
 				    ImageButton back = (ImageButton)commentView.findViewById(R.id.aboutBack);
 				    back.setOnClickListener(new View.OnClickListener() {
 				    public void onClick(View v) {
@@ -524,101 +498,93 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 				        }
 				    }); 
 				    commentView.show();
-
-			       return true;
-		        
+				    return true;
 		        default:
 		           return super.onOptionsItemSelected(item);
 		}
 	}
-
-	public class MyAdapter extends BaseAdapter {
-		   Context context;
-		   ArrayList<ImageItem> _arrayImageItem;
-		  
-		   MyAdapter(Context c){
-		    context = c;
-		    _arrayImageItem = new ArrayList<ImageItem>();
-		   }
-		  
-		   public void addImageItem(ImageItem item){
-		    _arrayImageItem.add(item);
-		   }
-		 
-		public int getCount() {
-		 // TODO Auto-generated method stub
-		 return _arrayImageItem.size();
-		}
-		 
-		public Object getItem(int position) {
-		 // TODO Auto-generated method stub
-		 return _arrayImageItem.get(position);
-		}
-		 
-		public long getItemId(int position) {
-		 // TODO Auto-generated method stub
-		 return position;
-		}
-		 
-		public View getView(int position, View convertView, ViewGroup parent) {
-		 // TODO Auto-generated method stub
-		 ImageView imageView;
-		 imageView = new ImageView(context);
-		 
-		 imageView.setLayoutParams(new Gallery.LayoutParams(150, 150));
-		 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		 imageView.setImageBitmap(_arrayImageItem.get(position).getImage());
-		 
-		 return imageView;
-		}
-	}
-
+	
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
-		//Toast.makeText(InformationActivity.this, "" + arg2, Toast.LENGTH_SHORT).show();
 		Intent image = new Intent(InformationActivity.this, ImageActivity.class);
-		//ImageActivity.setImageItem((ImageItem)myAdapter.getItem(arg2));
 		ImageActivity.setImages(myAdapter, arg2);
 		startActivity(image);
 	}
+
+	public class MyAdapter extends BaseAdapter {
+		Context context;
+		ArrayList<ImageItem> _arrayImageItem;
+		  
+		public MyAdapter(Context c){
+		    context = c;
+		    _arrayImageItem = new ArrayList<ImageItem>();
+		}
+		  
+		public void addImageItem(ImageItem item){
+			_arrayImageItem.add(item);
+		}
+		 
+		public int getCount() {
+			return _arrayImageItem.size();
+		}
+		 
+		public Object getItem(int position) {
+			return _arrayImageItem.get(position);
+		}
+		 
+		public long getItemId(int position) {
+			return position;
+		}
+		 
+		public View getView(int position, View convertView, ViewGroup parent) {
+			 ImageView imageView;
+			 imageView = new ImageView(context);
+			 
+			 imageView.setLayoutParams(new Gallery.LayoutParams(150, 150));
+			 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			 imageView.setImageBitmap(_arrayImageItem.get(position).getImage());
+			 
+			 return imageView;
+		}
+	}
 	
 	public class ImageItem {
-		   Bitmap bitmapImage;
+		Bitmap bitmapImage;
 		  
-		   public ImageItem(Bitmap bm){
-			   bitmapImage = bm;
-		   }
+		public ImageItem(Bitmap bm){
+		   bitmapImage = bm;
+		}
 		   
-		   public ImageItem(String link) throws IOException{
-			   try {
-				bitmapImage = getImageBitmap(link);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					throw e;
-				}
+		public ImageItem(String link) throws IOException{
+		   try {
+			   bitmapImage = getImageBitmap(link);
+		   } 
+		   catch (IOException e) {
+			   throw e;
 		   }
+		}
 		  
-		   public Bitmap getImage(){
-			   return bitmapImage;
-		   }
+		public Bitmap getImage(){
+		   return bitmapImage;
+		}
 		   
-		   public Bitmap getImageBitmap(String url) throws IOException { 
-		        Bitmap bm = null; 
-		        try { 
-		            URL aURL = new URL(url); 
-		            URLConnection conn = aURL.openConnection(); 
-		            conn.connect(); 
-		            InputStream is = conn.getInputStream(); 
-		            BufferedInputStream bis = new BufferedInputStream(is); 
-		            bm = BitmapFactory.decodeStream(bis); 
-		            bis.close(); 
-		            is.close(); 
-		       } catch (IOException e) { 
-		    	   throw e;
-		       } 
-		       bitmapImage = bm;
-		       return bm; 
+		public Bitmap getImageBitmap(String url) throws IOException { 
+		    Bitmap bm = null; 
+		    try { 
+		    	URL aURL = new URL(url); 
+		        URLConnection conn = aURL.openConnection(); 
+		        conn.connect(); 
+		        InputStream is = conn.getInputStream(); 
+		        BufferedInputStream bis = new BufferedInputStream(is); 
+		        bm = BitmapFactory.decodeStream(bis); 
+		        bis.close(); 
+		        is.close(); 
+		    }
+		    catch (IOException e) { 
+		       throw e;
 		    } 
+		    bitmapImage = bm;
+		    return bm; 
+		} 
 	}
 	
 	private class ImageTask extends AsyncTask<String, Void, ArrayList<Bitmap>> {
@@ -659,7 +625,6 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 
 		@Override
 		protected void onProgressUpdate(Void... values) {
-			// TODO Auto-generated method stub
 			super.onProgressUpdate(values);
 		}
 		
