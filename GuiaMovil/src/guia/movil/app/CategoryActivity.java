@@ -523,23 +523,22 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			        cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
 			        
 			        
-				        if(PresentationActivity.english){
-				        	aceptar.setImageResource(R.drawable.accept_button2);
-				        	cancelar.setImageResource(R.drawable.cancel_button2);
-				        	searchAutoComplete.setText("Insert place to search");
-				        }
-				        else{
-				        	aceptar.setImageResource(R.drawable.accept_button);
-				        	cancelar.setImageResource(R.drawable.cancel_button);
-				        	searchAutoComplete.setText("Ingrese sitio a buscar");
-				        }
+			        if(PresentationActivity.english){
+			        	aceptar.setImageResource(R.drawable.accept_button2);
+			        	cancelar.setImageResource(R.drawable.cancel_button2);
+			        }
+			        else{
+			        	aceptar.setImageResource(R.drawable.accept_button);
+			        	cancelar.setImageResource(R.drawable.cancel_button);
+			        }
 	    
 				    aceptar.setOnClickListener(this);
 				    
 				    cancelar.setOnClickListener(this);
 			        //now that the dialog is set up, it's time to show it    
 				    	searchView.show();
-			           return true;
+	        		  	
+		            return true;
 			        
 			           
 			    case R.id.languageMenu3:
