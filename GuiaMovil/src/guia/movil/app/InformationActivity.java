@@ -577,8 +577,8 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		// TODO Auto-generated method stub
 		//Toast.makeText(InformationActivity.this, "" + arg2, Toast.LENGTH_SHORT).show();
 		Intent image = new Intent(InformationActivity.this, ImageActivity.class);
-		ImageActivity.setImageItem((ImageItem)myAdapter.getItem(arg2));
-		/*ImageActivity.setImages(myAdapter, arg2);*/
+		//ImageActivity.setImageItem((ImageItem)myAdapter.getItem(arg2));
+		ImageActivity.setImages(myAdapter, arg2);
 		startActivity(image);
 	}
 	
