@@ -514,7 +514,31 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			       return true;
 		       
 		        case R.id.searchMenu3:
-		        	
+		        	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+			        searchView.setContentView(R.layout.search);
+			        searchView.setCancelable(true);
+			        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);;
+
+			        aceptar = (ImageButton) searchView.findViewById(R.id.acept);
+			        cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
+			        
+			        
+				        if(PresentationActivity.english){
+				        	aceptar.setImageResource(R.drawable.accept_button2);
+				        	cancelar.setImageResource(R.drawable.cancel_button2);
+				        	searchAutoComplete.setText("Insert place to search");
+				        }
+				        else{
+				        	aceptar.setImageResource(R.drawable.accept_button);
+				        	cancelar.setImageResource(R.drawable.cancel_button);
+				        	searchAutoComplete.setText("Ingrese sitio a buscar");
+				        }
+	    
+				    aceptar.setOnClickListener(this);
+				    
+				    cancelar.setOnClickListener(this);
+			        //now that the dialog is set up, it's time to show it    
+				    	searchView.show();
 			           return true;
 			        
 			           
