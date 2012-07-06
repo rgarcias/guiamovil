@@ -289,8 +289,14 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		else if(v.getId()==R.id.tweetButton && isOnline())
 		{
 			if(mTwitter.hasAccessToken()){
-				postReview("Hola!, he visitado "+ CategoryActivity.PLACE +" en la aplicación Guía Movil Curicó.");
-				postToTwitter("Hola!, he visitado "+ CategoryActivity.PLACE +" en la aplicación Guía Movil Curicó.");
+				if(PresentationActivity.english){
+					postReview("Hi!, I have found "+ CategoryActivity.PLACE +" in Guía Movil Curicó.");
+					postToTwitter("Hi!, I have found "+ CategoryActivity.PLACE +" in Guía Movil Curicó.");
+				}
+				else{
+					postReview("Hola!, he encontrado "+ CategoryActivity.PLACE +" en la aplicación Guía Movil Curicó.");
+					postToTwitter("Hola!, he encontrado "+ CategoryActivity.PLACE +" en la aplicación Guía Movil Curicó.");
+				}
 			}
 			else{
 				onTwitterClick();
