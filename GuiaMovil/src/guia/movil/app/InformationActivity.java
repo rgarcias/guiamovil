@@ -326,8 +326,13 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 			else{
 				conect();
 				Toast.makeText(this, published, Toast.LENGTH_LONG).show();
-				String text= this.text.getText().toString();
-				String title = this.title.getText().toString();
+				String text= "Hola!, he encontrado "+ CategoryActivity.PLACE +" en la aplicación Guía Movil Curicó.";
+				String title = "";
+				if(PresentationActivity.english){
+					text= "Hi!, I have found "+ CategoryActivity.PLACE +" in Guía Movil Curicó.";
+					title = "";
+				}
+
 				String response= postOnWall(title,text);
     		
 				if(response.equals("{\"error\":{\"message\":\"(#506) Duplicate status message\",\"type\":\"OAuthException\",\"code\":506}}"))
