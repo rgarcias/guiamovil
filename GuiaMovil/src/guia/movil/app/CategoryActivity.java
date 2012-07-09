@@ -3,6 +3,8 @@ package guia.movil.app;
 
 
 
+
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -215,6 +217,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
         }
     };
 	private String[] topTens;
+	private String[] resultadoBusqueda;
 	
 	public void doThat()
 	{
@@ -357,65 +360,120 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 		}
 		if(v.getId() == R.id.acept){
 			if(this.isOnline()){
-	    		String keyword = String.valueOf(searchAutoComplete.getText());
-	    		if(keyword.length() == 0){
-	    			if(PresentationActivity.english){
-	    				Toast.makeText(this, "No results for this search", Toast.LENGTH_LONG).show();
-			        }
-			        else{
-			        	Toast.makeText(this, "No hay resultados para esta búsqueda", Toast.LENGTH_LONG).show();
-			        }
-	    		}
-	    		else{
-	    		String[] resultado = procesarConsulta(Services.getLocationsSearched("getLocationsSearched", "http://turismo/getLocationsSearched", "Name", keyword));
-	    		if(resultado.length == 0){
-	    			if(PresentationActivity.english){
-	    				Toast.makeText(this, "No results for this search", Toast.LENGTH_LONG).show();
-			        }
-			        else{
-			        	Toast.makeText(this, "No hay resultados para esta búsqueda", Toast.LENGTH_LONG).show();
-			        }
-	    		}
-	    		else{
-	    			final Dialog resultSearchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
-		        	resultSearchView.setContentView(R.layout.listsearch);
-		        	resultSearchView.setCancelable(true);
-		        	ImageButton back = (ImageButton)resultSearchView.findViewById(R.id.sitesBack);
-		        	back.setOnClickListener(new View.OnClickListener() {
-			            public void onClick(View v) {
-			            	resultSearchView.dismiss();
-			            }});
-		        	TextView titleSearch = (TextView) resultSearchView.findViewById(R.id.resultSearch);
-		        	results = (ListView) resultSearchView.findViewById(R.id.searchList);
-		        	ArrayAdapter<String> resultsAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resultado);
-    				results.setAdapter(resultsAdapter);
-    				results.setOnItemClickListener(new OnItemClickListener(){
-
-					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
-						// TODO Auto-generated method stub
-						if(isOnline()){
-				    		   Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
-				    		   String place = (String) results.getAdapter().getItem(position);
-				    		   CategoryActivity.PLACE = place;
-				    		   startActivity(intent);
-				    		   resultSearchView.dismiss();
-				   	    	   searchView.dismiss();
-				    	   }
-					}});
-			        if(PresentationActivity.english){
-			        	titleSearch.setText("Results");
-			        }
-			        else{
-			        	titleSearch.setText("Resultados");
-			        }
-			        resultSearchView.show();
-	    			}
-	    		}
+				search();
+	   
 	    	}
 		}
 		if(v.getId() == R.id.cancel){
 			searchView.dismiss();
 		}
+	}
+	private Handler bHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            iProgress.dismiss();
+ 
+            if (msg.what == 0) {
+            	
+            	
+            	if(resultadoBusqueda.length == 0){
+        			if(PresentationActivity.english){
+        				Toast.makeText(CategoryActivity.this, "No results for this search", Toast.LENGTH_LONG).show();
+        	        }
+        	        else{
+        	        	Toast.makeText(CategoryActivity.this, "No hay resultados para esta búsqueda", Toast.LENGTH_LONG).show();
+        	        }
+        		}
+        		else{
+        			final Dialog resultSearchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+                	resultSearchView.setContentView(R.layout.showroute);
+                	resultSearchView.setCancelable(true);
+                	ImageButton back = (ImageButton)resultSearchView.findViewById(R.id.routBack);
+                	back.setOnClickListener(new View.OnClickListener() {
+        	            public void onClick(View v) {
+        	            	resultSearchView.dismiss();
+        	            }});
+                	searchView.dismiss();
+                	TextView titleSearch = (TextView) resultSearchView.findViewById(R.id.routName);
+                	results = (ListView) resultSearchView.findViewById(R.id.listaRuta);
+                	ArrayAdapter<String> resultsAdapter= new ArrayAdapter<String>(CategoryActivity.this, android.R.layout.simple_list_item_1, resultadoBusqueda);
+        			results.setAdapter(resultsAdapter);
+        			results.setOnItemClickListener(new OnItemClickListener(){
+
+        			public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+        				// TODO Auto-generated method stub
+        				if(isOnline()){
+     					       resultSearchView.dismiss();
+        		    		   Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
+        		    		   String place = (String) results.getAdapter().getItem(position);
+        		    		   CategoryActivity.PLACE = place;
+        		    		   startActivity(intent);
+        		    		   
+        		    	   }
+        			}});
+        	        if(PresentationActivity.english){
+        	        	titleSearch.setText("Results");
+        	        }
+        	        else{
+        	        	titleSearch.setText("Resultados");
+        	        }
+        	        resultSearchView.show();
+        			}
+        		}
+            	
+            	
+               
+                
+            else{
+            	Toast.makeText(CategoryActivity.this, "Cargado con éxito", Toast.LENGTH_SHORT).show();
+                }
+            }
+           
+        
+    };
+	
+	public void search()
+	{
+		String keyword = String.valueOf(searchAutoComplete.getText());
+		if(keyword.length() == 0){
+			if(PresentationActivity.english){
+				Toast.makeText(this, "Enter a search site please", Toast.LENGTH_LONG).show();
+	        }
+	        else{
+	        	Toast.makeText(this, "Ingrese un sitio a buscar por favor.", Toast.LENGTH_LONG).show();
+	        }
+		}
+		else{
+		
+		iProgress = new ProgressDialog(this);
+		iProgress.setCancelable(false);
+		iProgress.setMessage("Buscando");
+		if(PresentationActivity.english){
+			iProgress.setMessage("Searching");
+		}
+		iProgress.show();
+    	
+    	new Thread() {
+			@Override
+            public void run() {
+                int what = 0;
+                
+                try{  
+                	resultadoBusqueda = procesarConsulta(Services.getLocationsSearched("getLocationsSearched", "http://turismo/getLocationsSearched", "Name", String.valueOf(searchAutoComplete.getText())));
+                	
+                }
+                catch(Exception e){
+                	what = 1;
+                }
+                bHandler.sendMessage(cHandler.obtainMessage(what));
+            }
+        }.start();
+		
+				
+		}
+		
+
+		
 	}
 	
 	public void home(){
@@ -647,7 +705,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 						// TODO Auto-generated method stub
 						if(position==0){
 							if(PresentationActivity.english){
-								Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+								languageView.dismiss();
 				        	}
 				        	else{
 			        			PresentationActivity.english = true;
@@ -662,7 +720,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				        		languageView.dismiss();
 				        	}
 				        	else{
-				        		Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+				        		languageView.dismiss();
 			        		}
 				    	   }
 					}});
@@ -676,7 +734,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 						// TODO Auto-generated method stub
 						if(position==0){
 							if(PresentationActivity.english){
-								Toast.makeText(getApplicationContext(), "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+								languageView.dismiss();
 				        	}
 				        	else{
 			        			PresentationActivity.english = true;
@@ -691,7 +749,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				        		languageView.dismiss();
 				        	}
 				        	else{
-				        		Toast.makeText(getApplicationContext(), "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+				        		languageView.dismiss();
 			        		}
 				    	   }
 					}});
@@ -756,7 +814,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 						// TODO Auto-generated method stub
 						if(position==0){
 							if(PresentationActivity.english){
-								Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+								languageView.dismiss();
 				        	}
 				        	else{
 			        			PresentationActivity.english = true;
@@ -771,7 +829,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				        		languageView.dismiss();
 				        	}
 				        	else{
-				        		Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+				        		languageView.dismiss();
 			        		}
 				    	   }
 					}});
@@ -785,7 +843,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 						// TODO Auto-generated method stub
 						if(position==0){
 							if(PresentationActivity.english){
-								Toast.makeText(getApplicationContext(), "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+								languageView.dismiss();
 				        	}
 				        	else{
 			        			PresentationActivity.english = true;
@@ -800,7 +858,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 				        		languageView.dismiss();
 				        	}
 				        	else{
-				        		Toast.makeText(getApplicationContext(), "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+				        		languageView.dismiss();
 			        		}
 				    	   }
 					}});
