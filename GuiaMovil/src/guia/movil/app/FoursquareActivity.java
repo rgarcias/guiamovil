@@ -81,6 +81,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
  
     private void loadNearbyPlaces(final double latitude, final double longitude) {
         mProgress.show();
+        mProgress.setCancelable(false);
  
         new Thread() {
             @Override
@@ -148,6 +149,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 		cProgress = new ProgressDialog(this);
 		cProgress.setMessage("Checking you in...");
 		cProgress.show();	
+		cProgress.setCancelable(false);
 		new Thread() {
 	           @Override
 	           public void run() {
@@ -221,7 +223,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 							// TODO Auto-generated method stub
 							if(position==0){
 								if(PresentationActivity.english){
-									Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+									languageView.dismiss();
 					        	}
 					        	else{
 				        			PresentationActivity.english = true;
@@ -236,7 +238,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 					        		languageView.dismiss();
 					        	}
 					        	else{
-					        		Toast.makeText(FoursquareActivity.this, "This language is already selected", Toast.LENGTH_SHORT).show();
+					        		languageView.dismiss();
 				        		}
 					    	   }
 						}});
@@ -250,7 +252,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 							// TODO Auto-generated method stub
 							if(position==0){
 								if(PresentationActivity.english){
-									Toast.makeText(FoursquareActivity.this, "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+									languageView.dismiss();
 					        	}
 					        	else{
 				        			PresentationActivity.english = true;
@@ -265,7 +267,7 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 					        		languageView.dismiss();
 					        	}
 					        	else{
-					        		Toast.makeText(FoursquareActivity.this, "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+					        		languageView.dismiss();
 				        		}
 					    	   }
 						}});
