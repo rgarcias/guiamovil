@@ -7,10 +7,39 @@
     android:orientation="vertical"
     android:padding="2dip" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/sitesBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_categories_back" />
+
+        <TextView
+            android:id="@+id/searchTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal|center_vertical|right"
+            android:text="Search"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <AutoCompleteTextView
         android:id="@+id/autoCompleteTextView"
         android:layout_width="283dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
         android:ems="30"
         android:singleLine="true" />
 
@@ -24,8 +53,9 @@
             android:id="@+id/acept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/accept_button2" />
 
@@ -33,10 +63,12 @@
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/cancel_button2" />
+
     </LinearLayout>
 
 </LinearLayout>

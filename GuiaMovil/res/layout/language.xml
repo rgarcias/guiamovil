@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <ImageButton
             android:id="@+id/sitesBack"
@@ -21,34 +21,36 @@
             android:src="@drawable/ic_categories_back" />
 
         <TextView
-            android:id="@+id/resultSearch"
+            android:id="@+id/languageTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
             android:gravity="center_horizontal|center_vertical|right"
-            android:text="Resultados"
+            android:text="Idioma"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
     </LinearLayout>
+ 
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:gravity="left|right"
+        android:orientation="vertical" >
+        
+        <ScrollView
+            android:id="@+id/SCROLLER_ID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.57"
+            android:fillViewport="true"
+            android:scrollbars="vertical" >
 
-    
-		<ScrollView
-                  android:id="@+id/scrollView2"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:fillViewport="true"
-        		  android:scrollbars="vertical" >
-                  
-                  <LinearLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent" >
-                      
-                  <ListView
-                    android:id="@+id/searchList"
+                <ListView
+                    android:id="@+id/languagelist"
                     android:layout_width="match_parent"
-                    android:layout_height="145dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_weight="0.01"
@@ -57,8 +59,11 @@
                     android:choiceMode="singleChoice"
                     android:drawSelectorOnTop="false" >
 
-        		  </ListView>
-                  </LinearLayout>
-     </ScrollView>
+        		</ListView>
+
+                </ScrollView>
+        
+    </LinearLayout>
+
 </LinearLayout>
  
