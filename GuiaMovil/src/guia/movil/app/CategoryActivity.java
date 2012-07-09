@@ -425,7 +425,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
                
                 
             else{
-            	Toast.makeText(CategoryActivity.this, "Cargado con éxito", Toast.LENGTH_SHORT).show();
+            	
                 }
             }
            
@@ -465,7 +465,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
                 catch(Exception e){
                 	what = 1;
                 }
-                bHandler.sendMessage(cHandler.obtainMessage(what));
+                bHandler.sendMessage(bHandler.obtainMessage(what));
             }
         }.start();
 		
