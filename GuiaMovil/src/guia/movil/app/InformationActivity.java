@@ -41,6 +41,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageButton;
@@ -99,6 +100,9 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	private MyAdapter myAdapter;
 	private ArrayList<String> photos;
 	private String description;
+	private Dialog languageView;
+    private ListView languages;
+    private ListView idiomas;
 	
 	private Dialog exitDialog;
 
@@ -519,13 +523,84 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	public boolean onOptionsItemSelected(MenuItem item) {
 		   switch (item.getItemId()) {	           
 		        case R.id.languageMenu2:
-	        		if(PresentationActivity.english){
-	        			PresentationActivity.english = false;
+		        	languageView = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
+			        languageView.setContentView(R.layout.language);
+			        languageView.setCancelable(true);
+			        TextView titleLanguage = (TextView)languageView.findViewById(R.id.languageTitle);
+			        ImageButton backLang = (ImageButton)languageView.findViewById(R.id.sitesBack);
+		        	backLang.setOnClickListener(new View.OnClickListener() {
+			            public void onClick(View v) {
+			            	languageView.dismiss();
+			            }});
+		        	ListView idiomas = (ListView)languageView.findViewById(R.id.languagelist);
+		        	ArrayList<String> idms = new ArrayList<String>();
+		        	idms.add("Inglés");
+		        	idms.add("Español");
+		        	languages = (ListView)languageView.findViewById(R.id.languagelist);
+		        	ArrayList<String> langs = new ArrayList<String>();
+		        	langs.add("English");
+		        	langs.add("Spanish");
+		        	if(PresentationActivity.english){
+		        		titleLanguage.setText("Language");
+		        		ArrayAdapter<String> languagesAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, langs);
+						languages.setAdapter(languagesAdapter);
+						languages.setOnItemClickListener(new OnItemClickListener(){
+
+						public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+							// TODO Auto-generated method stub
+							if(position==0){
+								if(PresentationActivity.english){
+									Toast.makeText(InformationActivity.this, "This language is already selected", Toast.LENGTH_SHORT).show();
+					        	}
+					        	else{
+				        			PresentationActivity.english = true;
+				        			refresh();
+				        			languageView.dismiss();
+				        		}
+					    	   }
+							if(position==1){
+								if(PresentationActivity.english){
+					        		PresentationActivity.english = false;
+					        		refresh();
+					        		languageView.dismiss();
+					        	}
+					        	else{
+					        		Toast.makeText(InformationActivity.this, "This language is already selected", Toast.LENGTH_SHORT).show();
+				        		}
+					    	   }
+						}});
+		        	}
+		        	else{
+		        		ArrayAdapter<String> languagesAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, idms);
+						idiomas.setAdapter(languagesAdapter);
+						idiomas.setOnItemClickListener(new OnItemClickListener(){
+
+						public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+							// TODO Auto-generated method stub
+							if(position==0){
+								if(PresentationActivity.english){
+									Toast.makeText(InformationActivity.this, "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+					        	}
+					        	else{
+				        			PresentationActivity.english = true;
+				        			refresh();
+				        			languageView.dismiss();
+				        		}
+					    	   }
+							if(position==1){
+								if(PresentationActivity.english){
+					        		PresentationActivity.english = false;
+					        		refresh();
+					        		languageView.dismiss();
+					        	}
+					        	else{
+					        		Toast.makeText(InformationActivity.this, "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+				        		}
+					    	   }
+						}});
 	        		}
-	        		else{
-	        			PresentationActivity.english = true;
-	        		}
-	        		refresh();
+		        	
+				    languageView.show();
 	        		CategoryActivity.changed = 1;
 			      return true;     
 		        case R.id.aboutMenu2:
