@@ -129,9 +129,9 @@ public class MapsActivity extends MapActivity implements OnClickListener{
     		routDialog.setContentView(R.layout.showroute);
     		ImageButton back = (ImageButton)routDialog.findViewById(R.id.routBack);
     		TextView title = (TextView)routDialog.findViewById(R.id.routName);	        
-    	    title.setText("Como llegar"); 
+    	    title.setText("Cómo llegar"); 
     	    if(PresentationActivity.english)
-    	       	title.setText("Getting there"); 
+    	       	title.setText("Getting to"); 
 
     		back.setOnClickListener(new View.OnClickListener() {
     		public void onClick(View v) {
@@ -434,7 +434,7 @@ public class MapsActivity extends MapActivity implements OnClickListener{
 		        	comment.setText(mRoad.mName + " " + mRoad.mDescription);
 		        }
 		        else{
-		        	nick.setText("Descripcion");
+		        	nick.setText("Descripción");
 		        	comment.setText(mRoad.getmPoints()[mRoad.getmPoints().length-1].getmName()+" "+mRoad.getmName() +" "+ 
 		        	mRoad.getmPoints()[mRoad.getmPoints().length-1].getmDescription());
 		        }

@@ -60,7 +60,7 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 				}
 				else{
 					apodo ="Anonimo";
-					Toast.makeText(this, "Publicado como Anonimo", Toast.LENGTH_LONG).show();
+					Toast.makeText(this, "Publicado como Anónimo", Toast.LENGTH_LONG).show();
 				}
 			}
 			String methodname = "addComment";
