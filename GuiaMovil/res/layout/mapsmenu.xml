@@ -12,14 +12,14 @@
             android:id="@+id/btLlegar"
             android:background="@color/background"
             android:textColor="#fff"  
-            android:title="Como llegar">
+            android:title="Cómo llegar">
 <!--             android:icon="@drawable/directions"> -->
       </item>
        <item
             android:id="@+id/btDescripcion"
             android:background="@color/background"
             android:textColor="#fff"  
-            android:title="Descripcion">
+            android:title="Descripción">
 <!--             android:icon="@drawable/place"> -->
       </item>
 </menu>
