@@ -72,27 +72,6 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
         if(mFsqApp.hasAccessToken()){
         	loadNearbyPlaces(lat2, lon2);
         }
-        else{
-        	mFsqApp.authorize();
-            FsqAuthListener listener = new FsqAuthListener() {
-            
-            	public void onSuccess() {
-                   	if(PresentationActivity.english){
-                   		Toast.makeText(FoursquareActivity.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
-                   		
-                   	}
-                   	else{
-                   		 Toast.makeText(FoursquareActivity.this, "Conectado como " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
-                   	}
-                   	loadNearbyPlaces(lat2, lon2);
-                }
-         
-                public void onFail(String error) {
-                    Toast.makeText(FoursquareActivity.this, error, Toast.LENGTH_SHORT).show();
-                }
-            };   
-            mFsqApp.setListener(listener);
-        }
     }
  
     private void loadNearbyPlaces(final double latitude, final double longitude) {

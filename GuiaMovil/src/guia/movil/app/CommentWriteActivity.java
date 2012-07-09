@@ -71,11 +71,15 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 			finish();
 			this.startActivity(intent);
 	    }	
-		if(v.getId() == R.id.exitButton){
-			Intent temp = new Intent(Intent.ACTION_MAIN);
-			temp.addCategory(Intent.CATEGORY_HOME);
+		if(v.getId()==R.id.cancelButton){
 			exitDialog.dismiss();
-			startActivity(temp);
+		}
+		if(v.getId()==R.id.acceptButton){
+			Intent settingsIntent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+			settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			CommentWriteActivity.this.startActivityForResult(settingsIntent, 0);
+			exitDialog.dismiss();
+			finish();
 		}
 	}
 	
@@ -92,22 +96,26 @@ public class CommentWriteActivity extends Activity implements OnClickListener {
 	    }
 	    exitDialog = new Dialog(CommentWriteActivity.this, R.style.FullHeightDialog);
         exitDialog.setContentView(R.layout.exitdialog);
-        exitDialog.setCancelable(false);
 		if(PresentationActivity.english){
-	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
-	        exit.setImageResource(R.drawable.quit_button2);
+	        ImageButton accept = (ImageButton) exitDialog.findViewById(R.id.acceptButton);
+	        accept.setImageResource(R.drawable.accept_button2);
+	        ImageButton cancel = (ImageButton) exitDialog.findViewById(R.id.cancelButton);
+	        cancel.setImageResource(R.drawable.cancel_button2);
 	        
 	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
 	        exitText.setText(R.string.exitDialogING);
-	        exit.setOnClickListener(this);
+	        accept.setOnClickListener(this);
+	        cancel.setOnClickListener(this);
 		}
 		else{
-			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
-	        exit.setImageResource(R.drawable.quit_button);
-	        
+			ImageButton accept = (ImageButton) exitDialog.findViewById(R.id.acceptButton);
+	        accept.setImageResource(R.drawable.accept_button);
+	        ImageButton cancel= (ImageButton) exitDialog.findViewById(R.id.cancelButton);
+	        cancel.setImageResource(R.drawable.cancel_button);
 	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
 	        exitText.setText(R.string.exitDialogESP);
-	        exit.setOnClickListener(this);
+	        accept.setOnClickListener(this);
+	        cancel.setOnClickListener(this);
 		}
 		exitDialog.show(); 
 	    return false;

@@ -198,6 +198,9 @@ public class TwitterApp {
 			public void onError(String value) {
 				mListener.onError("Failed opening authorization page");
 			}
+			
+			public void onCancel() {
+			}
 		};
 		
 		new TwitterDialog(context, url, listener).show();
@@ -226,5 +229,7 @@ public class TwitterApp {
 		public void onComplete(String value);		
 		
 		public void onError(String value);
+		
+		public void onCancel();
 	}
 }
