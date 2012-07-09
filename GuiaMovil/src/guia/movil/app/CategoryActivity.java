@@ -1,5 +1,8 @@
 package guia.movil.app;
 
+
+
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -8,10 +11,13 @@ import com.google.gson.reflect.TypeToken;
 
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Menu;
@@ -55,6 +61,8 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     private AutoCompleteTextView searchAutoComplete;
     private Dialog searchView;
     private ListView results;
+	protected String[] lugares;
+	private ProgressDialog iProgress;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -112,16 +120,107 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
         	if(!(itemes.get(itemes.size()-1).compareTo((String) lv.getAdapter().getItem(position))==0)){
         		itemes.add((String) lv.getAdapter().getItem(position));
         	}
-        	ib.setVisibility(View.VISIBLE);
-        	ib2.setVisibility(View.VISIBLE);
-        	stv.setText(this.arrayListtoString());
-        	stv.setVisibility(View.VISIBLE);
-        	tv.setText(itemes.get(itemes.size()-1));
-            String[] aux = selectArray(itemes.get(itemes.size()-1));
-            listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
-        	lv.setAdapter(listAdapter);
+        	if(this.depth==2)
+        	{
+        		
+        		iProgress = new ProgressDialog(this);
+    			iProgress.setCancelable(false);
+    			iProgress.setMessage("Cargando lugares");
+    			if(PresentationActivity.english){
+    				iProgress.setMessage("Loading places");
+    			}
+    			iProgress.show();
+        		
+        		
+        		new Thread() {
+    				@Override
+    	            public void run() {
+    	                int what = 0;
+    	                
+    	                try{
+    	               
+    	                	lugares = procesarConsulta(Services.getPlaces("getPlaces", "http://turismo/getPlaces", "subcategory", itemes.get(itemes.size()-1)));
+    	                	
+    	                }
+    	                catch(Exception e){
+    	                	what = 1;
+    	                }
+    	                cHandler.sendMessage(cHandler.obtainMessage(what));
+    	            }
+    	        }.start();
+            
+        		
+        	}
+        	else
+        	{
+        		doThat();
+        	}
         }
     }
+	
+	private Handler cHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            iProgress.dismiss();
+ 
+            if (msg.what == 0 &&lugares.length>0) {
+            	
+            	ib.setVisibility(View.VISIBLE);
+            	ib2.setVisibility(View.VISIBLE);
+            	stv.setText(CategoryActivity.this.arrayListtoString());
+            	stv.setVisibility(View.VISIBLE);
+            	tv.setText(itemes.get(itemes.size()-1));
+                
+                listAdapter = new ArrayAdapter<String>(CategoryActivity.this, android.R.layout.simple_list_item_1, lugares);
+            	lv.setAdapter(listAdapter);
+            	
+               
+		        
+                if(PresentationActivity.english){
+                	Toast.makeText(CategoryActivity.this, "Successfully loading", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                	Toast.makeText(CategoryActivity.this, "Cargado con éxito", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if(msg.what == 0 &&lugares.length==0)
+            {
+            	itemes.remove(depth);
+           	 depth -= 1;
+           	 if(PresentationActivity.english){
+           		
+                	Toast.makeText(CategoryActivity.this, "No location available", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                	Toast.makeText(CategoryActivity.this, "No hay lugares disponibles ", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else{
+            	itemes.remove(depth);
+            	 depth -= 1;
+            	 if(PresentationActivity.english){
+            		
+                 	Toast.makeText(CategoryActivity.this, "Unsuccessfully loading", Toast.LENGTH_SHORT).show();
+                 }
+                 else{
+                 	Toast.makeText(CategoryActivity.this, "Cargado sin éxito", Toast.LENGTH_SHORT).show();
+                 }
+            }
+        }
+    };
+	private String[] topTens;
+	
+	public void doThat()
+	{
+		ib.setVisibility(View.VISIBLE);
+    	ib2.setVisibility(View.VISIBLE);
+    	stv.setText(this.arrayListtoString());
+    	stv.setVisibility(View.VISIBLE);
+    	tv.setText(itemes.get(itemes.size()-1));
+        String[] aux = selectArray(itemes.get(itemes.size()-1));
+        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
+    	lv.setAdapter(listAdapter);
+	}
     
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -516,37 +615,99 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	    commentView.show();
 	}
 	public void showTop10(){
-		final Dialog routDialog = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
-		routDialog.setContentView(R.layout.showroute);
-		ImageButton back = (ImageButton)routDialog.findViewById(R.id.routBack);
-		TextView title = (TextView)routDialog.findViewById(R.id.routName);	        
-        title.setText("Top 10"); 
-	    back.setOnClickListener(new View.OnClickListener() {
-	    public void onClick(View v) {
-	           routDialog.dismiss();
-	        }});
-	    
-	    String[] aux = procesarConsulta(Services.getTopTen("getRaitingSort",  "http://turismo/getPlaces"));
-		final ListView list = (ListView) routDialog.findViewById(R.id.listaRuta);
 		
-		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(routDialog.getContext(), android.R.layout.simple_list_item_1, aux);
+		iProgress = new ProgressDialog(this);
+		iProgress.setCancelable(false);
+		iProgress.setMessage("Cargando Top 10");
+		if(PresentationActivity.english){
+			iProgress.setMessage("Loading Top 10");
+		}
+		iProgress.show();
+    	
+    	new Thread() {
+			@Override
+            public void run() {
+                int what = 0;
+                
+                try{
+                	 topTens = procesarConsulta(Services.getTopTen("getRaitingSort",  "http://turismo/getPlaces"));
+                	
+                }
+                catch(Exception e){
+                	what = 1;
+                }
+                tHandler.sendMessage(cHandler.obtainMessage(what));
+            }
+        }.start();
+    
+		
+		
+		
+		
+	   
 	
-	    list.setAdapter(listAdapter);
-	    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-
-				if(isOnline()){
-		        	final Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
-		        	String place = list.getItemAtPosition(arg2).toString();
-		        	CategoryActivity.PLACE = place;
-			        routDialog.dismiss();
-		        	startActivity(intent);
-	        	}
-			}});
-		routDialog.setCancelable(true);
-		routDialog.show();
 	}
+	
+	
+	 private Handler tHandler = new Handler() {
+	        @Override
+	        public void handleMessage(Message msg) {
+	            iProgress.dismiss();
+	 
+	            if (msg.what == 0&&topTens.length>0) {
+	            	final Dialog routDialog = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+	        		routDialog.setContentView(R.layout.showroute);
+	        		ImageButton back = (ImageButton)routDialog.findViewById(R.id.routBack);
+	        		TextView title = (TextView)routDialog.findViewById(R.id.routName);	        
+	                title.setText("Top 10"); 
+	        	    back.setOnClickListener(new View.OnClickListener() {
+	        	    public void onClick(View v) {
+	        	           routDialog.dismiss();
+	        	        }});
+	        		final ListView list = (ListView) routDialog.findViewById(R.id.listaRuta);
+	        		
+	        		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(routDialog.getContext(), android.R.layout.simple_list_item_1, topTens);
+	        	
+	        	    list.setAdapter(listAdapter);
+	        	    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+	        			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+	        					long arg3) {
+
+	        				if(isOnline()){
+	        		        	final Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
+	        		        	String place = list.getItemAtPosition(arg2).toString();
+	        		        	CategoryActivity.PLACE = place;
+	        			        routDialog.dismiss();
+	        		        	startActivity(intent);
+	        	        	}
+	        			}});
+	        		routDialog.setCancelable(true);
+	        		routDialog.show();
+    
+	            }
+	            else if(msg.what == 0 &&topTens.length==0)
+	            {
+
+	           	 if(PresentationActivity.english){
+	           		
+	                	Toast.makeText(CategoryActivity.this, "Top 10 not available", Toast.LENGTH_SHORT).show();
+	                }
+	                else{
+	                	Toast.makeText(CategoryActivity.this, "Top 10 no disponibles", Toast.LENGTH_SHORT).show();
+	                }
+	            }
+	            else{
+	            	if(PresentationActivity.english){
+	                	Toast.makeText(CategoryActivity.this, "Unsuccessfully loading", Toast.LENGTH_SHORT).show();
+	                }
+	                else{
+	                	Toast.makeText(CategoryActivity.this, "Cargado sin éxito", Toast.LENGTH_SHORT).show();
+	            	
+	            	finish();
+	                }
+	            }
+	        }
+	    };
 	
 	public void refresh(){
 		Intent intent = new Intent(CategoryActivity.this, CategoryActivity.class);
