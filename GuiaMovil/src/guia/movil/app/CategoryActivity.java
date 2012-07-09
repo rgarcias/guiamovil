@@ -917,7 +917,7 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
                 catch(Exception e){
                 	what = 1;
                 }
-                tHandler.sendMessage(cHandler.obtainMessage(what));
+                tHandler.sendMessage(tHandler.obtainMessage(what));
             }
         }.start();
 	
