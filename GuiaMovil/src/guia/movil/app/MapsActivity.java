@@ -363,7 +363,12 @@ public class MapsActivity extends MapActivity implements OnClickListener{
         			localizar();
         			double lat2 =  point.getLatitudeE6() / 1e6;
         			double lon2 = point.getLongitudeE6() / 1e6;
+        			try{
         			showDriveIndicationRoute(lat2,lon2);
+        			}
+        			catch (Exception e){
+        			}
+        			
         		}
 	           return true;
 	        case R.id.btTrazar:
