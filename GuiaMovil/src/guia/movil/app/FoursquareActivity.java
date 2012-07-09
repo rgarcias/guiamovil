@@ -10,6 +10,7 @@ import com.fsq.android.NearbyAdapter;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,6 +43,9 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 	private ProgressDialog cProgress;
 	private double lat2;
 	private double lon2;
+	private Dialog languageView;
+    private ListView languages;
+    private ListView idiomas;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -179,10 +184,94 @@ public class FoursquareActivity extends ListActivity implements OnItemClickListe
 	    return true;
 	}
     
+    public void refresh(){
+		Intent intent = new Intent(FoursquareActivity.this, FoursquareActivity.class);
+		this.finish();
+		startActivity(intent);
+	}
+    
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		   switch (item.getItemId()) { 		           
 		        case R.id.languageMenu2:
+		        	languageView = new Dialog(this, R.style.FullHeightDialog);
+			        languageView.setContentView(R.layout.language);
+			        languageView.setCancelable(true);
+			        TextView titleLanguage = (TextView)languageView.findViewById(R.id.languageTitle);
+			        ImageButton backLang = (ImageButton)languageView.findViewById(R.id.sitesBack);
+		        	backLang.setOnClickListener(new View.OnClickListener() {
+			            public void onClick(View v) {
+			            	languageView.dismiss();
+			            }});
+		        	ListView idiomas = (ListView)languageView.findViewById(R.id.languagelist);
+		        	ArrayList<String> idms = new ArrayList<String>();
+		        	idms.add("Inglés");
+		        	idms.add("Español");
+		        	languages = (ListView)languageView.findViewById(R.id.languagelist);
+		        	ArrayList<String> langs = new ArrayList<String>();
+		        	langs.add("English");
+		        	langs.add("Spanish");
+		        	if(PresentationActivity.english){
+		        		titleLanguage.setText("Language");
+		        		ArrayAdapter<String> languagesAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, langs);
+						languages.setAdapter(languagesAdapter);
+						languages.setOnItemClickListener(new OnItemClickListener(){
+
+						public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+							// TODO Auto-generated method stub
+							if(position==0){
+								if(PresentationActivity.english){
+									Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+					        	}
+					        	else{
+				        			PresentationActivity.english = true;
+				        			refresh();
+				        			languageView.dismiss();
+				        		}
+					    	   }
+							if(position==1){
+								if(PresentationActivity.english){
+					        		PresentationActivity.english = false;
+					        		refresh();
+					        		languageView.dismiss();
+					        	}
+					        	else{
+					        		Toast.makeText(FoursquareActivity.this, "This language is already selected", Toast.LENGTH_SHORT).show();
+				        		}
+					    	   }
+						}});
+		        	}
+		        	else{
+		        		ArrayAdapter<String> languagesAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, idms);
+						idiomas.setAdapter(languagesAdapter);
+						idiomas.setOnItemClickListener(new OnItemClickListener(){
+
+						public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+							// TODO Auto-generated method stub
+							if(position==0){
+								if(PresentationActivity.english){
+									Toast.makeText(FoursquareActivity.this, "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+					        	}
+					        	else{
+				        			PresentationActivity.english = true;
+				        			refresh();
+				        			languageView.dismiss();
+				        		}
+					    	   }
+							if(position==1){
+								if(PresentationActivity.english){
+					        		PresentationActivity.english = false;
+					        		refresh();
+					        		languageView.dismiss();
+					        	}
+					        	else{
+					        		Toast.makeText(FoursquareActivity.this, "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+				        		}
+					    	   }
+						}});
+	        		}
+		        	
+				    languageView.show();
 			      return true;    
 		        case R.id.aboutMenu2:
 		        	final Dialog commentView = new Dialog(FoursquareActivity.this, R.style.FullHeightDialog);
