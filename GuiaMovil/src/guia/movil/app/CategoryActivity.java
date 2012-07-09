@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,11 +59,16 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
     private ImageButton ib2;
     private ArrayAdapter<String> listAdapter;
     private Dialog exitDialog;
-    private AutoCompleteTextView searchAutoComplete;
-    private Dialog searchView;
-    private ListView results;
 	protected String[] lugares;
 	private ProgressDialog iProgress;
+    private AutoCompleteTextView searchAutoComplete;
+    private Dialog searchView;
+    private Dialog languageView;
+    private ListView results;
+    private ListView languages;
+    private ListView idiomas;
+    private TextView titleLanguage;
+    private TextView titleSort;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -519,14 +525,21 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		    case R.id.searchMenu:
-		      	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		    	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
 		        searchView.setContentView(R.layout.search);
 		        searchView.setCancelable(true);
-		        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);;
+		        TextView titleSearch = (TextView) searchView.findViewById(R.id.searchTitle);
+		        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);
+		        ImageButton back = (ImageButton)searchView.findViewById(R.id.sitesBack);
+	        	back.setOnClickListener(new View.OnClickListener() {
+		            public void onClick(View v) {
+		            	searchView.dismiss();
+		            }});
 		        ImageButton aceptar = (ImageButton) searchView.findViewById(R.id.acept);
 		        ImageButton cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
 		        
 		        if(PresentationActivity.english){
+		        	titleSearch.setText("Search");
 		        	aceptar.setImageResource(R.drawable.accept_button2);
 		        	cancelar.setImageResource(R.drawable.cancel_button2);
 		        }
@@ -539,27 +552,152 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			    searchView.show();
 			    return true;
 		    case R.id.sortMenu:
-		       	if(ASC){
-		       		String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortAsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
-		       		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
-		       		lv.setAdapter(listAdapter);
-		       		ASC=false;
-		       	}
-		       	else{
-		       		String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortDsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
-		       		listAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aux);
-		       		lv.setAdapter(listAdapter);
-		       		ASC=true;
-		       	}
-		       	return true;
-		    case R.id.languageMenu:
-		       	if(PresentationActivity.english){
-	        		PresentationActivity.english = false;
+		    	final Dialog sortView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		        sortView.setContentView(R.layout.sort);
+		        sortView.setCancelable(true);
+		        titleSort = (TextView)sortView.findViewById(R.id.sortTitle);
+		        ImageButton backsort = (ImageButton)sortView.findViewById(R.id.sitesBack);
+	        	backsort.setOnClickListener(new View.OnClickListener() {
+		            public void onClick(View v) {
+		            	sortView.dismiss();
+		            }});
+	        	ListView ordenar = (ListView)sortView.findViewById(R.id.sortlist);
+	        	ArrayList<String> ord = new ArrayList<String>();
+	        	ord.add("Ascendente");
+	        	ord.add("Descendente");
+	        	ListView sort = (ListView)sortView.findViewById(R.id.sortlist);
+	        	ArrayList<String> srt = new ArrayList<String>();
+	        	srt.add("Ascending");
+	        	srt.add("Descending");
+	        	if(PresentationActivity.english){
+	        		titleSort.setText("Alphabetic order");
+	        		ArrayAdapter<String> sortAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, srt);
+					sort.setAdapter(sortAdapter);
+					sort.setOnItemClickListener(new OnItemClickListener(){
+
+					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+						// TODO Auto-generated method stub
+						if(position==0){
+							String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortAsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
+							ArrayAdapter<String> listAdapter= new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, aux);
+				       		lv.setAdapter(listAdapter);
+						sortView.dismiss();
+				       		ASC=false;
+				    	   }
+						if(position==1){
+							String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortDsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
+				       		listAdapter= new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, aux);
+				       		lv.setAdapter(listAdapter);
+				       		sortView.dismiss();
+						ASC=true;
+				    	   }
+					}});
 	        	}
 	        	else{
-        			PresentationActivity.english = true;
+	        		ArrayAdapter<String> sortAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ord);
+					ordenar.setAdapter(sortAdapter);
+					ordenar.setOnItemClickListener(new OnItemClickListener(){
+
+					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+						// TODO Auto-generated method stub
+						if(position==0){
+							String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortAsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
+				       		listAdapter= new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, aux);
+				       		lv.setAdapter(listAdapter);
+				       		sortView.dismiss();
+						ASC=false;
+				    	   }
+						if(position==1){
+							String[] aux = procesarConsulta(Services.getPlaces("getPlacesSortDsc", "http://turismo/getPlaces", "name", itemes.get(itemes.size()-1)));
+				       		listAdapter= new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, aux);
+				       		lv.setAdapter(listAdapter);
+				       		sortView.dismiss();
+						ASC=true;
+				    	   }
+					}});
         		}
-        		refresh();
+	        	
+			    sortView.show();
+		       	return true;
+		    case R.id.languageMenu:
+		    	languageView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		        languageView.setContentView(R.layout.language);
+		        languageView.setCancelable(true);
+		        titleLanguage = (TextView)languageView.findViewById(R.id.languageTitle);
+		        ImageButton backLang = (ImageButton)languageView.findViewById(R.id.sitesBack);
+	        	backLang.setOnClickListener(new View.OnClickListener() {
+		            public void onClick(View v) {
+		            	languageView.dismiss();
+		            }});
+	        	ListView idiomas = (ListView)languageView.findViewById(R.id.languagelist);
+	        	ArrayList<String> idms = new ArrayList<String>();
+	        	idms.add("Inglés");
+	        	idms.add("Español");
+	        	languages = (ListView)languageView.findViewById(R.id.languagelist);
+	        	ArrayList<String> langs = new ArrayList<String>();
+	        	langs.add("English");
+	        	langs.add("Spanish");
+	        	if(PresentationActivity.english){
+	        		titleLanguage.setText("Language");
+	        		ArrayAdapter<String> languagesAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, langs);
+					languages.setAdapter(languagesAdapter);
+					languages.setOnItemClickListener(new OnItemClickListener(){
+
+					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+						// TODO Auto-generated method stub
+						if(position==0){
+							if(PresentationActivity.english){
+								Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+				        	}
+				        	else{
+			        			PresentationActivity.english = true;
+			        			refresh();
+			        			languageView.dismiss();
+			        		}
+				    	   }
+						if(position==1){
+							if(PresentationActivity.english){
+				        		PresentationActivity.english = false;
+				        		refresh();
+				        		languageView.dismiss();
+				        	}
+				        	else{
+				        		Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+			        		}
+				    	   }
+					}});
+	        	}
+	        	else{
+	        		ArrayAdapter<String> languagesAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, idms);
+					idiomas.setAdapter(languagesAdapter);
+					idiomas.setOnItemClickListener(new OnItemClickListener(){
+
+					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+						// TODO Auto-generated method stub
+						if(position==0){
+							if(PresentationActivity.english){
+								Toast.makeText(getApplicationContext(), "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+				        	}
+				        	else{
+			        			PresentationActivity.english = true;
+			        			refresh();
+			        			languageView.dismiss();
+			        		}
+				    	   }
+						if(position==1){
+							if(PresentationActivity.english){
+				        		PresentationActivity.english = false;
+				        		refresh();
+				        		languageView.dismiss();
+				        	}
+				        	else{
+				        		Toast.makeText(getApplicationContext(), "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+			        		}
+				    	   }
+					}});
+        		}
+	        	
+			    languageView.show();
         		return true;
 	        case R.id.aboutMenu:
 	        	showAbout();
@@ -568,10 +706,17 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 	        	searchView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
 		        searchView.setContentView(R.layout.search);
 		        searchView.setCancelable(true);
-		        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);;
+		        searchAutoComplete = (AutoCompleteTextView)searchView.findViewById(R.id.autoCompleteTextView);
+		        titleSearch = (TextView) searchView.findViewById(R.id.searchTitle);
+		        back = (ImageButton)searchView.findViewById(R.id.sitesBack);
+	        	back.setOnClickListener(new View.OnClickListener() {
+		            public void onClick(View v) {
+		            	searchView.dismiss();
+		            }});
 		        aceptar = (ImageButton) searchView.findViewById(R.id.acept);
 		        cancelar = (ImageButton) searchView.findViewById(R.id.cancel);
 			    if(PresentationActivity.english){
+			    	titleSearch.setText("Search");
 			       	aceptar.setImageResource(R.drawable.accept_button2);
 			       	cancelar.setImageResource(R.drawable.cancel_button2);
 			    }
@@ -584,13 +729,84 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
 			    searchView.show();
 		        return true;
 		    case R.id.languageMenu3:
-		    	if(PresentationActivity.english){
-        			PresentationActivity.english = false;
+		    	languageView = new Dialog(CategoryActivity.this, R.style.FullHeightDialog);
+		        languageView.setContentView(R.layout.language);
+		        languageView.setCancelable(true);
+		        titleLanguage = (TextView)languageView.findViewById(R.id.languageTitle);
+		        backLang = (ImageButton)languageView.findViewById(R.id.sitesBack);
+	        	backLang.setOnClickListener(new View.OnClickListener() {
+		            public void onClick(View v) {
+		            	languageView.dismiss();
+		            }});
+	        	idiomas = (ListView)languageView.findViewById(R.id.languagelist);
+	        	idms = new ArrayList<String>();
+	        	idms.add("Inglés");
+	        	idms.add("Español");
+	        	languages = (ListView)languageView.findViewById(R.id.languagelist);
+	        	langs = new ArrayList<String>();
+	        	langs.add("English");
+	        	langs.add("Spanish");
+	        	if(PresentationActivity.english){
+	        		titleLanguage.setText("Language");
+	        		ArrayAdapter<String> languagesAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, langs);
+					languages.setAdapter(languagesAdapter);
+					languages.setOnItemClickListener(new OnItemClickListener(){
+
+					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+						// TODO Auto-generated method stub
+						if(position==0){
+							if(PresentationActivity.english){
+								Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+				        	}
+				        	else{
+			        			PresentationActivity.english = true;
+			        			refresh();
+			        			languageView.dismiss();
+			        		}
+				    	   }
+						if(position==1){
+							if(PresentationActivity.english){
+				        		PresentationActivity.english = false;
+				        		refresh();
+				        		languageView.dismiss();
+				        	}
+				        	else{
+				        		Toast.makeText(getApplicationContext(), "This language is already selected", Toast.LENGTH_SHORT).show();
+			        		}
+				    	   }
+					}});
+	        	}
+	        	else{
+	        		ArrayAdapter<String> languagesAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, idms);
+					idiomas.setAdapter(languagesAdapter);
+					idiomas.setOnItemClickListener(new OnItemClickListener(){
+
+					public void onItemClick(AdapterView<?> l, View v, int position, long arg3) {
+						// TODO Auto-generated method stub
+						if(position==0){
+							if(PresentationActivity.english){
+								Toast.makeText(getApplicationContext(), "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+				        	}
+				        	else{
+			        			PresentationActivity.english = true;
+			        			refresh();
+			        			languageView.dismiss();
+			        		}
+				    	   }
+						if(position==1){
+							if(PresentationActivity.english){
+				        		PresentationActivity.english = false;
+				        		refresh();
+				        		languageView.dismiss();
+				        	}
+				        	else{
+				        		Toast.makeText(getApplicationContext(), "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+			        		}
+				    	   }
+					}});
         		}
-        		else{
-        			PresentationActivity.english = true;
-        		}
-        		refresh();
+	        	
+			    languageView.show();
         		return true;
 		    case R.id.aboutMenu3:
 	        	showAbout();
@@ -646,12 +862,6 @@ public class CategoryActivity extends ListActivity implements OnClickListener {
                 tHandler.sendMessage(cHandler.obtainMessage(what));
             }
         }.start();
-    
-		
-		
-		
-		
-	   
 	
 	}
 	
