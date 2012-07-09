@@ -206,7 +206,14 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
     	String methodnameAv = "getPlaceRatingAverage";
    	    String soapAv = "http://turismo/" + methodnameAv;
    	    rat = Services.getPlaceID(methodnameAv, soapAv, "placeId", placeID);
-        rb.setRating(Float.valueOf(rat));
+   	    try
+   	    {
+   	    	rb.setRating(Float.valueOf(rat));
+   	    }
+   	    catch (Exception e) {
+			// TODO: handle exception
+   	    	rb.setRating(0);
+		}
     }
 
 	public void onClick(View v) {
@@ -550,7 +557,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 							// TODO Auto-generated method stub
 							if(position==0){
 								if(PresentationActivity.english){
-									Toast.makeText(InformationActivity.this, "This language is already selected", Toast.LENGTH_SHORT).show();
+									languageView.dismiss();
 					        	}
 					        	else{
 				        			PresentationActivity.english = true;
@@ -565,7 +572,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 					        		languageView.dismiss();
 					        	}
 					        	else{
-					        		Toast.makeText(InformationActivity.this, "This language is already selected", Toast.LENGTH_SHORT).show();
+					        		languageView.dismiss();
 				        		}
 					    	   }
 						}});
@@ -579,7 +586,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 							// TODO Auto-generated method stub
 							if(position==0){
 								if(PresentationActivity.english){
-									Toast.makeText(InformationActivity.this, "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+									languageView.dismiss();
 					        	}
 					        	else{
 				        			PresentationActivity.english = true;
@@ -594,7 +601,7 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 					        		languageView.dismiss();
 					        	}
 					        	else{
-					        		Toast.makeText(InformationActivity.this, "Este idioma ya está aplicado", Toast.LENGTH_SHORT).show();
+					        		languageView.dismiss();
 				        		}
 					    	   }
 						}});
