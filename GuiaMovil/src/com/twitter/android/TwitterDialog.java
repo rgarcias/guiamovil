@@ -5,9 +5,10 @@
  */
 package com.twitter.android;
 
+import com.facebook.android.FbDialog;
 import com.twitter.android.TwitterApp.TwDialogListener;
 
-import android.R;
+import guia.movil.app.R;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 
@@ -21,12 +22,14 @@ import android.util.Log;
 import android.content.Context;
 
 import android.view.Display;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.webkit.CookieManager;
@@ -44,6 +47,7 @@ public class TwitterDialog extends Dialog {
     private WebView mWebView;
     private LinearLayout mContent;
     private TextView mTitle;
+    private ImageView mCrossImage;
 
     private static final String TAG = "Twitter-WebView";
     
@@ -67,8 +71,10 @@ public class TwitterDialog extends Dialog {
         
         mContent.setOrientation(LinearLayout.VERTICAL);
         
+        createCrossImage();
+        int crossWidth = mCrossImage.getDrawable().getIntrinsicWidth();
         setUpTitle();
-        setUpWebView();
+        setUpWebView(crossWidth);
         
         Display display = getWindow().getWindowManager().getDefaultDisplay();
         double[] dimensions = new double[2];
@@ -101,14 +107,31 @@ public class TwitterDialog extends Dialog {
         
         mContent.addView(mTitle);
     }
+    
+    private void createCrossImage() {
+        mCrossImage = new ImageView(getContext());
+        // Dismiss the dialog when user click on the 'x'
+        mCrossImage.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mListener.onCancel();
+                TwitterDialog.this.dismiss();
+            }
+        });
+        Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.close);
+        mCrossImage.setImageDrawable(crossDrawable);
+        /* 'x' should not be visible while webview is loading
+         * make it visible only after webview has fully loaded
+        */
+        mCrossImage.setVisibility(View.INVISIBLE);
+    }
 
-    private void setUpWebView() {
+    private void setUpWebView(int margin) {
     	CookieSyncManager.createInstance(getContext()); 
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie();
         
         mWebView = new WebView(getContext());
-        
+        mWebView.setPadding(margin, margin, margin, margin);
         mWebView.setVerticalScrollBarEnabled(false);
         mWebView.setHorizontalScrollBarEnabled(false);
         mWebView.setWebViewClient(new TwitterWebViewClient());
@@ -160,6 +183,7 @@ public class TwitterDialog extends Dialog {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             String title = mWebView.getTitle();
+            mCrossImage.setVisibility(View.VISIBLE);
             if (title != null && title.length() > 0) {
                 mTitle.setText(title);
             }

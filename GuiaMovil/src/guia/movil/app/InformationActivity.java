@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
+import com.fsq.android.FoursquareApp.FsqAuthListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.twitter.android.TwitterApp;
@@ -251,24 +252,28 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        	    } else if (mobile.isConnected()) {
 	        	        return true;
 	        	    }
-	        	    Dialog exitDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
+	        	    exitDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
 	                exitDialog.setContentView(R.layout.exitdialog);
-	                exitDialog.setCanceledOnTouchOutside(true);
 	        		if(PresentationActivity.english){
-	        	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
-	        	        exit.setImageResource(R.drawable.quit_button2);
+	        	        ImageButton accept = (ImageButton) exitDialog.findViewById(R.id.acceptButton);
+	        	        accept.setImageResource(R.drawable.accept_button2);
+	        	        ImageButton cancel = (ImageButton) exitDialog.findViewById(R.id.cancelButton);
+	        	        cancel.setImageResource(R.drawable.cancel_button2);
 	        	        
 	        	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
 	        	        exitText.setText(R.string.exitDialogING);
-	        	        exit.setOnClickListener(this);
+	        	        accept.setOnClickListener(this);
+	        	        cancel.setOnClickListener(this);
 	        		}
 	        		else{
-	        			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
-	        	        exit.setImageResource(R.drawable.quit_button);
-	        	        
+	        			ImageButton accept = (ImageButton) exitDialog.findViewById(R.id.acceptButton);
+	        	        accept.setImageResource(R.drawable.accept_button);
+	        	        ImageButton cancel= (ImageButton) exitDialog.findViewById(R.id.cancelButton);
+	        	        cancel.setImageResource(R.drawable.cancel_button);
 	        	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
 	        	        exitText.setText(R.string.exitDialogESP);
-	        	        exit.setOnClickListener(this);
+	        	        accept.setOnClickListener(this);
+	        	        cancel.setOnClickListener(this);
 	        		}
 	        		exitDialog.show(); 
 	        	    return false;
@@ -283,8 +288,30 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		}
 		else if(v.getId()==R.id.checkinButton && isOnline())
 		{
-			Intent intent = new Intent(InformationActivity.this, FoursquareActivity.class);
-        	this.startActivity(intent);
+			if(!mFsqApp.hasAccessToken()){
+				mFsqApp.authorize();
+	            FsqAuthListener listener = new FsqAuthListener() {
+	            
+	            	public void onSuccess() {
+	                   	if(PresentationActivity.english){
+	                   		Toast.makeText(InformationActivity.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
+	                   	}
+	                   	else{
+	                   		 Toast.makeText(InformationActivity.this, "Conectado como " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
+	                   	}
+	                   	Intent intent = new Intent(InformationActivity.this, FoursquareActivity.class);
+	                	startActivity(intent);
+	                }        
+	                public void onFail(String error) {
+	                    Toast.makeText(InformationActivity.this, error, Toast.LENGTH_SHORT).show();
+	                }
+	            };   
+	            mFsqApp.setListener(listener);
+			}
+			else{
+				Intent intent = new Intent(InformationActivity.this, FoursquareActivity.class);
+            	startActivity(intent);
+			}
 		}
 		else if(v.getId()==R.id.tweetButton && isOnline())
 		{
@@ -341,12 +368,15 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 					Toast.makeText(this,publicado, Toast.LENGTH_LONG).show();
 			}
 		}
-		else if(v.getId()==R.id.exitButton){
-			this.finish();
+		if(v.getId()==R.id.cancelButton){
 			exitDialog.dismiss();
-			Intent temp = new Intent(Intent.ACTION_MAIN);
-			temp.addCategory(Intent.CATEGORY_HOME);
-			startActivity(temp);
+		}
+		if(v.getId()==R.id.acceptButton){
+			Intent settingsIntent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+			settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			InformationActivity.this.startActivityForResult(settingsIntent, 0);
+			exitDialog.dismiss();
+			finish();
 		}
 	}
 	
@@ -369,22 +399,26 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	    }
 	    exitDialog = new Dialog(InformationActivity.this, R.style.FullHeightDialog);
         exitDialog.setContentView(R.layout.exitdialog);
-        exitDialog.setCancelable(false);
 		if(PresentationActivity.english){
-	        ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
-	        exit.setImageResource(R.drawable.quit_button2);
+	        ImageButton accept = (ImageButton) exitDialog.findViewById(R.id.acceptButton);
+	        accept.setImageResource(R.drawable.accept_button2);
+	        ImageButton cancel = (ImageButton) exitDialog.findViewById(R.id.cancelButton);
+	        cancel.setImageResource(R.drawable.cancel_button2);
 	        
 	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
 	        exitText.setText(R.string.exitDialogING);
-	        exit.setOnClickListener(this);
+	        accept.setOnClickListener(this);
+	        cancel.setOnClickListener(this);
 		}
 		else{
-			ImageButton exit = (ImageButton) exitDialog.findViewById(R.id.exitButton);
-	        exit.setImageResource(R.drawable.quit_button);
-	        
+			ImageButton accept = (ImageButton) exitDialog.findViewById(R.id.acceptButton);
+	        accept.setImageResource(R.drawable.accept_button);
+	        ImageButton cancel= (ImageButton) exitDialog.findViewById(R.id.cancelButton);
+	        cancel.setImageResource(R.drawable.cancel_button);
 	        TextView exitText = (TextView) exitDialog.findViewById(R.id.exitText);
 	        exitText.setText(R.string.exitDialogESP);
-	        exit.setOnClickListener(this);
+	        accept.setOnClickListener(this);
+	        cancel.setOnClickListener(this);
 		}
 		exitDialog.show(); 
 	    return false;
@@ -436,6 +470,10 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 		
 		public void onError(String value) {		
 			Toast.makeText(InformationActivity.this, "Twitter connection failed", Toast.LENGTH_LONG).show();
+		}
+		
+		public void onCancel(){
+			
 		}
 	};
 
