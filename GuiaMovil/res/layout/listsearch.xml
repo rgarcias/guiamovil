@@ -50,8 +50,8 @@
                 <ListView
                     android:id="@+id/searchList"
                     android:layout_width="match_parent"
-                    android:layout_height="145dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_height="match_parent"
+                    
                     android:layout_marginTop="15dp"
                     android:layout_weight="0.01"
                     android:background="@color/background"
