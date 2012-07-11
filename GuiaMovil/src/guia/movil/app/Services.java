@@ -1,6 +1,7 @@
 package guia.movil.app;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -11,9 +12,10 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 public class Services {
-	private static final String NAMESPACE  = "http://turismo/";
-    public static String URL="http://192.168.1.38:8084/TurismoCuricoWebService/TurismoCurico?wsdl";
-
+	private static final String NAMESPACE  = "http://Turismo/";
+    public static String URL="http://192.168.1.8:8080/TurismoCuricoWebService/TurismoCurico?wsdl";
+    //public static String URL="http://172.17.32.185:8080/TurismoCuricoWebService/TurismoCurico?wsdl";
+    
     public static String getDescription(String methodname,String soap,String nombre,String parametrovalor, String nombre2, Boolean english){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 	    PropertyInfo parametro = new PropertyInfo();
@@ -77,6 +79,7 @@ public class Services {
 	        return null;
 	    }
 	} 
+    
 
     public static String getLongitude(String methodname,String soap,String nombre,String parametrovalor){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
@@ -133,7 +136,6 @@ public class Services {
 	        return null;
 	    }
 	} 
-    
     public static String getComments(String methodname,String soap,String nombre,String parametrovalor){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 	    PropertyInfo parametro = new PropertyInfo();
@@ -190,7 +192,10 @@ public class Services {
 	    }
 	} 
 
-	public static void addComments(String methodname,String soap,String parametrovalorComment, String parametrovalorNick, String parametrovalorplcaeid){
+
+
+	public static void addComments(String methodname,String soap,String parametrovalorComment
+			,String parametrovalorNick,String parametrovalorplcaeid){
 		SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 		PropertyInfo parametroComment = new PropertyInfo();
 		parametroComment.setName("comment");
@@ -227,7 +232,8 @@ public class Services {
 		    }
 	}
 	
-	public static void addRating(String methodname,String soap,String parametrovalorNumber, String parametrovalorplcaeid){
+	public static void addRating(String methodname,String soap,String parametrovalorNumber
+			,String parametrovalorplcaeid){
 		SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 		PropertyInfo parametroNumber = new PropertyInfo();
 		parametroNumber.setName("number");
@@ -257,7 +263,9 @@ public class Services {
 		       
 		    }
 	}
-
+	
+	
+	
 	public static String getRatingAverage(String methodname,String soap,String nombre,String parametrovalor){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 	    PropertyInfo parametro = new PropertyInfo();
@@ -341,7 +349,8 @@ public class Services {
 	        return null;
 	    }
 	} 
-
+	
+	
 	public static String getPlacesSortAsc(String methodname,String soap,String nombre,String parametrovalor){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 	    PropertyInfo parametro = new PropertyInfo();
@@ -369,7 +378,8 @@ public class Services {
 	        return null;
 	    }
 	}
-
+	
+	
 	public static String getPlacesSortDsc(String methodname,String soap,String nombre,String parametrovalor){
 	    SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
 	    PropertyInfo parametro = new PropertyInfo();
@@ -399,7 +409,10 @@ public class Services {
 	}
 
 	public static String getTopTen(String methodname,String soap) {
+		// TODO Auto-generated method stub
 		 SoapObject Solicitud = new SoapObject(NAMESPACE, methodname);
+		    
+		    
 		    SoapSerializationEnvelope Envoltorio = new SoapSerializationEnvelope (SoapEnvelope.VER11);
 		    Envoltorio.setOutputSoapObject (Solicitud);
 		    HttpTransportSE TransporteHttp = new HttpTransportSE(URL);
@@ -421,4 +434,7 @@ public class Services {
 		    }
 		
 	}
+	
+	
+	
 }
