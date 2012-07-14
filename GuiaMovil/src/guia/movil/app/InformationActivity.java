@@ -767,7 +767,9 @@ public class InformationActivity extends FBConnectionActivity implements OnClick
 	        myAdapter = new MyAdapter(InformationActivity.this);
 	        
 	        for(Bitmap e: result){
-				myAdapter.addImageItem(new ImageItem(e));
+	        	if(photos.size() > 0){
+	        		myAdapter.addImageItem(new ImageItem(e));
+	        	}
 			}
 	        g.setOnItemClickListener(InformationActivity.this);
 	        g.setAdapter(myAdapter);

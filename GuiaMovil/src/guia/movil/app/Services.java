@@ -13,7 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class Services {
 	private static final String NAMESPACE  = "http://Turismo/";
-    public static String URL="http://192.168.1.8:8080/TurismoCuricoWebService/TurismoCurico?wsdl";
+    public static String URL="http://taller2012.no-ip.org:8080/TurismoCuricoWebService/TurismoCurico?wsdl";
     //public static String URL="http://172.17.32.185:8080/TurismoCuricoWebService/TurismoCurico?wsdl";
     
     public static String getDescription(String methodname,String soap,String nombre,String parametrovalor, String nombre2, Boolean english){
